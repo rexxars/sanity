@@ -278,6 +278,12 @@ export default createSchema({
           required: true
         },
         {
+          name: 'couldBeAnything',
+          title: 'Anything',
+          type: 'any',
+          of: [{type: 'author', title: 'Author'}, {type: 'image', title: 'Image'}]
+        },
+        {
           name: 'email',
           title: 'Email',
           type: 'email'
