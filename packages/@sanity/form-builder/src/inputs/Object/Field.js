@@ -42,7 +42,7 @@ export default class Field extends React.Component {
     const expectedJSType = field.type.jsonType
     const valueJSType = resolveJSType(value)
 
-    if (value && expectedJSType !== valueJSType) {
+    if (value && expectedJSType !== '<any>' && expectedJSType !== valueJSType) {
       return (
         <ManageInvalidValue
           field={field}

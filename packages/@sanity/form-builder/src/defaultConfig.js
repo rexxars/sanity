@@ -9,6 +9,7 @@ import {
   Image,
   File,
   Slug,
+  Any,
   TextInput,
   UrlInput
 } from './defaultInputComponents'
@@ -28,6 +29,7 @@ const typeNameToInputMap = {
   email: EmailInput,
   url: UrlInput,
   image: Image,
+  any: Any,
   file: File,
   reference: Reference,
   string: StringInput,
