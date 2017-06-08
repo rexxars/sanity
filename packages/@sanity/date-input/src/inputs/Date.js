@@ -14,8 +14,6 @@ const KRONOS_STYLES = {
 
 export default class DateInput extends React.PureComponent {
 
-  // If schema options sez input is UTC
-  // we're not storing anything else in order to avoid confusion
   assembleOutgoingValue(newMoment) {
     if (!newMoment || !newMoment.isValid()) {
       return undefined
