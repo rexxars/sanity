@@ -14,8 +14,6 @@ const KRONOS_STYLES = {
 
 export default class RichDateInput extends React.PureComponent {
 
-  // If schema options sez input is UTC
-  // we're not storing anything else in order to avoid confusion
   assembleOutgoingValue(newMoment) {
     const {type} = this.props
 
@@ -23,6 +21,7 @@ export default class RichDateInput extends React.PureComponent {
       return undefined
     }
     if (this.optionsWithDefaults().inputUtc) {
+      // Only store non-localized data
       return {
         _type: type.name,
         utc: newMoment.utc().format() // e.g. "2017-02-12T09:15:00Z"
@@ -46,16 +45,6 @@ export default class RichDateInput extends React.PureComponent {
   editableMoment(currentValue) {
     if (!currentValue) {
       return null
-    }
-    if (typeof currentValue === 'string') {
-      // Backwards compatibility
-      if (currentValue.match(/\d\d\d\d-\d\d-\d\d/)) {
-        return moment(currentValue, 'YYYY-MM-DD')
-      }
-      if (currentValue.match(/\d\d\/\d\d\/\d\d\d\d/)) {
-        return moment(currentValue, 'MM/DD/YYYY')
-      }
-      return moment() // sorry pal, can't help you
     }
     if (this.optionsWithDefaults().inputUtc) {
       return currentValue.utc ? moment.utc(currentValue.utc) : moment.utc()
