@@ -2,7 +2,7 @@ import {pick, keyBy, startCase} from 'lodash'
 import {lazyGetter} from './utils'
 import createPreviewGetter from '../preview/createPreviewGetter'
 
-const OVERRIDABLE_FIELDS = ['jsonType', 'type', 'name', 'title', 'description', 'options']
+const OVERRIDABLE_FIELDS = ['type', 'name', 'title', 'description', 'options', 'preview']
 
 const OBJECT_CORE = {
   name: 'object',
