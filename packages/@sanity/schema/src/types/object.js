@@ -1,6 +1,8 @@
+// @flow
 import {pick, keyBy, startCase} from 'lodash'
 import {lazyGetter} from './utils'
 import createPreviewGetter from '../preview/createPreviewGetter'
+import type {TypeFactory} from '../flowtypes'
 
 const OVERRIDABLE_FIELDS = ['type', 'name', 'title', 'description', 'options', 'preview']
 
@@ -10,17 +12,17 @@ const OBJECT_CORE = {
   jsonType: 'object'
 }
 
-export const ObjectType = {
+export const ObjectType : TypeFactory = {
   get() {
     return OBJECT_CORE
   },
-  extend(subTypeDef, createMemberType) {
-    const options = {...(subTypeDef.options || {})}
-    const parsed = Object.assign(pick(OBJECT_CORE, OVERRIDABLE_FIELDS), subTypeDef, {
+  extend(typeDef, createMemberType) : TypeFactory {
+    const options = {...(typeDef.options || {})}
+    const parsed = Object.assign(pick(OBJECT_CORE, OVERRIDABLE_FIELDS), typeDef, {
       type: OBJECT_CORE,
-      title: subTypeDef.title || (subTypeDef.name ? startCase(subTypeDef.name) : ''),
+      title: typeDef.title || (typeDef.name ? startCase(typeDef.name) : ''),
       options: options,
-      fields: subTypeDef.fields.map(fieldDef => {
+      fields: typeDef.fields.map(fieldDef => {
         const {name, fieldset, ...rest} = fieldDef
 
         const compiledField = {
@@ -38,33 +40,28 @@ export const ObjectType = {
     })
 
     lazyGetter(parsed, 'fieldsets', () => {
-      return createFieldsets(subTypeDef, parsed.fields)
+      return createFieldsets(typeDef, parsed.fields)
     })
 
-    lazyGetter(parsed, 'preview', createPreviewGetter(subTypeDef, parsed))
+    lazyGetter(parsed, 'preview', createPreviewGetter(typeDef, parsed))
 
-    return subtype(parsed)
+    return extend(parsed)
 
-    function subtype(parent) {
+    function extend(parent) : TypeFactory {
       return {
         get() {
           return parent
         },
-        extend: extensionDef => {
-          if (extensionDef.fields) {
-            throw new Error('Cannot override `fields` of subtypes of "object"')
-          }
-          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {
-            title: extensionDef.title || subTypeDef.title,
+        extend: subTypeDef => {
+          return extend(Object.assign({}, parent, pick(subTypeDef, OVERRIDABLE_FIELDS), {
+            title: subTypeDef.title || typeDef.title,
             type: parent
-          })
-          return subtype(current)
+          }))
         }
       }
     }
   }
 }
-
 
 function createFieldsets(typeDef, fields) {
   const fieldsetsDef = (typeDef.fieldsets || [])
@@ -96,31 +93,3 @@ function createFieldsets(typeDef, fields) {
     })
     .filter(Boolean)
 }
-
-// const Person = ObjectType.extend({
-//   name: 'person',
-//   title: 'Person',
-//   fields: [
-//     {type: 'string', name: 'lol'}
-//   ]
-// }, v => v)
-//
-// const TypeOfPerson = Person.extend({
-//   name: 'typeofperson',
-//   title: 'Type Of Person'
-// }, v => v)
-//
-// const TypeOfTypeOfPerson = TypeOfPerson.extend({
-//   name: 'typeoftypeofperson',
-//   title: 'Type Of Type Of Person'
-// }, v => v)
-//
-// assert.equal(TypeOfTypeOfPerson.get().type, TypeOfPerson.get())
-// assert.equal(TypeOfTypeOfPerson.get().type, TypeOfPerson.get())
-// assert.equal(TypeOfTypeOfPerson.get().fields, Person.get().fields)
-// assert.throws(
-//   () => TypeOfTypeOfPerson.extend({name: 'lol', fields: []}),
-//   /Cannot override `fields` of subtypes of "object"/
-// )
-// // console.log('TypeOfTypeOfPerson', TypeOfTypeOfPerson.get())
-//
