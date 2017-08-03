@@ -10,6 +10,12 @@ import randomKey from './randomKey'
 import PatchEvent, {insert, setIfMissing, unset, set} from '../../PatchEvent'
 import resolveListComponents from './resolveListComponents'
 
+import Observable from '@sanity/observable'
+import importFile from './importFile'
+import {getAcceptedMember} from './utils'
+import {uploadImage} from '../../sanity/inputs/client-adapters/assets'
+
+
 function hasKeys(object, exclude = []) {
   for (const key in object) {
     if (!exclude.includes(key)) {
@@ -26,7 +32,8 @@ function isEmpty(value: ?ItemValue) {
 type State = {
   selectType: boolean,
   editItemKey: ?string,
-  focusItemKey: ?string
+  focusItemKey: ?string,
+  uploadItems: { [string]: Object }
 }
 
 function createProtoValue(type): ItemValue {
@@ -50,7 +57,8 @@ export default class ArrayInput<T: ItemValue> extends React.Component<*, *, Stat
   state = {
     selectType: false,
     editItemKey: null,
-    focusItemKey: null
+    focusItemKey: null,
+    uploadItems: {}
   }
 
   handleAddBtnClick = () => {
@@ -137,6 +145,80 @@ export default class ArrayInput<T: ItemValue> extends React.Component<*, *, Stat
     )
   }
 
+  handlePaste = (ev: SyntheticClipboardEvent) => {
+    if (ev.clipboardData.files) {
+      importFile(ev.clipboardData.files)
+        .subscribe(result => {
+          console.log('UPLOAD THIS', result)
+        })
+    }
+  }
+
+  setUploadItem(key: string, value: ItemValue) {
+    this.setState(prevState => ({
+      uploadItems: {
+        ...prevState.uploadItems,
+        [key]: value
+      }
+    }))
+  }
+
+  handleDrop = (ev: SyntheticDragEvent) => {
+    const {onChange} = this.props
+    if (ev.dataTransfer.files) {
+      const toUpload = Observable.from(Array.from(ev.dataTransfer.files))
+        .map(file => {
+          const memberType = getAcceptedMember(this.props.type, file)
+          // start by inserting placeholder values
+          const item = {
+            ...createProtoValue(memberType),
+            _isUploading: true,
+            _percent: 0
+          }
+          this.insert(item, 'after', -1)
+          return {
+            ...item,
+            file: file
+          }
+        })
+        .mergeMap(item =>
+          importFile(item.file)
+            .do(prepared => {
+              this.setUploadItem(item._key, {
+                _previewImageUrl: prepared._imageUrl
+              })
+            })
+            .map(() => item))
+        .mergeMap(item => {
+          return Observable.from(uploadImage(item.file))
+            .do(event => {
+              onChange(PatchEvent.from(set(event.percent, ['_percent'])).prefixAll({_key: item._key}))
+            })
+            .do(event => {
+              if (event.type === 'complete') {
+                onChange(PatchEvent.from(
+                  setIfMissing({
+                    ...item,
+                    asset: {_type: 'reference'}
+                  }),
+                  set({_type: 'reference', _ref: event.id}, ['asset']),
+                  unset(['_isUploading']),
+                  unset(['_percent'])
+                ).prefixAll({_key: item._key}))
+              }
+            })
+            .do(ev => {
+              setTimeout(() => {
+                this.setUploadItem(item._key, null)
+              }, 2000)
+            })
+        })
+        .subscribe(event => {
+          console.log(event)
+        })
+    }
+  }
+
   handleItemChange = (event: PatchEvent, item: T) => {
     const {onChange, value} = this.props
 
@@ -198,7 +280,8 @@ export default class ArrayInput<T: ItemValue> extends React.Component<*, *, Stat
   }
 
   renderList() {
-    const {type, value} = this.props
+    const {type} = this.props
+    const value = this.getValueWithUploadItemsMerged()
 
     const {List, Item} = resolveListComponents(type)
 
@@ -227,14 +310,31 @@ export default class ArrayInput<T: ItemValue> extends React.Component<*, *, Stat
     )
   }
 
+  getValueWithUploadItemsMerged() {
+    const {value} = this.props
+    const {uploadItems} = this.state
+    const keys = Object.keys(uploadItems)
+    if (keys.length === 0) {
+      return value
+    }
+    return value.map(item => {
+      return (uploadItems[item._key])
+        ? {...item, ...(uploadItems[item._key])}
+        : item
+    })
+  }
+
   render() {
     const {type, level, value} = this.props
+
     return (
       <Fieldset
         legend={type.title}
         description={type.description}
         level={level}
         tabIndex="0"
+        onPaste={this.handlePaste} /* note: the onPaste must be on fieldset for it to work in chrome */
+        onDrop={this.handleDrop}
       >
         <div className={styles.root}>
           {
