@@ -760,6 +760,10 @@
       "path": "panes/SplitPaneWrapper.js"
     },
     {
+      "implements": "part:@sanity/components/portal/sticky",
+      "path": "portal/Sticky.js"
+    },
+    {
       "implements": "part:@sanity/base/component",
       "path": "buttons/story.js"
     },
@@ -866,6 +870,10 @@
     {
       "implements": "part:@sanity/base/component",
       "path": "panes/story.js"
+    },
+    {
+      "implements": "part:@sanity/base/component",
+      "path": "portal/story.js"
     }
 
   ]

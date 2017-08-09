@@ -24,16 +24,19 @@ storiesOf('Edit item')
   () => {
     return (
       <div style={overflowHidden} id="myScrollContainerId">
-        Things is in the background here.
-        <Button onClick={action('oh noes! I should not ble clickable!')}>Try click me</Button>
+        Things is in the background here. So the portal should stich between this
+        {chance.paragraph()}
+        {chance.paragraph()}
         <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
           <EditItemPopOver
             title={text('title (prop)', 'Edit this item')}
             onClose={action('onClose')}
           >
-            Put your form here
+            {text('children (prop)', 'Edit this item')}
           </EditItemPopOver>
         </Sanity>
+        {chance.paragraph()}
+        {chance.paragraph()}
       </div>
     )
   }

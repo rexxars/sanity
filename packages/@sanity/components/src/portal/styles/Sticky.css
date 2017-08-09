@@ -1,0 +1,41 @@
+.root {
+  border: 1px solid red;
+  background-color: blue;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+}
+
+.availableSpace {
+  display: block;
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  width: 100vw;
+  lost-utility: clearfix;
+}
+
+.availableSpaceDebug {
+  composes: availableSpace;
+  border: 5px solid red;
+}
+
+.content {
+  border: 5px solid green;
+  box-sizing: border-box;
+  pointer-events: auto;
+  position: absolute;
+  height: 100%;
+}
+
+.portal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5000;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
