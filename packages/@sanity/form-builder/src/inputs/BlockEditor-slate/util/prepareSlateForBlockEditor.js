@@ -12,7 +12,7 @@ import {SLATE_DEFAULT_STYLE} from '../constants'
 import Blockquote from '../preview/Blockquote'
 import Header from '../preview/Header'
 import ListItem from '../preview/ListItem'
-import Mark from '../preview/Mark'
+import Decorator from '../preview/Decorator'
 import Normal from '../preview/Normal'
 
 // When the slate-fields are rendered in the editor, their node data is stored in a parent container component.
@@ -92,28 +92,28 @@ export default function prepareSlateForBlockEditor(blockEditor) {
       && listField.type.options.list.filter(listStyle => listStyle.value)
   }
 
-  const marksField = getSpanType(type)
-    .fields.find(field => field.name === 'marks')
+  const decoratorsField = getSpanType(type)
+    .fields.find(field => field.name === 'decorators')
 
-  const allowedMarks = (get(marksField, 'type.options.list') || []).map(mark => mark.value)
+  const allowedDecorators = (get(decoratorsField, 'type.options.list') || []).map(decorator => decorator.value)
 
   const memberTypesExceptBlock = type.of.filter(ofType => ofType.name !== 'block')
   const spanType = getSpanType(type)
-  const customSpanFields = spanType.fields.filter(field => {
-    return !['text', 'marks'].includes(field.name)
+  const annotationsFields = spanType.fields.filter(field => {
+    return !['text', 'decorators'].includes(field.name)
   })
 
   const FormBuilderBlock = createBlockNode(type)
 
-  const schema = {
+  const slateSchema = {
     nodes: {
       ...mapToObject(memberTypesExceptBlock, ofType => [ofType.name, FormBuilderBlock]),
       __unknown: FormBuilderBlock,
       span: createSpanNode(spanType),
       contentBlock: createSlatePreviewNode,
     },
-    marks: mapToObject(allowedMarks, mark => {
-      return [mark, Mark]
+    marks: mapToObject(allowedDecorators, decorator => {
+      return [decorator, Decorator]
     }),
     rules: [
       // Rule to insert a default block when document is empty
@@ -139,8 +139,8 @@ export default function prepareSlateForBlockEditor(blockEditor) {
   return {
     listItems: listItems,
     textStyles: textStyles,
-    customSpans: customSpanFields,
+    customSpans: annotationsFields,
     customBlocks: memberTypesExceptBlock,
-    schema: schema
+    slateSchema: slateSchema
   }
 }

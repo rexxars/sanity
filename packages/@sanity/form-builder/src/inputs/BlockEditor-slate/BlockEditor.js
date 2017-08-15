@@ -6,7 +6,6 @@ import Portal from 'react-portal'
 import {uniqueId} from 'lodash'
 
 import FormField from 'part:@sanity/components/formfields/default'
-import ActivateOnFocus from 'part:@sanity/components/utilities/activate-on-focus'
 import Toolbar from './toolbar/Toolbar'
 import createBlockEditorOperations from './createBlockEditorOperations'
 import prepareSlateForBlockEditor from './util/prepareSlateForBlockEditor'
@@ -47,7 +46,7 @@ export default class BlockEditor extends React.Component {
     super(props, context)
 
     const preparation = prepareSlateForBlockEditor(this)
-    this.slateSchema = preparation.schema
+    this.slateSchema = preparation.slateSchema
     this.textStyles = preparation.textStyles
     this.listItems = preparation.listItems
     this.customSpans = preparation.customSpans
@@ -108,9 +107,9 @@ export default class BlockEditor extends React.Component {
     this.refreshCSS()
   }
 
-  hasMark(markName) {
+  hasDecorator(decoratorName) {
     const {value} = this.props
-    return value.marks.some(mark => mark.type == markName)
+    return value.marks.some(mark => mark.type == decoratorName)
   }
 
   hasStyle(styleName) {
@@ -130,11 +129,11 @@ export default class BlockEditor extends React.Component {
     })
   }
 
-  getActiveMarks() {
-    return Object.keys(this.slateSchema.marks).map(mark => {
+  getActiveDecorators() {
+    return Object.keys(this.slateSchema.marks).map(decorator => {
       return {
-        type: mark,
-        active: this.hasMark(mark)
+        type: decorator,
+        active: this.hasDecorator(decorator)
       }
     })
   }
@@ -307,7 +306,7 @@ export default class BlockEditor extends React.Component {
             onLinkButtonClick={this.handleLinkButtonClick}
             activeLinks={this.getActiveLinks()}
             showLinkButton={showLinkButton}
-            marks={this.getActiveMarks()}
+            decorators={this.getActiveDecorators()}
           />
           <div
             className={styles.inputContainer}

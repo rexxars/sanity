@@ -2,7 +2,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styles from './styles/Toolbar.css'
 import InsertBlocks, {insertBlockShape} from './InsertBlocks'
-import Marks, {mark} from './Marks'
+import Decorators, {decorator} from './Decorators'
 import ListItems, {listItem} from './ListItems'
 import BlockStyle, {blockStyleShape} from './BlockStyle'
 import Button from 'part:@sanity/components/buttons/default'
@@ -21,8 +21,8 @@ export default class Toolbar extends React.Component {
     onListButtonClick: PropTypes.func,
     onBlockStyleChange: PropTypes.func,
     insertBlocks: PropTypes.arrayOf(insertBlockShape),
-    marks: PropTypes.arrayOf(
-      mark
+    decorators: PropTypes.arrayOf(
+      decorator
     ),
     listItems: PropTypes.arrayOf(
       listItem
@@ -39,7 +39,7 @@ export default class Toolbar extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return (
-      this.props.marks !== nextProps.marks
+      this.props.decorators !== nextProps.decorators
       || this.props.blockStyles !== nextProps.blockStyles
       || this.props.fullscreen !== nextProps.fullscreen
       || this.props.activeLinks !== nextProps.activeLinks
@@ -50,7 +50,7 @@ export default class Toolbar extends React.Component {
     const {
       className,
       fullscreen,
-      marks,
+      decorators,
       onInsertBlock,
       onMarkButtonClick,
       onListButtonClick,
@@ -70,9 +70,9 @@ export default class Toolbar extends React.Component {
         </div>
 
         <div className={styles.formatButtons}>
-          {marks && marks.length > 0 && (
+          {decorators && decorators.length > 0 && (
             <div className={styles.textFormatContainer}>
-              <Marks marks={marks} onClick={onMarkButtonClick} />
+              <Decorators decorators={decorators} onClick={onMarkButtonClick} />
             </div>
           )}
 
