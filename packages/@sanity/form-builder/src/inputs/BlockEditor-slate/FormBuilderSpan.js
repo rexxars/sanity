@@ -4,11 +4,10 @@ import ReactDOM from 'react-dom'
 
 import DefaultButton from 'part:@sanity/components/buttons/default'
 import EditItemPopOver from 'part:@sanity/components/edititem/popover'
-import Preview from '../../Preview'
 import Field from '../Object/Field'
 import styles from './styles/FormBuilderSpan.css'
 import {applyAll} from '../../simplePatch'
-
+import {isEqual} from 'lodash'
 
 export default class FormBuilderSpan extends React.Component {
   static propTypes = {
@@ -24,12 +23,14 @@ export default class FormBuilderSpan extends React.Component {
   _clickCounter = 0
   _isMarkingText = false
   _editorNodeRect = null
+  _memberFields = []
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.isEditing !== this.state.isEditing
       || nextState.rootElement !== this.state.rootElement
       || nextProps.state.focusOffset !== this.props.state.focusOffset
-      || nextProps.node.data.get('value') !== this.props.node.data.get('value')
+      || !isEqual(nextProps.node.data.get('annotations'), this.props.node.data.get('annotations'))
+      || nextProps.node.data.get('fieldBeingEdited') !== this.props.node.data.get('fieldBeingEdited')
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -42,6 +43,15 @@ export default class FormBuilderSpan extends React.Component {
       if (!isFocused) {
         this.setState({isEditing: false, ...{isFocused}})
       }
+    }
+    this._memberFields = nextProps.type.fields.filter(field => {
+      return !['text', 'decorators'].includes(field.name)
+    })
+  }
+
+  componentDidUpdate() {
+    if (this.isEmpty() && this.state.isEditing && !this.getAnnotationBeingEdited()) {
+      this.handleCloseInput()
     }
   }
 
@@ -56,11 +66,25 @@ export default class FormBuilderSpan extends React.Component {
   }
 
   isEmpty() {
-    return !this.getValue()
+    const value = this.getAnnotations()
+    if (!value) {
+      return true
+    }
+    return !value.filter(field => {
+      return !this.isEmptyField(field)
+    }).length
   }
 
-  getValue() {
-    return this.props.node.data.get('value')
+  isEmptyField = field => {
+    return isEqual(Object.keys(field.value), ['_type', '_key'])
+  }
+
+  getAnnotations() {
+    return this.props.node.data.get('annotations')
+  }
+
+  getAnnotationBeingEdited() {
+    return this.props.node.data.get('annotationBeingEdited')
   }
 
   handleCloseInput = () => {
@@ -70,6 +94,7 @@ export default class FormBuilderSpan extends React.Component {
       if (this.state.isEditing) {
         this.setState({isEditing: false})
       }
+      this.cleanUpAfterDialogClosed()
     }, 100)
   }
 
@@ -77,6 +102,47 @@ export default class FormBuilderSpan extends React.Component {
     this.props.editor.props.blockEditor
       .operations
       .removeSpan(this.props.node)
+  }
+
+  cleanUpAfterDialogClosed() {
+    const value = this.getAnnotations()
+    if (value) {
+      Object.keys(value).forEach(key => {
+        if (this.isEmptyField(value[key])) {
+          delete value[key]
+        }
+      })
+    }
+    const {editor, node} = this.props
+    if (value && !Object.keys(value).length) {
+      this.handleRemove()
+      return
+    }
+    const next = editor.getState()
+      .transform()
+      .setNodeByKey(node.key, {
+        data: {
+          fieldBeingEdited: undefined,
+          value: value
+        }
+      })
+      .apply()
+
+    editor.onChange(next)
+  }
+
+  setFieldBeingEdited(fieldName) {
+    const {editor, node} = this.props
+    const next = editor.getState()
+      .transform()
+      .setNodeByKey(node.key, {
+        data: {
+          fieldBeingEdited: fieldName,
+          value: node.data.get('value')
+        }
+      })
+      .apply()
+    editor.onChange(next)
   }
 
   // Open dialog when user clicks the node,
@@ -102,21 +168,16 @@ export default class FormBuilderSpan extends React.Component {
       .transform()
       .setNodeByKey(node.key, {
         data: {
-          value: applyAll(node.data.get('value'), event.prefixAll(field.name).patches)
+          annotationBeingEdited: this.getAnnotationBeingEdited(),
+          annotations: applyAll(node.data.get('annotations').map(annotation => annotation.value), event.prefixAll(field.name).patches)
         }
       })
       .apply()
-
     editor.onChange(next)
   }
 
   renderInput() {
-    const value = this.getValue()
-    const {type} = this.props
-    const ignoredFields = ['text', 'marks']
-    const memberFields = type.fields.filter(field => {
-      return !ignoredFields.includes(field.name)
-    })
+    const annotations = this.getAnnotations()
     const style = {}
     if (this.state.rootElement) {
       const {width, height, left} = this.state.rootElement.getBoundingClientRect()
@@ -125,38 +186,59 @@ export default class FormBuilderSpan extends React.Component {
       style.left = `${left - this._editorNodeRect.left}px`
       style.top = `${this.state.rootElement.offsetTop + height + 10}px`
     }
-
+    const annotationBeingEdited = this.getAnnotationBeingEdited()
+    let fieldBeingEdited
+    if (this._memberFields.length === 1) {
+      fieldBeingEdited = this.memberFields[0]
+    } else if (annotations && annotations.length === 1) {
+      fieldBeingEdited = this._memberFields.find(memberField => {
+        return memberField.name === annotations[0].type.name
+      })
+    } else if (annotationBeingEdited) {
+      fieldBeingEdited = this._memberFields.find(memberField => {
+        return memberField.name === annotationBeingEdited
+      })
+    }
+    const fieldValue = fieldBeingEdited && annotations && annotations.find(annotation => annotation.type.name === fieldBeingEdited)
     return (
       <span className={styles.editSpanContainer} style={style}>
         <EditItemPopOver
           onClose={this.handleCloseInput}
         >
-          {
-            this.renderManage()
-          }
+          { !fieldBeingEdited && (
+            <div>
+              {
+                this._memberFields.map(memberField => {
+                  if (!annotations || !annotations.length || !annotations.find(annotation => annotation.type.name === memberField.name)) {
+                    return null
+                  }
+                  const setFieldFunc = () => {
+                    this.setFieldBeingEdited(memberField.name)
+                  }
+                  return (
+                    <DefaultButton
+                      key={`memberField${memberField.name}`}
+                      onClick={setFieldFunc}
+                    >
+                      {memberField.type.title}
+                    </DefaultButton>
+                  )
+                })
+              }
+            </div>
+          )}
 
-          {
-            memberFields.map(memberField => {
-              const fieldValue = value && value[memberField.name]
-              return (
-                <Field
-                  key={memberField.name}
-                  field={memberField}
-                  level={0}
-                  value={fieldValue}
-                  onChange={this.handleFieldChange}
-                />
-              )
-            })
-          }
+          { fieldBeingEdited && (
+            <Field
+              field={fieldBeingEdited}
+              level={0}
+              value={fieldValue}
+              onChange={this.handleFieldChange}
+            />
+          )}
         </EditItemPopOver>
       </span>
     )
-  }
-
-  shouldPreview() {
-    // Disabled for now
-    return false
   }
 
   getCustomFields() {
@@ -164,38 +246,6 @@ export default class FormBuilderSpan extends React.Component {
       .filter(field => field.name !== 'text' && field.name !== 'marks')
   }
 
-  renderPreview() {
-    if (this.shouldPreview()) {
-      const value = this.getValue()
-      const {type} = this.props
-      return (
-        <Preview
-          value={value}
-          type={type}
-        />
-      )
-    }
-    return null
-  }
-
-  renderManage() {
-    return (
-      <div>
-        <div className={styles.manageLinkPreview}>
-          { this.renderPreview() }
-        </div>
-        <div className={styles.manageButtons}>
-          <DefaultButton
-            kind="simple"
-            color="danger"
-            onClick={this.handleRemove}
-          >
-            Clear {this.getCustomFields().length > 1 ? 'all' : ''}
-          </DefaultButton>
-        </div>
-      </div>
-    )
-  }
 
   setRootElement = element => {
     this.setState({rootElement: element})
