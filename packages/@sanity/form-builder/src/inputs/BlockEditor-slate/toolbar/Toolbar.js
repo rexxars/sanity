@@ -52,16 +52,16 @@ export default class Toolbar extends React.Component {
     const {
       className,
       fullscreen,
+      annotations,
       decorators,
+      listItems,
+      blockStyles,
+      insertBlocks,
       onInsertBlock,
       onMarkButtonClick,
       onListButtonClick,
       onBlockStyleChange,
-      listItems,
-      blockStyles,
-      insertBlocks,
       onAnnotationButtonClick,
-      annotations
     } = this.props
 
     return (
@@ -90,7 +90,7 @@ export default class Toolbar extends React.Component {
               annotations.map(annotation => {
                 return (
                   <AnnotationButton
-                    key={`annotationButton${annotation.name}`}
+                    key={`annotationButton${annotation.type.name}`}
                     annotation={annotation} onClick={onAnnotationButtonClick}
                   />
                 )

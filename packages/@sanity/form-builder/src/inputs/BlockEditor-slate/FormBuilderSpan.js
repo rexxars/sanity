@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 
 import DefaultButton from 'part:@sanity/components/buttons/default'
 import EditItemPopOver from 'part:@sanity/components/edititem/popover'
-import Field from '../Object/Field'
+import {FormBuilderInput} from '../../FormBuilderInput'
 import styles from './styles/FormBuilderSpan.css'
 import {applyAll} from '../../simplePatch'
 import {isEqual} from 'lodash'
@@ -19,18 +19,32 @@ export default class FormBuilderSpan extends React.Component {
     node: PropTypes.object
   }
 
-  state = {isFocused: false, isEditing: false}
+  state = {isFocused: false, isEditing: false, focusedAnnotationName: undefined}
+
   _clickCounter = 0
   _isMarkingText = false
   _editorNodeRect = null
-  _memberFields = []
+
+  componentWillMount() {
+    this.setState({
+      isEditing: false,
+      focusedAnnotationName: this.props.node.data && this.props.node.data.get('focusedAnnotationName')
+    })
+  }
+
+  componentDidMount() {
+    this._editorNodeRect = ReactDOM.findDOMNode(this.props.editor).getBoundingClientRect()
+    if (this.state.focusedAnnotationName) {
+      this.setState({isEditing: true})
+    }
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.isEditing !== this.state.isEditing
       || nextState.rootElement !== this.state.rootElement
+      || nextState.focusedAnnotationName !== this.state.focusedAnnotationName
       || nextProps.state.focusOffset !== this.props.state.focusOffset
-      || !isEqual(nextProps.node.data.get('annotations'), this.props.node.data.get('annotations'))
-      || nextProps.node.data.get('fieldBeingEdited') !== this.props.node.data.get('fieldBeingEdited')
+      || !isEqual(nextProps.node.data, this.props.node.data)
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -44,47 +58,42 @@ export default class FormBuilderSpan extends React.Component {
         this.setState({isEditing: false, ...{isFocused}})
       }
     }
-    this._memberFields = nextProps.type.fields.filter(field => {
-      return !['text', 'decorators'].includes(field.name)
-    })
+    // If annotations where emptied, just destroy this span (unwrap it to text actually)
+    if (!nextProps.node.data.get('annotations')) {
+      this.destroy()
+    }
   }
 
   componentDidUpdate() {
-    if (this.isEmpty() && this.state.isEditing && !this.getAnnotationBeingEdited()) {
+    // Close popover and clean up if it is unnanotated and no annotation type is in focus
+    if (this.isUnannotated() && this.state.isEditing && !this.state.focusedAnnotationName) {
       this.handleCloseInput()
     }
   }
 
-  componentWillMount() {
-    if (this.isEmpty()) {
-      this.setState({isEditing: true})
-    }
+  destroy = () => {
+    this.props.editor.props.blockEditor
+      .operations
+      .removeSpan(this.props.node)
   }
 
-  componentDidMount() {
-    this._editorNodeRect = ReactDOM.findDOMNode(this.props.editor).getBoundingClientRect()
-  }
-
-  isEmpty() {
-    const value = this.getAnnotations()
-    if (!value) {
+  isUnannotated() {
+    const annotations = this.getAnnotations()
+    if (!annotations) {
       return true
     }
-    return !value.filter(field => {
-      return !this.isEmptyField(field)
-    }).length
+    return !Object.keys(annotations).filter(key => {
+      return !this.isEmptyAnnotation(annotations[key])
+    }).length === 0
   }
 
-  isEmptyField = field => {
-    return isEqual(Object.keys(field.value), ['_type', '_key'])
+  isEmptyAnnotation = annotation => {
+    const otherKeys = Object.keys(annotation).filter(key => !['_type', '_key'].includes(key))
+    return otherKeys.length === 0
   }
 
   getAnnotations() {
     return this.props.node.data.get('annotations')
-  }
-
-  getAnnotationBeingEdited() {
-    return this.props.node.data.get('annotationBeingEdited')
   }
 
   handleCloseInput = () => {
@@ -92,55 +101,48 @@ export default class FormBuilderSpan extends React.Component {
     this.props.editor.focus()
     setTimeout(() => {
       if (this.state.isEditing) {
-        this.setState({isEditing: false})
+        this.setState({isEditing: false, focusedAnnotationName: undefined})
       }
-      this.cleanUpAfterDialogClosed()
+      this.garbageCollect()
     }, 100)
   }
 
-  handleRemove = () => {
-    this.props.editor.props.blockEditor
-      .operations
-      .removeSpan(this.props.node)
-  }
-
-  cleanUpAfterDialogClosed() {
-    const value = this.getAnnotations()
-    if (value) {
-      Object.keys(value).forEach(key => {
-        if (this.isEmptyField(value[key])) {
-          delete value[key]
+  garbageCollect() {
+    let nextAnnotations = {...this.getAnnotations()}
+    if (nextAnnotations) {
+      Object.keys(nextAnnotations).forEach(key => {
+        if (this.isEmptyAnnotation(nextAnnotations[key])) {
+          delete nextAnnotations[key]
         }
       })
     }
     const {editor, node} = this.props
-    if (value && !Object.keys(value).length) {
-      this.handleRemove()
-      return
+    if (nextAnnotations && !Object.keys(nextAnnotations).length) {
+      nextAnnotations = undefined
+    }
+    const data = {
+      ...node.data.toObject(),
+      focusedAnnotationName: undefined,
+      annotations: nextAnnotations
     }
     const next = editor.getState()
       .transform()
-      .setNodeByKey(node.key, {
-        data: {
-          fieldBeingEdited: undefined,
-          value: value
-        }
-      })
+      .setNodeByKey(node.key, {data})
       .apply()
 
     editor.onChange(next)
   }
 
-  setFieldBeingEdited(fieldName) {
+  focusAnnotation(annotationName) {
     const {editor, node} = this.props
+    this.setState({focusedAnnotationName: annotationName})
+    const data = {
+      ...node.data.toObject(),
+      focusedAnnotationName: annotationName
+    }
     const next = editor.getState()
       .transform()
-      .setNodeByKey(node.key, {
-        data: {
-          fieldBeingEdited: fieldName,
-          value: node.data.get('value')
-        }
-      })
+      .setNodeByKey(node.key, {data})
       .apply()
     editor.onChange(next)
   }
@@ -162,22 +164,49 @@ export default class FormBuilderSpan extends React.Component {
     this._isMarkingText = false
   }
 
-  handleFieldChange = (event, field) => {
+  handleNodeClick = () => {
+    const annotations = this.getAnnotations()
+    // Don't do anyting if this type doesn't have annotations.
+    if (this.props.type.annotations.length === 0) {
+      return
+    }
+    // Try to figure out which annotation that should be focused when user clicks the span
+    let focusedAnnotationName
+    if (this.props.type.annotations.length === 1) { // Only one annotation type, always focus this one
+      focusedAnnotationName = this.props.type.annotations[0].name
+    } else if (annotations && Object.keys(annotations).length === 1) { // Only one annotation value, focus it
+      focusedAnnotationName = annotations[Object.keys(annotations)[0]]._type
+    }
+    if (focusedAnnotationName) {
+      this.focusAnnotation(focusedAnnotationName)
+    }
+    // If no focusedAnnotationName was found, buttons to edit respective annotations will be show
+  }
+
+  handleAnnotationChange = event => {
+    const name = this.state.focusedAnnotationName
+    const annotations = this.getAnnotations()
+    const nextAnnotation = {...annotations[name]}
+    const nextAnnotations = {...annotations}
+    nextAnnotations[name] = applyAll(nextAnnotation, event.patches)
     const {node, editor} = this.props
+    const data = {
+      ...node.data.toObject(),
+      focusedAnnotationName: this.state.focusedAnnotationName,
+      annotations: nextAnnotations
+    }
     const next = editor.getState()
       .transform()
-      .setNodeByKey(node.key, {
-        data: {
-          annotationBeingEdited: this.getAnnotationBeingEdited(),
-          annotations: applyAll(node.data.get('annotations').map(annotation => annotation.value), event.prefixAll(field.name).patches)
-        }
-      })
+      .setNodeByKey(node.key, {data})
       .apply()
     editor.onChange(next)
   }
 
   renderInput() {
     const annotations = this.getAnnotations()
+    const annotationTypes = this.props.type.annotations
+    const {focusedAnnotationName} = this.state
+
     const style = {}
     if (this.state.rootElement) {
       const {width, height, left} = this.state.rootElement.getBoundingClientRect()
@@ -186,41 +215,37 @@ export default class FormBuilderSpan extends React.Component {
       style.left = `${left - this._editorNodeRect.left}px`
       style.top = `${this.state.rootElement.offsetTop + height + 10}px`
     }
-    const annotationBeingEdited = this.getAnnotationBeingEdited()
-    let fieldBeingEdited
-    if (this._memberFields.length === 1) {
-      fieldBeingEdited = this.memberFields[0]
-    } else if (annotations && annotations.length === 1) {
-      fieldBeingEdited = this._memberFields.find(memberField => {
-        return memberField.name === annotations[0].type.name
-      })
-    } else if (annotationBeingEdited) {
-      fieldBeingEdited = this._memberFields.find(memberField => {
-        return memberField.name === annotationBeingEdited
-      })
-    }
-    const fieldValue = fieldBeingEdited && annotations && annotations.find(annotation => annotation.type.name === fieldBeingEdited)
+
+    const annotationTypeInFocus = annotationTypes.find(type => {
+      return type.name === focusedAnnotationName
+    })
+    const focusedAnnotationKey = Object.keys(annotations).find(key => {
+      return annotations[key]._type === focusedAnnotationName
+    })
+    const annotationValue = focusedAnnotationKey && annotations && annotations[focusedAnnotationKey]
     return (
       <span className={styles.editSpanContainer} style={style}>
         <EditItemPopOver
           onClose={this.handleCloseInput}
         >
-          { !fieldBeingEdited && (
+          { /* Buttons for selecting annotation when there are several, and none is focused  */ }
+          { !focusedAnnotationName && Object.keys(annotations).length > 1 && (
             <div>
+              <h3>Which annotation?</h3>
               {
-                this._memberFields.map(memberField => {
-                  if (!annotations || !annotations.length || !annotations.find(annotation => annotation.type.name === memberField.name)) {
+                Object.keys(annotations).map(annotationKey => {
+                  if (!annotations[annotationKey]) {
                     return null
                   }
                   const setFieldFunc = () => {
-                    this.setFieldBeingEdited(memberField.name)
+                    this.focusAnnotation(annotations[annotationKey]._type)
                   }
                   return (
                     <DefaultButton
-                      key={`memberField${memberField.name}`}
+                      key={`annotationButton${annotationKey}`}
                       onClick={setFieldFunc}
                     >
-                      {memberField.type.title}
+                      {annotationTypes.find(type => type.name === annotations[annotationKey]._type).title}
                     </DefaultButton>
                   )
                 })
@@ -228,24 +253,22 @@ export default class FormBuilderSpan extends React.Component {
             </div>
           )}
 
-          { fieldBeingEdited && (
-            <Field
-              field={fieldBeingEdited}
-              level={0}
-              value={fieldValue}
-              onChange={this.handleFieldChange}
-            />
+          { /* Render input for focused annotation  */ }
+          { focusedAnnotationName && (
+            <div>
+              <FormBuilderInput
+                value={annotationValue}
+                type={annotationTypeInFocus}
+                level={0}
+                onChange={this.handleAnnotationChange}
+                autoFocus
+              />
+            </div>
           )}
         </EditItemPopOver>
       </span>
     )
   }
-
-  getCustomFields() {
-    return this.props.type.fields
-      .filter(field => field.name !== 'text' && field.name !== 'marks')
-  }
-
 
   setRootElement = element => {
     this.setState({rootElement: element})
@@ -259,6 +282,7 @@ export default class FormBuilderSpan extends React.Component {
         {...attributes}
         onMouseDown={this.handleMouseDown}
         onMouseUp={this.handleMouseUp}
+        onClick={this.handleNodeClick}
         className={styles.root}
         ref={this.setRootElement}
       >

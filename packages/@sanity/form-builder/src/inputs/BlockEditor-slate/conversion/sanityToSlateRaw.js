@@ -16,20 +16,29 @@ function toRawMark(markName) {
 }
 
 function sanitySpanToRawSlateBlockNode(span, sanityBlock) {
+
+  if (span._type !== 'span') {
+    return {
+      kind: 'inline',
+      isVoid: true,
+      type: span._type,
+      key: span._key,
+      data: {value: span},
+      nodes: []
+    }
+  }
+
   const {text, marks = []} = span
   const decorators = marks.filter(mark => {
-    return !Object.keys(sanityBlock.markDefs).includes(mark)
+    return !sanityBlock.markDefs.map(def => def._key).includes(mark)
   })
-  const annotations = marks.filter(x => decorators.indexOf(x) == -1)
-
-  let value
-  if (annotations.length) {
-    value = {}
-    annotations.forEach(key => {
-      const entry = sanityBlock.markDefs[key]
-      const name = entry._name
-      delete entry._name
-      value[name] = entry
+  const annotationKeys = marks.filter(x => decorators.indexOf(x) == -1)
+  let annotations
+  if (annotationKeys.length) {
+    annotations = {}
+    annotationKeys.forEach(key => {
+      const annotation = sanityBlock.markDefs.find(def => def._key === key)
+      annotations[annotation._type] = annotation
     })
   }
 
@@ -39,15 +48,16 @@ function sanitySpanToRawSlateBlockNode(span, sanityBlock) {
     marks: decorators.map(toRawMark)
   }
 
-  if (!value) {
-    return {kind: 'text', ranges: [range]}
+  if (!annotations) {
+    return {key: span._key, kind: 'text', ranges: [range]}
   }
 
   return {
     kind: 'inline',
     isVoid: false,
     type: 'span',
-    data: {value: value},
+    key: span._key,
+    data: {annotations},
     nodes: [
       {kind: 'text', ranges: [range]}
     ]

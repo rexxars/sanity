@@ -1,9 +1,10 @@
 import React from 'react'
-import {Block} from 'slate'
-import {get} from 'lodash'
+import {Block, setKeyGenerator} from 'slate'
 import createBlockNode from '../createBlockNode'
+import createInlineNode from '../createInlineNode'
 import createSpanNode from '../createSpanNode'
 import mapToObject from './mapToObject'
+import randomKey from '../util/randomKey'
 
 import {getSpanType} from './spanHelpers'
 import {SLATE_DEFAULT_STYLE} from '../constants'
@@ -14,6 +15,10 @@ import Header from '../preview/Header'
 import ListItem from '../preview/ListItem'
 import Decorator from '../preview/Decorator'
 import Normal from '../preview/Normal'
+
+// Set our own key generator
+const keyGenerator = () => randomKey(12)
+setKeyGenerator(keyGenerator)
 
 // When the slate-fields are rendered in the editor, their node data is stored in a parent container component.
 // In order to use the node data as props inside our components, we have to dereference them here first (see list and header keys)
@@ -67,6 +72,7 @@ function createSlatePreviewNode(props) {
 }
 
 export default function prepareSlateForBlockEditor(blockEditor) {
+
   const type = blockEditor.props.type
   const blockType = type.of.find(ofType => ofType.name === 'block')
   if (!blockType) {
@@ -92,22 +98,23 @@ export default function prepareSlateForBlockEditor(blockEditor) {
       && listField.type.options.list.filter(listStyle => listStyle.value)
   }
 
-  const decoratorsField = getSpanType(type)
-    .fields.find(field => field.name === 'decorators')
-
-  const allowedDecorators = (get(decoratorsField, 'type.options.list') || []).map(decorator => decorator.value)
 
   const memberTypesExceptBlock = type.of.filter(ofType => ofType.name !== 'block')
   const spanType = getSpanType(type)
-  const annotationsFields = spanType.fields.filter(field => {
-    return !['text', 'decorators'].includes(field.name)
-  })
+  const allowedDecorators = spanType.decorators.map(decorator => decorator.value)
 
   const FormBuilderBlock = createBlockNode(type)
+  const FormBuilderInline = createInlineNode(type)
 
   const slateSchema = {
     nodes: {
-      ...mapToObject(memberTypesExceptBlock, ofType => [ofType.name, FormBuilderBlock]),
+      ...mapToObject(
+        memberTypesExceptBlock,
+        ofType => [
+          ofType.name,
+          ofType.options && ofType.options.inline ? FormBuilderInline : FormBuilderBlock
+        ]
+      ),
       __unknown: FormBuilderBlock,
       span: createSpanNode(spanType),
       contentBlock: createSlatePreviewNode,
@@ -133,14 +140,71 @@ export default function prepareSlateForBlockEditor(blockEditor) {
             .insertNodeByKey(document.key, 0, block)
             .focus()
         }
+      },
+      // Rule to unique annotation's _keys within a block (i.e. copy/pasted within the same block)
+      {
+        match: node => {
+          return node.kind === 'block'
+            && node.type === 'contentBlock'
+            && node.filterDescendants(desc => {
+              const annotations = desc.data && desc.data.get('annotations')
+              return annotations && Object.keys(annotations).length
+            }).size
+        },
+        validate: node => {
+          const duplicateKeys = node.filterDescendants(
+            desc => desc.data && desc.data.get('annotations')
+          )
+          .toArray()
+          .map(aNode => {
+            const annotations = aNode.data.get('annotations')
+            return Object.keys(annotations).map(name => annotations[name]._key)
+          })
+          .reduce((a, b) => {
+            return a.concat(b)
+          }, [])
+          .filter((key, i, keys) => keys.lastIndexOf(key) !== i)
+          if (duplicateKeys.length) {
+            return duplicateKeys.map(key => {
+              return {
+                dKey: key,
+                aNode: node.filterDescendants(
+                  desc => {
+                    const annotations = desc.data && desc.data.get('annotations')
+                    return annotations
+                      && Object.keys(annotations)
+                          .find(name => annotations[name]._key === key)
+                  }).toArray().slice(-1)[0] // The last occurrence, most of the time the one we want
+              }
+            })
+          }
+          return null
+        },
+        normalize: (transform, node, keysAndNodes) => {
+          keysAndNodes.forEach(keyAndNode => {
+            const {dKey, aNode} = keyAndNode
+            const annotations = {...aNode.data.get('annotations')}
+            const newAnnotations = {}
+            Object.keys(annotations).forEach(name => {
+              newAnnotations[name] = {...annotations[name]}
+              if (annotations[name]._key === dKey) {
+                newAnnotations[name]._key = randomKey(12)
+              }
+            })
+            const data = {...aNode.data.toObject(), annotations: newAnnotations}
+            transform.setNodeByKey(aNode.key, {data})
+          })
+          blockEditor.props.onChange(transform.apply({save: false}))
+          return transform
+        }
       }
     ]
   }
   return {
     listItems: listItems,
     textStyles: textStyles,
-    annotations: annotationsFields,
-    decorators: decoratorsField,
+    annotationTypes: spanType.annotations,
+    decorators: spanType.decorators,
     customBlocks: memberTypesExceptBlock,
     slateSchema: slateSchema
   }

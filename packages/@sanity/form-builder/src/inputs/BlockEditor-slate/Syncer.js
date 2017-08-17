@@ -14,7 +14,7 @@ function deserialize(value, type) {
   return Raw.deserialize(sanityToSlateRaw(value, type))
 }
 function serialize(state) {
-  return slateRawToSanity(Raw.serialize(state))
+  return slateRawToSanity(Raw.serialize(state, {preserveKeys: true}))
 }
 
 function isDocumentEqual(slateState, otherSlateState) {

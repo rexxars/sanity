@@ -6,7 +6,7 @@ import {
   BLOCK_STYLES,
   DEFAULT_BLOCK_STYLES,
   DEFAULT_LINK_ANNOTATION,
-  DEFAULT_LIST_TYPES,
+  DEFAULT_LIST_TYPES, DEFAULT_MARKS_FIELD,
   DEFAULT_TEXT_FIELD
 } from './defaults'
 
@@ -130,20 +130,7 @@ const DEFAULT_ANNOTATIONS = [
   DEFAULT_LINK_ANNOTATION
 ]
 
-function ensureTextField(fields) {
-  return fields.some(style => style.value === 'text')
-    ? fields
-    : [DEFAULT_TEXT_FIELD, ...fields]
-}
-
-function createSpansField(config = {}) {
-  const decoratorsField = createDecoratorField(config.decorators)
-
-  const fields = [
-    decoratorsField,
-    ...(config.annotations ? config.annotations : DEFAULT_ANNOTATIONS)
-  ]
-
+function createSpansField(marks) {
   return {
     name: 'spans',
     title: 'Content',
@@ -151,7 +138,9 @@ function createSpansField(config = {}) {
     of: [
       {
         type: 'span',
-        fields: ensureTextField(fields)
+        fields: [DEFAULT_TEXT_FIELD, DEFAULT_MARKS_FIELD],
+        annotations: marks.annotations || DEFAULT_ANNOTATIONS,
+        decorators: marks.decorators || DEFAULT_DECORATORS
       }
     ]
   }

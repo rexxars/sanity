@@ -1,6 +1,6 @@
 import {SLATE_DEFAULT_STYLE, SLATE_SPAN_TYPE} from './constants'
-import {getSpanType} from './util/spanHelpers'
 import {createProtoValue} from './createProtoValue'
+import randomKey from './util/randomKey'
 
 export default function createBlockEditorOperations(blockEditor) {
 
@@ -14,23 +14,11 @@ export default function createBlockEditorOperations(blockEditor) {
     return blockEditor.editor.getState()
   }
 
-  const span = {
-    isVoid: false, // todo: make void if schema says so
-    type: SLATE_SPAN_TYPE,
-    kind: 'inline',
-    data: undefined
-  }
-
-
   return {
 
-    createFormBuilderSpan(annotation) {
+    createFormBuilderSpan(annotationType) {
       const state = getState()
       const {startOffset} = state
-
-      const spanType = getSpanType(blockEditor.props.type)
-      const annotationField = spanType.fields.find(field => field.name === annotation.name)
-
       let transform
 
       if (state.isExpanded) {
@@ -42,17 +30,25 @@ export default function createBlockEditorOperations(blockEditor) {
           return null
         }
       }
+      const key = randomKey(12)
+      const span = {
+        isVoid: false,
+        type: SLATE_SPAN_TYPE,
+        kind: 'inline',
+        data: undefined,
+        key: key
+      }
 
       transform = transform
         .unwrapInline(SLATE_SPAN_TYPE)
         .wrapInline(span)
 
       // There is a bug (in Slate?) where if you
-      // select the first word in a block and try to
+      // select the first word in a block text and try to
       // make a link of it, at this point, it says
       // that the range is not in the document
       // Move the selection back to the initial selection
-      if (startOffset === 0 && state.isExpanded) {
+      if (startOffset === 0 && state.isExpanded && state.inlines.size === 0) {
         transform = transform.select(state.selection)
       }
 
@@ -67,9 +63,13 @@ export default function createBlockEditorOperations(blockEditor) {
       //     nextState.selection.anchorOffset,
       //     nextState.selection.focusOffset
       //   )
+
       const currentSpan = blockEditor.props.value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()[0]
-      const data = {annotations: currentSpan ? currentSpan.data.get('annotations') || [] : [], annotationBeingEdited: annotation.name}
-      data.annotations.push({type: annotationField, value: createProtoValue(annotationField.type)})
+      const data = {
+        annotations: currentSpan ? currentSpan.data.get('annotations') || {} : {},
+        focusedAnnotationName: annotationType.name
+      }
+      data.annotations[annotationType.name] = createProtoValue(annotationType, key)
       // Update the span with new data
       const finalState = transform
         .setInline({data: data})
@@ -78,26 +78,30 @@ export default function createBlockEditorOperations(blockEditor) {
       return onChange(finalState)
     },
 
-    removeAnnotationFromSpan(spanNode, annotation) {
+    removeAnnotationFromSpan(spanNode, annotationType) {
       const state = getState()
-      const value = spanNode.data.get('value')
+      const annotations = spanNode.data.get('annotations')
+      if (!annotations) {
+        return
+      }
       // Remove the whole span if this annotation is the only one left
-      if (value.length === 1 && value[0].name === annotation._type.name) {
+      if (Object.keys(annotations).length === 1 && annotations[annotationType.name]) {
         this.removeSpan(spanNode)
         return
       }
-      value.forEach(val => {
-        if (val.name === annotation._type.name) {
-          value.splice(value.indexOf(val), 1)
+      // If several annotations, remove only this one and leave the node intact
+      Object.keys(annotations).forEach(name => {
+        if (annotations[name]._type === annotationType.name) {
+          delete annotations[name]
         }
       })
+      const data = {
+        ...spanNode.data.toObject(),
+        focusedAnnotationName: undefined,
+        annotations: annotations
+      }
       const nextState = state.transform()
-        .setNodeByKey(spanNode.key, {
-          data: {
-            fieldBeingEdited: undefined,
-            value: value
-          }
-        })
+        .setNodeByKey(spanNode.key, {data})
         .apply()
 
       onChange(nextState)
@@ -209,16 +213,33 @@ export default function createBlockEditorOperations(blockEditor) {
 
     insertBlock(type) {
       const state = getState()
-
+      const key = randomKey(12)
       const props = {
         type: type.name,
         isVoid: true,
+        key: key,
         data: {
-          value: createProtoValue(type)
+          value: createProtoValue(type, key)
         }
       }
 
       const nextState = state.transform().insertBlock(props).apply()
+      onChange(nextState)
+    },
+
+    insertInline(type) {
+      const state = getState()
+      const key = randomKey(12)
+      const props = {
+        type: type.name,
+        isVoid: true,
+        key: key,
+        data: {
+          value: createProtoValue(type, key)
+        }
+      }
+
+      const nextState = state.transform().insertInline(props).apply()
       onChange(nextState)
     },
 

@@ -16,6 +16,13 @@ export const DEFAULT_TEXT_FIELD = {
   title: 'Text'
 }
 
+export const DEFAULT_MARKS_FIELD = {
+  name: 'marks',
+  type: 'array',
+  of: [{type: 'string'}],
+  title: 'Marks'
+}
+
 export const LIST_TYPES = {
   bullet: {title: 'Bullet', value: 'bullet'},
   numbered: {title: 'Numbered', value: 'number'}

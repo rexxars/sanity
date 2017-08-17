@@ -1,7 +1,6 @@
-
 export const blocksTest = {
-  name: 'blocksTest',
-  title: 'Blocks test',
+  name: 'blocksWithAnnotations',
+  title: 'Blocks with annotations',
   type: 'object',
   fields: [
     {
@@ -10,23 +9,30 @@ export const blocksTest = {
       type: 'string',
     },
     {
-      name: 'customized',
-      title: 'Customized with block types',
+      name: 'annotatedContent',
+      title: 'Annotated content',
       type: 'array',
       of: [
-          {type: 'image', title: 'Image'},
-          {type: 'author', title: 'Author', options: {inline: true}},
+        {type: 'image', title: 'Image'},
+        {type: 'author', title: 'Author'},
+        {
+          type: 'object',
+          title: 'Footnote',
+          name: 'footnote',
+          fields: [{type: 'string', name: 'note'}],
+          options: {inline: true}
+        },
         {
           type: 'block',
           styles: [
-              {title: 'Normal', value: 'normal'},
-              {title: 'H1', value: 'h1'},
-              {title: 'H2', value: 'h2'},
-              {title: 'Quote', value: 'blockquote'}
+            {title: 'Normal', value: 'normal'},
+            {title: 'H1', value: 'h1'},
+            {title: 'H2', value: 'h2'},
+            {title: 'Quote', value: 'blockquote'}
           ],
           lists: [
-              {title: 'Bullet', value: 'bullet'},
-              {title: 'Numbered', value: 'number'}
+            {title: 'Bullet', value: 'bullet'},
+            {title: 'Numbered', value: 'number'}
           ],
           marks: {
             decorators: [
@@ -34,8 +40,13 @@ export const blocksTest = {
               {title: 'Emphasis', value: 'em'}
             ],
             annotations: [
-              {type: 'reference', to: {type: 'author'}, name: 'authorReference', title: 'Author', options: {icon: ''}},
-              {type: 'object', title: 'Address', name: 'address', fields: [{type: 'string', name: 'street'}, {type: 'string', name: 'number'}]},
+              {type: 'reference', to: {type: 'author'}, name: 'authorReference', title: 'Author', preview: {select: ['name']}, options: {icon: ''}},
+              {
+                type: 'object',
+                title: 'Address',
+                name: 'address',
+                fields: [{type: 'string', name: 'street'}, {type: 'string', name: 'number'}]
+              },
               {type: 'object', title: 'Link', name: 'link', fields: [{type: 'string', name: 'href'}]},
             ]
           }

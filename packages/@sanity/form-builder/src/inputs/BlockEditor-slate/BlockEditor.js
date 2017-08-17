@@ -10,7 +10,6 @@ import Toolbar from './toolbar/Toolbar'
 import createBlockEditorOperations from './createBlockEditorOperations'
 import prepareSlateForBlockEditor from './util/prepareSlateForBlockEditor'
 import initializeSlatePlugins from './util/initializeSlatePlugins'
-import {openSpanDialog} from './util/spanHelpers'
 
 import styles from './styles/BlockEditor.css'
 import {SLATE_SPAN_TYPE} from './constants'
@@ -49,7 +48,7 @@ export default class BlockEditor extends React.Component {
     this.slateSchema = preparation.slateSchema
     this.textStyles = preparation.textStyles
     this.listItems = preparation.listItems
-    this.annotations = preparation.annotations
+    this.annotationTypes = preparation.annotationTypes
     this.customBlocks = preparation.customBlocks
     this.operations = createBlockEditorOperations(this)
     this.slatePlugins = initializeSlatePlugins(this)
@@ -66,6 +65,10 @@ export default class BlockEditor extends React.Component {
   }
 
   handleInsertBlock = item => {
+    if (item.options && item.options.inline) {
+      this.operations.insertInline(item)
+      return
+    }
     this.operations.insertBlock(item)
   }
 
@@ -92,74 +95,35 @@ export default class BlockEditor extends React.Component {
       const {value} = this.props
       const spans = value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
       spans.forEach(span => {
-        this.operations.removeAnnotationFromSpan(span, annotation)
+        this.operations.removeAnnotationFromSpan(span, annotation.type)
       })
       return
     }
-    this.operations.createFormBuilderSpan(annotation)
+    this.operations.createFormBuilderSpan(annotation.type)
   }
 
-  handleBlockStyleChange = selectedValue => {
-    this.operations.setBlockStyle(selectedValue.style.value)
-    this.refreshCSS()
-  }
-
-  hasDecorator(decoratorName) {
-    const {value} = this.props
-    return value.marks.some(mark => mark.type == decoratorName)
-  }
-
-  hasAnnotation(annotation) {
+  hasAnnotationType(annotationType) {
     const {value} = this.props
     const spans = value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
-    return spans.find(span => {
-      const val = span.data.get('value') || {}
-      return val[annotation.name]
-    }) !== undefined
+    return spans.some(span => {
+      const annotations = span.data.get('annotations') || {}
+      return Object.keys(annotations).find(key => annotations[key]._type === annotationType.name)
+    })
+  }
+
+  getActiveAnnotations() {
+    return this.annotationTypes.map(annotationType => {
+      const active = this.hasAnnotationType(annotationType)
+      return {
+        active: active,
+        type: annotationType,
+      }
+    })
   }
 
   hasStyle(styleName) {
     const {value} = this.props
     return value.blocks.some(block => block.data.get('style') === styleName)
-  }
-
-  hasListItem(listItem) {
-    const {value} = this.props
-    return value.blocks.some(block => {
-      return block.data.get('listItem') === listItem
-    })
-  }
-
-  getActiveDecorators() {
-    return Object.keys(this.slateSchema.marks).map(decorator => {
-      return {
-        type: decorator,
-        active: this.hasDecorator(decorator)
-      }
-    })
-  }
-
-  getActiveAnnotations() {
-    return this.annotations.map(annotation => {
-      return {
-        active: this.hasAnnotation(annotation),
-        ...annotation
-      }
-    })
-    // const {value} = this.props
-    // return value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
-  }
-
-
-  getListItems() {
-    return (this.listItems)
-      .map((item, index) => {
-        return {
-          type: item.value,
-          title: item.title,
-          active: this.hasListItem(item.value)
-        }
-      })
   }
 
   getBlockStyles() {
@@ -199,6 +163,43 @@ export default class BlockEditor extends React.Component {
       items: items,
       value: value
     }
+  }
+
+  handleBlockStyleChange = selectedValue => {
+    this.operations.setBlockStyle(selectedValue.style.value)
+    this.refreshCSS()
+  }
+
+  hasDecorator(decoratorName) {
+    const {value} = this.props
+    return value.marks.some(mark => mark.type == decoratorName)
+  }
+
+  getActiveDecorators() {
+    return Object.keys(this.slateSchema.marks).map(decorator => {
+      return {
+        type: decorator,
+        active: this.hasDecorator(decorator)
+      }
+    })
+  }
+
+  hasListItem(listItem) {
+    const {value} = this.props
+    return value.blocks.some(block => {
+      return block.data.get('listItem') === listItem
+    })
+  }
+
+  getListItems() {
+    return (this.listItems)
+      .map((item, index) => {
+        return {
+          type: item.value,
+          title: item.title,
+          active: this.hasListItem(item.value)
+        }
+      })
   }
 
   handleToggleFullscreen = () => {
