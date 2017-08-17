@@ -139,7 +139,8 @@ export default function prepareSlateForBlockEditor(blockEditor) {
   return {
     listItems: listItems,
     textStyles: textStyles,
-    customSpans: annotationsFields,
+    annotations: annotationsFields,
+    decorators: decoratorsField,
     customBlocks: memberTypesExceptBlock,
     slateSchema: slateSchema
   }
