@@ -18,17 +18,18 @@ export default function createBlockEditorOperations(blockEditor) {
     isVoid: false, // todo: make void if schema says so
     type: SLATE_SPAN_TYPE,
     kind: 'inline',
-    data: {value: undefined}
+    data: undefined
   }
 
 
   return {
 
-    createFormBuilderSpan() {
+    createFormBuilderSpan(annotation) {
       const state = getState()
       const {startOffset} = state
 
       const spanType = getSpanType(blockEditor.props.type)
+      const annotationField = spanType.fields.find(field => field.name === annotation.name)
 
       let transform
 
@@ -66,40 +67,39 @@ export default function createBlockEditorOperations(blockEditor) {
       //     nextState.selection.anchorOffset,
       //     nextState.selection.focusOffset
       //   )
-
-      // const spanNode = {data: {value: {text: selectedText}}}
-
-
+      const currentSpan = blockEditor.props.value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()[0]
+      const data = {annotations: currentSpan ? currentSpan.data.get('annotations') || [] : [], annotationBeingEdited: annotation.name}
+      data.annotations.push({type: annotationField, value: createProtoValue(annotationField.type)})
       // Update the span with new data
       const finalState = transform
-        .setInline({data: {value: createProtoValue(spanType.type)}})
+        .setInline({data: data})
         .apply()
 
       return onChange(finalState)
     },
 
-    resetSpan(spanNode) {
+    removeAnnotationFromSpan(spanNode, annotation) {
       const state = getState()
-      const spanField = getSpanType(blockEditor.props.type)
-      const data = {value: createProtoValue(spanField.type)}
-      let nextState
-      if (Array.isArray(spanNode)) {
-        nextState = state.transform()
-        spanNode.forEach(node => {
-          nextState = nextState
-            .setNodeByKey(spanNode.key, {})
-        })
-        nextState = nextState.focus()
-      } else if (spanNode) {
-        nextState = state.transform()
-          .setNodeByKey(spanNode.key, {data})
-      } else {
-        // Apply on current selection
-        nextState = state.transform()
-          .setInline({data})
+      const value = spanNode.data.get('value')
+      // Remove the whole span if this annotation is the only one left
+      if (value.length === 1 && value[0].name === annotation._type.name) {
+        this.removeSpan(spanNode)
+        return
       }
+      value.forEach(val => {
+        if (val.name === annotation._type.name) {
+          value.splice(value.indexOf(val), 1)
+        }
+      })
+      const nextState = state.transform()
+        .setNodeByKey(spanNode.key, {
+          data: {
+            fieldBeingEdited: undefined,
+            value: value
+          }
+        })
+        .apply()
 
-      nextState = nextState.focus().apply()
       onChange(nextState)
     },
 
