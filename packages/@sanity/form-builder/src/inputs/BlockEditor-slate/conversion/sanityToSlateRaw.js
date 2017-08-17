@@ -15,16 +15,31 @@ function toRawMark(markName) {
   }
 }
 
-function sanitySpanToRawSlateBlockNode(span) {
-  const {text, _type, marks = [], ...rest} = span
+function sanitySpanToRawSlateBlockNode(span, sanityBlock) {
+  const {text, marks = []} = span
+  const decorators = marks.filter(mark => {
+    return !Object.keys(sanityBlock.markDefs).includes(mark)
+  })
+  const annotations = marks.filter(x => decorators.indexOf(x) == -1)
+
+  let value
+  if (annotations.length) {
+    value = {}
+    annotations.forEach(key => {
+      const entry = sanityBlock.markDefs[key]
+      const name = entry._name
+      delete entry._name
+      value[name] = entry
+    })
+  }
 
   const range = {
     kind: 'range',
     text: text,
-    marks: marks.map(toRawMark)
+    marks: decorators.map(toRawMark)
   }
 
-  if (!hasKeys(rest)) {
+  if (!value) {
     return {kind: 'text', ranges: [range]}
   }
 
@@ -32,7 +47,7 @@ function sanitySpanToRawSlateBlockNode(span) {
     kind: 'inline',
     isVoid: false,
     type: 'span',
-    data: {value: {_type, ...rest}},
+    data: {value: value},
     nodes: [
       {kind: 'text', ranges: [range]}
     ]
@@ -41,12 +56,7 @@ function sanitySpanToRawSlateBlockNode(span) {
 
 function sanityBlockToRawNode(sanityBlock, type) {
   // eslint-disable-next-line no-unused-vars
-  const {spans, _type, ...rest} = sanityBlock
-
-  // todo: refactor
-  const spanType = type.fields
-    .find(field => field.name === 'spans').type.of
-    .find(spanMemberType => spanMemberType.name === 'span')
+  const {children, _type, ...rest} = sanityBlock
 
   const restData = hasKeys(rest) ? {data: {_type, ...rest}} : {}
 
@@ -55,7 +65,7 @@ function sanityBlockToRawNode(sanityBlock, type) {
     isVoid: false,
     type: 'contentBlock',
     ...restData,
-    nodes: spans.map(span => sanitySpanToRawSlateBlockNode(span, spanType))
+    nodes: children.map(child => sanitySpanToRawSlateBlockNode(child, sanityBlock))
   }
 }
 
