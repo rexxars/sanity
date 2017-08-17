@@ -49,7 +49,7 @@ export default class BlockEditor extends React.Component {
     this.slateSchema = preparation.slateSchema
     this.textStyles = preparation.textStyles
     this.listItems = preparation.listItems
-    this.customSpans = preparation.customSpans
+    this.annotations = preparation.annotations
     this.customBlocks = preparation.customBlocks
     this.operations = createBlockEditorOperations(this)
     this.slatePlugins = initializeSlatePlugins(this)
@@ -86,20 +86,17 @@ export default class BlockEditor extends React.Component {
     }
   }
 
-
-  handleLinkButtonClick = linkNodes => {
+  handleAnnotationButtonClick = annotation => {
     this.editor.focus()
-    if (linkNodes.length) {
-      // If selection contains more than one link,
-      // the button will act as a "remove links"-button
-      if (linkNodes.length > 1) {
-        this.operations.removeSpan(linkNodes)
-        return
-      }
-      openSpanDialog(linkNodes[0])
+    if (annotation.active) {
+      const {value} = this.props
+      const spans = value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
+      spans.forEach(span => {
+        this.operations.removeAnnotationFromSpan(span, annotation)
+      })
       return
     }
-    this.operations.createFormBuilderSpan()
+    this.operations.createFormBuilderSpan(annotation)
   }
 
   handleBlockStyleChange = selectedValue => {
@@ -112,14 +109,18 @@ export default class BlockEditor extends React.Component {
     return value.marks.some(mark => mark.type == decoratorName)
   }
 
+  hasAnnotation(annotation) {
+    const {value} = this.props
+    const spans = value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
+    return spans.find(span => {
+      const val = span.data.get('value') || {}
+      return val[annotation.name]
+    }) !== undefined
+  }
+
   hasStyle(styleName) {
     const {value} = this.props
     return value.blocks.some(block => block.data.get('style') === styleName)
-  }
-
-  getActiveLinks() {
-    const {value} = this.props
-    return value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
   }
 
   hasListItem(listItem) {
@@ -137,6 +138,18 @@ export default class BlockEditor extends React.Component {
       }
     })
   }
+
+  getActiveAnnotations() {
+    return this.annotations.map(annotation => {
+      return {
+        active: this.hasAnnotation(annotation),
+        ...annotation
+      }
+    })
+    // const {value} = this.props
+    // return value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()
+  }
+
 
   getListItems() {
     return (this.listItems)
@@ -278,7 +291,6 @@ export default class BlockEditor extends React.Component {
     const {fullscreen} = this.state
 
     const hasError = validation && validation.messages && validation.messages.length > 0
-    const showLinkButton = this.customSpans.length > 0
     return (
       <FormField
         label={type.title}
@@ -299,13 +311,12 @@ export default class BlockEditor extends React.Component {
             onFullscreenEnable={this.handleToggleFullscreen}
             fullscreen={this.state.fullscreen}
             onMarkButtonClick={this.handleOnClickMarkButton}
+            onAnnotationButtonClick={this.handleAnnotationButtonClick}
             onListButtonClick={this.handleOnClickListFormattingButton}
             onBlockStyleChange={this.handleBlockStyleChange}
             listItems={this.getListItems()}
             blockStyles={this.getBlockStyles()}
-            onLinkButtonClick={this.handleLinkButtonClick}
-            activeLinks={this.getActiveLinks()}
-            showLinkButton={showLinkButton}
+            annotations={this.getActiveAnnotations()}
             decorators={this.getActiveDecorators()}
           />
           <div

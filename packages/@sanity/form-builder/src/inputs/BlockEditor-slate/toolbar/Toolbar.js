@@ -8,33 +8,35 @@ import BlockStyle, {blockStyleShape} from './BlockStyle'
 import Button from 'part:@sanity/components/buttons/default'
 import FullscreenIcon from 'part:@sanity/base/fullscreen-icon'
 import CloseIcon from 'part:@sanity/base/close-icon'
-import LinkButton from './LinkButton'
+import AnnotationButton from './AnnotationButton'
 
 export default class Toolbar extends React.Component {
 
   static propTypes = {
-    onInsertBlock: PropTypes.func,
-    onFullscreenEnable: PropTypes.func,
+
     className: PropTypes.string,
+
     fullscreen: PropTypes.bool,
-    onMarkButtonClick: PropTypes.func,
-    onListButtonClick: PropTypes.func,
-    onBlockStyleChange: PropTypes.func,
-    insertBlocks: PropTypes.arrayOf(insertBlockShape),
-    decorators: PropTypes.arrayOf(
-      decorator
-    ),
-    listItems: PropTypes.arrayOf(
-      listItem
-    ),
+
     blockStyles: PropTypes.shape({
       value: PropTypes.arrayOf(blockStyleShape),
       items: PropTypes.arrayOf(blockStyleShape),
       onSelect: PropTypes.func
     }),
-    onLinkButtonClick: PropTypes.func,
-    activeLinks: PropTypes.arrayOf(PropTypes.object),
-    showLinkButton: PropTypes.bool
+
+    annotations: PropTypes.arrayOf(PropTypes.object),
+    decorators: PropTypes.arrayOf(decorator),
+    insertBlocks: PropTypes.arrayOf(insertBlockShape),
+    listItems: PropTypes.arrayOf(
+      listItem
+    ),
+
+    onInsertBlock: PropTypes.func,
+    onFullscreenEnable: PropTypes.func,
+    onMarkButtonClick: PropTypes.func,
+    onListButtonClick: PropTypes.func,
+    onBlockStyleChange: PropTypes.func,
+    onAnnotationButtonClick: PropTypes.func
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -42,7 +44,7 @@ export default class Toolbar extends React.Component {
       this.props.decorators !== nextProps.decorators
       || this.props.blockStyles !== nextProps.blockStyles
       || this.props.fullscreen !== nextProps.fullscreen
-      || this.props.activeLinks !== nextProps.activeLinks
+      || this.props.annotations !== nextProps.annotations
     )
   }
 
@@ -58,9 +60,8 @@ export default class Toolbar extends React.Component {
       listItems,
       blockStyles,
       insertBlocks,
-      onLinkButtonClick,
-      activeLinks,
-      showLinkButton
+      onAnnotationButtonClick,
+      annotations
     } = this.props
 
     return (
@@ -71,25 +72,32 @@ export default class Toolbar extends React.Component {
 
         <div className={styles.formatButtons}>
           {decorators && decorators.length > 0 && (
-            <div className={styles.textFormatContainer}>
+            <div className={styles.decoratorContainer}>
               <Decorators decorators={decorators} onClick={onMarkButtonClick} />
             </div>
           )}
 
-          {listItems && listItems.length > 0 && (
+          {listItems && listItems.length && (
             <div className={styles.listFormatContainer}>
               <ListItems listItems={listItems} onClick={onListButtonClick} />
             </div>
           )}
         </div>
 
-        {
-          showLinkButton && (
-            <div className={styles.linkContainer}>
-              <LinkButton activeLinks={activeLinks} onClick={onLinkButtonClick} />
-            </div>
-          )
-        }
+        {annotations && annotations.length && (
+          <div className={styles.annotationsContainer}>
+            {
+              annotations.map(annotation => {
+                return (
+                  <AnnotationButton
+                    key={`annotationButton${annotation.name}`}
+                    annotation={annotation} onClick={onAnnotationButtonClick}
+                  />
+                )
+              })
+            }
+          </div>
+        )}
 
         <div className={styles.fullscreenButtonContainer}>
           <Button
