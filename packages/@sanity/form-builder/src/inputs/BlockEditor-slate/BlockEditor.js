@@ -112,11 +112,17 @@ export default class BlockEditor extends React.Component {
   }
 
   getActiveAnnotations() {
+    const {value} = this.props
+    let disabled = false
+    if (value.inlines.some(inline => inline.type !== SLATE_SPAN_TYPE)) {
+      disabled = true
+    }
     return this.annotationTypes.map(annotationType => {
       const active = this.hasAnnotationType(annotationType)
       return {
         active: active,
         type: annotationType,
+        disabled: disabled
       }
     })
   }

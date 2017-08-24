@@ -23,6 +23,7 @@ export default class AnnotationButton extends React.Component {
       <ToggleButton
         onClick={this.handleToggleButtonClick}
         title={annotation.type.title}
+        disabled={annotation.disabled}
         selected={annotation.active}
         className={styles.button}
       >
