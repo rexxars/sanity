@@ -328,7 +328,6 @@ export default class FormBuilderBlock extends React.Component {
         {...attributes}
         onDragStart={this.handleDragStart}
         onDragEnd={this.handleDragEnd}
-        onDragOver={this.handleDragOver}
         draggable
         ref={this.refFormBuilderBlock}
         className={className}

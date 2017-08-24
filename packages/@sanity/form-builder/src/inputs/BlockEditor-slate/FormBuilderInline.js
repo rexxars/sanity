@@ -336,7 +336,6 @@ export default class FormBuilderInline extends React.Component {
         {...attributes}
         onDragStart={this.handleDragStart}
         onDragEnd={this.handleDragEnd}
-        onDragOver={this.handleDragOver}
         draggable
         ref={this.refFormBuilderInline}
         className={className}
