@@ -1,4 +1,4 @@
-export const blocksTest = {
+export default {
   name: 'blocksWithAnnotations',
   title: 'Blocks with annotations',
   type: 'object',
@@ -13,7 +13,7 @@ export const blocksTest = {
       title: 'Annotated content',
       type: 'array',
       of: [
-        {type: 'image', title: 'Image'},
+        {type: 'image', title: 'Image', options: {inline: true}},
         {type: 'author', title: 'Author'},
         {
           type: 'object',
