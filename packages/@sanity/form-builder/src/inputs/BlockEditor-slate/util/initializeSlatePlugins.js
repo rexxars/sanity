@@ -1,6 +1,6 @@
 import insertBlockOnEnter from 'slate-insert-block-on-enter'
 import softBreak from 'slate-soft-break'
-import formBuilderNodeOnDrop from '../plugins/formBuilderNodeOnDrop'
+import onDrop from '../plugins/onDrop'
 import formBuilderNodeOnPaste from '../plugins/formBuilderNodeOnPaste'
 import onModKeySetMarkCombos from '../plugins/onModKeySetMarkCombos'
 import onEnterInListItem from '../plugins/onEnterInListItem'
@@ -33,9 +33,8 @@ export default function intializeSlatePlugins(blockEditor) {
     // Set mark keyboard shortcuts
     onModKeySetMarkCombos(blockEditor),
 
-    // Dropping stuff onto formBuilder nodes
-    formBuilderNodeOnDrop(),
-
+    // Dropping stuff
+    onDrop(),
 
     softBreak({
       onlyIn: ['contentBlock'],
