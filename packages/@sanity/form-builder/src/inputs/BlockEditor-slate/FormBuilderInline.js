@@ -3,6 +3,9 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import OffsetKey from 'slate/lib/utils/offset-key'
+import setTransferData from 'slate/lib/utils/set-transfer-data'
+import TRANSFER_TYPES from 'slate/lib/constants/transfer-types'
+import Base64 from 'slate/lib/serializers/base-64'
 import {Selection} from 'slate'
 import ItemForm from './ItemForm'
 import FullscreenDialog from 'part:@sanity/components/dialogs/fullscreen'
@@ -93,7 +96,8 @@ export default class FormBuilderInline extends React.Component {
     this.addDragHandlers()
 
     const element = ReactDOM.findDOMNode(this.previewContainer)
-    event.dataTransfer.setData('text/plain', event.target.id)
+    const encoded = Base64.serializeNode(this.props.node, {preserveKeys: true})
+    setTransferData(event.dataTransfer, TRANSFER_TYPES.NODE, encoded)
     event.dataTransfer.effectAllowed = 'move'
     event.dataTransfer.setDragImage(element, (element.clientWidth / 2), -10)
   }
@@ -247,7 +251,7 @@ export default class FormBuilderInline extends React.Component {
       )
     }
     return (
-      <span onClick={this.handleToggleEdit}>
+      <span>
         <Preview
           type={memberType}
           value={this.getValue()}
@@ -336,8 +340,12 @@ export default class FormBuilderInline extends React.Component {
         {...attributes}
         onDragStart={this.handleDragStart}
         onDragEnd={this.handleDragEnd}
+        onDragEnter={this.handleCancelEvent}
+        onDragLeave={this.handleCancelEvent}
+        onDrop={this.handleCancelEvent}
         draggable
         ref={this.refFormBuilderInline}
+        onClick={this.handleToggleEdit}
         className={className}
       >
         <span
@@ -348,7 +356,7 @@ export default class FormBuilderInline extends React.Component {
         </span>
 
         {isEditing && (
-          <span className={styles.editBlockContainer}>
+          <span className={styles.editInlineContainer}>
             {this.renderInput()}
           </span>
         )}

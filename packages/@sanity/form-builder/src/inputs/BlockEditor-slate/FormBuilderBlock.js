@@ -3,7 +3,10 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import OffsetKey from 'slate/lib/utils/offset-key'
-import {findDOMNode} from 'slate'
+import setTransferData from 'slate/lib/utils/set-transfer-data'
+import TRANSFER_TYPES from 'slate/lib/constants/transfer-types'
+import Base64 from 'slate/lib/serializers/base-64'
+import {findDOMNode, Selection} from 'slate'
 import ItemForm from './ItemForm'
 import FullscreenDialog from 'part:@sanity/components/dialogs/fullscreen'
 import Preview from '../../Preview'
@@ -93,7 +96,8 @@ export default class FormBuilderBlock extends React.Component {
     this.addDragHandlers()
 
     const element = ReactDOM.findDOMNode(this.previewContainer)
-    event.dataTransfer.setData('text/plain', event.target.id)
+    const encoded = Base64.serializeNode(this.props.node, {preserveKeys: true})
+    setTransferData(event.dataTransfer, TRANSFER_TYPES.NODE, encoded)
     event.dataTransfer.effectAllowed = 'move'
     event.dataTransfer.setDragImage(element, (element.clientWidth / 2), -10)
   }
@@ -174,13 +178,11 @@ export default class FormBuilderBlock extends React.Component {
       return
     }
 
-    if (node.type === 'contentBlock') {
-      const domNode = findDOMNode(node)
-      if (rangeIsAtStart) {
-        this.showBlockDragMarker('before', domNode)
-      } else {
-        this.showBlockDragMarker('after', domNode)
-      }
+    const domNode = findDOMNode(node)
+    if (rangeIsAtStart) {
+      this.showBlockDragMarker('before', domNode)
+    } else {
+      this.showBlockDragMarker('after', domNode)
     }
     this._dropTarget = {node: node, isAtStart: rangeIsAtStart, offset: rangeOffset}
   }
@@ -196,36 +198,25 @@ export default class FormBuilderBlock extends React.Component {
 
     // Return if this is our node
     if (!target || target.node === node) {
+      this.resetDropTarget()
       return
     }
 
-    let transform
-    transform = state.transform().removeNodeByKey(node.key)
-    transform = this.moveToDroptarget(transform, target)
-
-    this.resetDropTarget()
-
-    // Move cursor and apply
-    const next = transform.collapseToEndOf(node)
+    let next = state.transform().removeNodeByKey(node.key)
+    next = next[target.isAtStart ? 'collapseToStartOf' : 'collapseToEndOf'](target.node)
+      .insertBlock(node)
+      .collapseToEndOf(node)
       .focus()
       .apply()
 
     editor.onChange(next)
+
+    this.resetDropTarget()
+
   }
 
   handleCancelEvent = event => {
     event.preventDefault()
-  }
-
-  moveToDroptarget(transform, target) {
-    const {node} = this.props
-    let next = transform
-    if (target.isAtStart) {
-      next = next.collapseToStartOf(target.node)
-    } else {
-      next = next.collapseToEndOf(target.node)
-    }
-    return next.insertBlock(node)
   }
 
   getValue() {
@@ -261,13 +252,11 @@ export default class FormBuilderBlock extends React.Component {
       )
     }
     return (
-      <div onClick={this.handleToggleEdit}>
-        <Preview
-          type={memberType}
-          value={this.getValue()}
-          layout="block"
-        />
-      </div>
+      <Preview
+        type={memberType}
+        value={this.getValue()}
+        layout="block"
+      />
     )
   }
 
@@ -328,7 +317,11 @@ export default class FormBuilderBlock extends React.Component {
         {...attributes}
         onDragStart={this.handleDragStart}
         onDragEnd={this.handleDragEnd}
+        onDragEnter={this.handleCancelEvent}
+        onDragLeave={this.handleCancelEvent}
+        onDrop={this.handleCancelEvent}
         draggable
+        onClick={this.handleToggleEdit}
         ref={this.refFormBuilderBlock}
         className={className}
       >
