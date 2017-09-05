@@ -22,7 +22,6 @@ export default function intializeSlatePlugins(blockEditor) {
     insertBlockOnEnter(insertBlockOnEnterDef),
 
     // Copy paste
-    // TODO: wire up this when spanBlocks are ready
     editorOnPasteHtml(blockEditor),
     formBuilderNodeOnPaste(blockEditor.context.formBuilder, blockEditor.props.type.of),
 
