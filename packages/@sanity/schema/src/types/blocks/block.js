@@ -139,8 +139,8 @@ function createSpansField(marks) {
       {
         type: 'span',
         fields: [DEFAULT_TEXT_FIELD, DEFAULT_MARKS_FIELD],
-        annotations: marks.annotations || DEFAULT_ANNOTATIONS,
-        decorators: marks.decorators || DEFAULT_DECORATORS
+        annotations: marks && marks.annotations ? marks.annotations : DEFAULT_ANNOTATIONS,
+        decorators: marks && marks.decorators ? marks.decorators : DEFAULT_DECORATORS
       }
     ]
   }
