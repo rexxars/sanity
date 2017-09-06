@@ -38,7 +38,7 @@
     "react-portal": "^3.0.0",
     "shallow-equals": "^1.0.0",
     "slate": "^0.21.4",
-    "slate-insert-block-on-enter": "0.0.3",
+    "slate-insert-block-on-enter": "^0.0.4",
     "slate-soft-break": "^0.3.0",
     "speakingurl": "^13.0.0"
   },
