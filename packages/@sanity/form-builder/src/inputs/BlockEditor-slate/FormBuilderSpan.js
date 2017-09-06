@@ -125,12 +125,11 @@ export default class FormBuilderSpan extends React.Component {
       focusedAnnotationName: undefined,
       annotations: nextAnnotations
     }
-    const next = editor.getState()
-      .transform()
+    const change = editor.getState()
+      .change()
       .setNodeByKey(node.key, {data})
-      .apply()
 
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   focusAnnotation(annotationName) {
@@ -140,11 +139,10 @@ export default class FormBuilderSpan extends React.Component {
       ...node.data.toObject(),
       focusedAnnotationName: annotationName
     }
-    const next = editor.getState()
-      .transform()
+    const change = editor.getState()
+      .change()
       .setNodeByKey(node.key, {data})
-      .apply()
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   // Open dialog when user clicks the node,
@@ -195,11 +193,10 @@ export default class FormBuilderSpan extends React.Component {
       focusedAnnotationName: this.state.focusedAnnotationName,
       annotations: nextAnnotations
     }
-    const next = editor.getState()
-      .transform()
+    const change = editor.getState()
+      .change()
       .setNodeByKey(node.key, {data})
-      .apply()
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   renderInput() {

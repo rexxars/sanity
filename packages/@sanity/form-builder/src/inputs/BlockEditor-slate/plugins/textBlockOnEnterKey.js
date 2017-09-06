@@ -4,10 +4,11 @@
 // normal block below
 
 function createOnKeyDown(insertBlockStyle) {
-  return function onKeyDown(event, data, state, editor) {
+  return function onKeyDown(event, data, change) {
     if (data.key !== 'enter') {
       return null
     }
+    const state = change.state
     const isTextBlock = state.blocks.some(block => block.data.get('style'))
     const isDefaultNode = state.blocks.some(block => block.data.get('style') === insertBlockStyle)
     const isListNode = state.blocks.some(block => block.data.get('listItem'))
@@ -16,15 +17,14 @@ function createOnKeyDown(insertBlockStyle) {
       return null
     }
     if (!isDefaultNode) {
-      const transform = state.transform().insertBlock({
+      change.insertBlock({
         type: 'contentBlock',
         data: {
           style: insertBlockStyle
         }
       })
-      const nextState = transform.apply()
       event.preventDefault()
-      return nextState
+      return change
     }
     return null
   }

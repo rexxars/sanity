@@ -1,17 +1,13 @@
 // This plugin is responsible for preparing data
 // from a drag event onto the editor nodes
 
-function noOp(state) {
-  return state.transform().apply()
-}
-
-function onDrop(event, data, state, editor) {
+function onDrop(event, data, change) {
 
   // Cancel the default Slate handling for void nodes
   // (we deal with it within our ForbuilderBlock/FormbulderInline code)
   if (data.type === 'node' && data.node.isVoid) {
     event.preventDefault()
-    return noOp(state)
+    return change
   }
 
   const {isInternal, type} = data
@@ -28,7 +24,7 @@ function onDrop(event, data, state, editor) {
 
   // Nothing else implemented for now
   // TODO: implement image drop?
-  return noOp(state)
+  return change
 
 }
 

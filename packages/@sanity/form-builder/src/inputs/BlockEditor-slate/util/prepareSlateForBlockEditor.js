@@ -131,12 +131,12 @@ export default function prepareSlateForBlockEditor(blockEditor) {
         validate: document => {
           return document.nodes.size ? null : true
         },
-        normalize: (transform, document) => {
+        normalize: (change, document) => {
           const block = Block.create({
             type: 'contentBlock',
             data: {style: SLATE_DEFAULT_STYLE}
           })
-          transform
+          change
             .insertNodeByKey(document.key, 0, block)
             .focus()
         }
@@ -180,7 +180,7 @@ export default function prepareSlateForBlockEditor(blockEditor) {
           }
           return null
         },
-        normalize: (transform, node, keysAndNodes) => {
+        normalize: (change, node, keysAndNodes) => {
           keysAndNodes.forEach(keyAndNode => {
             const {dKey, aNode} = keyAndNode
             const annotations = {...aNode.data.get('annotations')}
@@ -192,10 +192,10 @@ export default function prepareSlateForBlockEditor(blockEditor) {
               }
             })
             const data = {...aNode.data.toObject(), annotations: newAnnotations}
-            transform.setNodeByKey(aNode.key, {data})
+            change.setNodeByKey(aNode.key, {data})
           })
-          blockEditor.props.onChange(transform.apply({save: false}))
-          return transform
+          blockEditor.props.onChange(change)
+          return change
         }
       }
     ]

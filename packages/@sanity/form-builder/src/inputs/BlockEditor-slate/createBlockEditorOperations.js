@@ -4,8 +4,8 @@ import randomKey from './util/randomKey'
 
 export default function createBlockEditorOperations(blockEditor) {
 
-  function onChange(nextState) {
-    return blockEditor.props.onChange(nextState)
+  function onChange(change) {
+    return blockEditor.props.onChange(change)
   }
 
   function getState() {
@@ -19,13 +19,13 @@ export default function createBlockEditorOperations(blockEditor) {
     createFormBuilderSpan(annotationType) {
       const state = getState()
       const {startOffset} = state
-      let transform
+      let change
 
       if (state.isExpanded) {
-        transform = state.transform()
+        change = state.change()
       } else {
-        transform = this.expandToFocusedWord()
-        if (!transform) {
+        change = this.expandToFocusedWord()
+        if (!change) {
           // No word to expand to
           return null
         }
@@ -39,7 +39,7 @@ export default function createBlockEditorOperations(blockEditor) {
         key: key
       }
 
-      transform = transform
+      change = change
         .unwrapInline(SLATE_SPAN_TYPE)
         .wrapInline(span)
 
@@ -49,7 +49,7 @@ export default function createBlockEditorOperations(blockEditor) {
       // that the range is not in the document
       // Move the selection back to the initial selection
       if (startOffset === 0 && state.isExpanded && state.inlines.size === 0) {
-        transform = transform.select(state.selection)
+        change = change.select(state.selection)
       }
 
       // IDEA: get selected text and set it on the data
@@ -71,11 +71,10 @@ export default function createBlockEditorOperations(blockEditor) {
       }
       data.annotations[annotationType.name] = createProtoValue(annotationType, key)
       // Update the span with new data
-      const finalState = transform
+      const finalChange = change
         .setInline({data: data})
-        .apply()
 
-      return onChange(finalState)
+      return onChange(finalChange)
     },
 
     removeAnnotationFromSpan(spanNode, annotationType) {
@@ -100,35 +99,32 @@ export default function createBlockEditorOperations(blockEditor) {
         focusedAnnotationName: undefined,
         annotations: annotations
       }
-      const nextState = state.transform()
+      const nextChange = state.change()
         .setNodeByKey(spanNode.key, {data})
-        .apply()
 
-      onChange(nextState)
+      onChange(nextChange)
     },
 
     removeSpan(spanNode) {
       const state = getState()
-      let nextState
+      let change
       if (Array.isArray(spanNode)) {
-        nextState = state.transform()
+        change = state.change()
         spanNode.forEach(node => {
-          nextState = nextState.unwrapInlineByKey(node.key)
+          change = change.unwrapInlineByKey(node.key)
         })
-        nextState = nextState.focus().apply()
+        change = change.focus()
       } else if (spanNode) {
-        nextState = state.transform()
+        change = state.change()
           .unwrapInlineByKey(spanNode.key)
           .focus()
-          .apply()
       } else {
         // Apply on current selection
-        nextState = state.transform()
+        change = state.change()
           .unwrapInline(SLATE_SPAN_TYPE)
           .focus()
-          .apply()
       }
-      onChange(nextState)
+      onChange(change)
     },
 
     toggleListItem(listItemName, isActive) {
@@ -141,23 +137,23 @@ export default function createBlockEditorOperations(blockEditor) {
         type: 'contentBlock',
         data: {listItem: listItemName, style: SLATE_DEFAULT_STYLE}
       }
-      let transform = state.transform()
+      let change = state.change()
 
       if (isActive) {
-        transform = transform
+        change = change
           .setBlock(normalBlock)
       } else {
-        transform = transform
+        change = change
           .setBlock(listItemBlock)
       }
-      const nextState = transform.focus().apply()
-      onChange(nextState)
+      const nextChange = change.focus()
+      onChange(nextChange)
     },
 
     setBlockStyle(styleName) {
       const state = getState()
       const {selection, startBlock, endBlock} = state
-      let transform = state.transform()
+      let change = state.change()
 
       // If a single block is selected partially, split block conditionally
       // (selection in start, middle or end of text)
@@ -174,7 +170,7 @@ export default function createBlockEditorOperations(blockEditor) {
           const extendForward = selection.isForward
             ? (selection.focusOffset - selection.anchorOffset)
             : (selection.anchorOffset - selection.focusOffset)
-          transform = transform
+          change = change
             .collapseToStart()
             .splitBlock()
             .moveForward()
@@ -183,32 +179,31 @@ export default function createBlockEditorOperations(blockEditor) {
             .splitBlock()
             .collapseToStartOfPreviousText()
         } else {
-          transform = hasTextBefore ? (
-            transform
+          change = hasTextBefore ? (
+            change
               .collapseToStart()
               .splitBlock()
               .moveForward()
           ) : (
-            transform
+            change
               .collapseToEnd()
               .splitBlock()
               .select(selection)
           )
         }
       }
-      transform.focus().apply()
+      change.focus()
 
       // Do the actual style transform, only acting on type contentBlock
-      transform = state.transform()
       state.blocks.forEach(blk => {
         const newData = {...blk.data.toObject(), style: styleName}
         if (blk.type === 'contentBlock') {
-          transform = transform
+          change = change
             .setNodeByKey(blk.key, {data: newData})
         }
       })
-      const nextState = transform.focus().apply()
-      onChange(nextState)
+      const nextChange = change.focus()
+      onChange(nextChange)
     },
 
     insertBlock(type) {
@@ -223,8 +218,8 @@ export default function createBlockEditorOperations(blockEditor) {
         }
       }
 
-      const nextState = state.transform().insertBlock(props).apply()
-      onChange(nextState)
+      const nextChange = state.change().insertBlock(props)
+      onChange(nextChange)
     },
 
     insertInline(type) {
@@ -239,18 +234,17 @@ export default function createBlockEditorOperations(blockEditor) {
         }
       }
 
-      const nextState = state.transform().insertInline(props).apply()
-      onChange(nextState)
+      const nextChange = state.change().insertInline(props)
+      onChange(nextChange)
     },
 
     toggleMark(mark) {
       const state = getState()
-      const nextState = state
-        .transform()
+      const nextChange = state
+        .change()
         .toggleMark(mark.type)
         .focus()
-        .apply()
-      onChange(nextState)
+      onChange(nextChange)
     },
 
     expandToFocusedWord() {
@@ -275,17 +269,15 @@ export default function createBlockEditorOperations(blockEditor) {
       }
 
       // Select and highlight current word
-      // Note: don't call apply and onChange here
-      return state.transform()
+      return state.change()
         .moveOffsetsTo(newStartOffset, newEndOffset)
         .focus()
     },
 
     expandToNode(node) {
-      return getState().transform()
+      return getState().change()
         .moveToRangeOf(node)
         .focus()
-        .apply()
     }
 
   }

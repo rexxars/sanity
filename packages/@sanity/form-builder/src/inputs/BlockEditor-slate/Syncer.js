@@ -38,8 +38,8 @@ export default withPatchSubscriber(class Syncer extends React.PureComponent {
     this.unsubscribe = props.subscribe(this.receivePatches)
   }
 
-  handleChange = nextSlateState => {
-    this.setState(prevState => (prevState.isOutOfSync ? {} : {value: nextSlateState}))
+  handleChange = slateChange => {
+    this.setState(prevState => (prevState.isOutOfSync ? {} : {value: slateChange.state}))
   }
 
   receivePatches = ({snapshot, shouldReset, patches}) => {

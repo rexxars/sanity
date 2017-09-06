@@ -6,7 +6,7 @@ import OffsetKey from 'slate/lib/utils/offset-key'
 import setTransferData from 'slate/lib/utils/set-transfer-data'
 import TRANSFER_TYPES from 'slate/lib/constants/transfer-types'
 import Base64 from 'slate/lib/serializers/base-64'
-import {findDOMNode, Selection} from 'slate'
+import {findDOMNode} from 'slate'
 import ItemForm from './ItemForm'
 import FullscreenDialog from 'part:@sanity/components/dialogs/fullscreen'
 import Preview from '../../Preview'
@@ -55,14 +55,13 @@ export default class FormBuilderBlock extends React.Component {
 
   handleChange = event => {
     const {node, editor} = this.props
-    const next = editor.getState()
-      .transform()
+    const change = editor.getState()
+      .change()
       .setNodeByKey(node.key, {
         data: {value: applyAll(node.data.get('value'), event.patches)}
       })
-      .apply()
 
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   handleInvalidValueChange = event => {
@@ -71,20 +70,14 @@ export default class FormBuilderBlock extends React.Component {
       const {node, editor} = this.props
 
       const nextValue = applyAll(node.data.get('value'), event.patches)
+      const change = editor.getState().change()
+      const nextChange = (nextValue === undefined)
+        ? change.removeNodeByKey(node.key)
+        : change.setNodeByKey(node.key, {
+          data: {value: nextValue}
+        })
 
-      const nextState = (nextValue === undefined)
-        ? editor.getState()
-          .transform()
-          .removeNodeByKey(node.key)
-          .apply()
-        : editor.getState()
-          .transform()
-          .setNodeByKey(node.key, {
-            data: {value: nextValue}
-          })
-          .apply()
-
-      editor.onChange(nextState)
+      editor.onChange(nextChange)
     }, 0)
   }
 
@@ -202,14 +195,13 @@ export default class FormBuilderBlock extends React.Component {
       return
     }
 
-    let next = state.transform().removeNodeByKey(node.key)
-    next = next[target.isAtStart ? 'collapseToStartOf' : 'collapseToEndOf'](target.node)
+    let nextChange = state.change().removeNodeByKey(node.key)
+    nextChange = nextChange[target.isAtStart ? 'collapseToStartOf' : 'collapseToEndOf'](target.node)
       .insertBlock(node)
       .collapseToEndOf(node)
       .focus()
-      .apply()
 
-    editor.onChange(next)
+    editor.onChange(nextChange)
 
     this.resetDropTarget()
 

@@ -23,7 +23,7 @@ function onPasteHtml(blockEditor) {
     createFieldValueFn: createFieldValueFromHtml
   })
 
-  function onPaste(event, data, state, editor) {
+  function onPaste(event, data, change) {
     if (data.type != 'html') {
       return null
     }
@@ -33,10 +33,7 @@ function onPasteHtml(blockEditor) {
     const {document} = deserializer.deserialize(
       data.html
     )
-    return state
-      .transform()
-      .insertFragment(document)
-      .apply()
+    return change.insertFragment(document)
   }
 
   return {

@@ -55,14 +55,13 @@ export default class FormBuilderInline extends React.Component {
 
   handleChange = event => {
     const {node, editor} = this.props
-    const next = editor.getState()
-      .transform()
+    const change = editor.getState()
+      .change()
       .setNodeByKey(node.key, {
         data: {value: applyAll(node.data.get('value'), event.patches)}
       })
-      .apply()
 
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   handleInvalidValueChange = event => {
@@ -71,20 +70,13 @@ export default class FormBuilderInline extends React.Component {
       const {node, editor} = this.props
 
       const nextValue = applyAll(node.data.get('value'), event.patches)
-
-      const nextState = (nextValue === undefined)
-        ? editor.getState()
-          .transform()
-          .removeNodeByKey(node.key)
-          .apply()
-        : editor.getState()
-          .transform()
-          .setNodeByKey(node.key, {
-            data: {value: nextValue}
-          })
-          .apply()
-
-      editor.onChange(nextState)
+      const change = editor.getState().change()
+      const nextChange = (nextValue === undefined)
+        ? change.removeNodeByKey(node.key)
+        : change.setNodeByKey(node.key, {
+          data: {value: nextValue}
+        })
+      editor.onChange(nextChange)
     }, 0)
   }
 
@@ -205,13 +197,12 @@ export default class FormBuilderInline extends React.Component {
 
     const {editor, node} = this.props
     const state = editor.getState()
-    const next = state.transform()
+    const change = state.change()
       .removeNodeByKey(node.key)
       .insertInline(node)
       .focus()
-      .apply()
     this._dropTarget = null
-    editor.onChange(next)
+    editor.onChange(change)
   }
 
   handleCancelEvent = event => {
@@ -314,12 +305,11 @@ export default class FormBuilderInline extends React.Component {
       theOffset = 0
     }
 
-    const nextState = state.transform()
+    const change = state.change()
       .collapseToStartOf(node)
       .move(theOffset)
       .focus()
-      .apply()
-    editor.onChange(nextState)
+    editor.onChange(change)
   }
 
   render() {

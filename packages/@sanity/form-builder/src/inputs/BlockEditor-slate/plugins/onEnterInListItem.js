@@ -3,10 +3,9 @@
 // OR if no previous block (top of document)
 
 function createOnKeyDown(insertBlockStyle, callbackFn) {
-  return function onKeyDown(event, data, state, editor) {
+  return function onKeyDown(event, data, change, editor) {
 
-    const {document, startKey, startBlock} = state
-    let transform = state.transform()
+    const {document, startKey, startBlock} = change.state
 
     // only for key
     if (data.key !== 'enter') {
@@ -34,14 +33,11 @@ function createOnKeyDown(insertBlockStyle, callbackFn) {
     // If on top of document
     // and no text insert a node before
     if (!previousBlock) {
-      const nextState = transform
-        .insertBlock(blockToInsert)
-        .focus()
-        .apply()
+      change.insertBlock(blockToInsert).focus()
       if (callbackFn) {
-        callbackFn(nextState)
+        callbackFn(change.state)
       }
-      return nextState
+      return change
     }
 
     const nextBlock = document.getNextBlock(startKey)
@@ -49,24 +45,20 @@ function createOnKeyDown(insertBlockStyle, callbackFn) {
 
     // Delete previous listItem if previous list item is empty
     if (previousBlock.data.get('listItem') && !previousBlock.nodes.length) {
-      transform = transform.deleteBackward(1)
+      change.deleteBackward(1)
     }
 
     // Jump to next node if next node is not a listItem or a void block
     if (nextBlock && !nextBlock.data.get('listItem') && !nextBlock.isVoid) {
-      transform = transform
-        .collapseToStartOf(nextBlock)
+      change.collapseToStartOf(nextBlock)
     } else {
       // Insert a given block type
-      transform = transform
-        .insertBlock(blockToInsert)
-        .focus()
+      change.insertBlock(blockToInsert).focus()
     }
-    const nextState = transform.apply()
     if (callbackFn) {
-      callbackFn(nextState)
+      callbackFn(change.state)
     }
-    return nextState
+    return change
   }
 }
 

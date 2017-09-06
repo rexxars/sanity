@@ -25,7 +25,7 @@ function formBuilderNodeOnPaste(formBuilder, editorFields) {
     })
   }
 
-  function onPaste(event, data, state, editor) {
+  function onPaste(event, data, change) {
     if (typeof data.fragment === 'undefined' || data.fragment === null) {
       return null
     }
@@ -34,12 +34,7 @@ function formBuilderNodeOnPaste(formBuilder, editorFields) {
       key: data.fragment.key,
       nodes: newNodesList
     })
-
-    // Must return state here, so that slate's core plugin onPaste method doesn't kick in!
-    return state
-      .transform()
-      .insertFragment(newDoc)
-      .apply()
+    return change.insertFragment(newDoc)
   }
 
   return {
