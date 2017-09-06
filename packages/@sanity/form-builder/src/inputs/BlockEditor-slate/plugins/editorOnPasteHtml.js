@@ -2,25 +2,23 @@ import HtmlDeserializer from '../conversion/slateHTMLDeserializer'
 
 function onPasteHtml(blockEditor) {
 
-  function createFieldValueFromHtml(element) {
-    return element.tagName.toLowerCase() === 'a'
-      ? {link: {href: element.attribs.href}}
-      : undefined
-  }
-
   function resolveEnabledStyles() {
     return blockEditor.textStyles
       .map(style => style.value)
   }
 
-  function resolveEnabledMarks() {
+  function resolveEnabledAnnotationTypes() {
+    return blockEditor.annotationTypes.map(type => type.name)
+  }
+
+  function resolveEnabledDecorators() {
     return Object.keys(blockEditor.slateSchema.marks)
   }
 
   const deserializer = new HtmlDeserializer({
     enabledStyles: resolveEnabledStyles(),
-    enabledMarks: resolveEnabledMarks(),
-    createFieldValueFn: createFieldValueFromHtml
+    enabledDecorators: resolveEnabledDecorators(),
+    enabledAnnotations: resolveEnabledAnnotationTypes()
   })
 
   function onPaste(event, data, change) {

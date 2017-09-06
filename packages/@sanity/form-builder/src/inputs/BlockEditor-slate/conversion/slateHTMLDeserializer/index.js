@@ -14,7 +14,7 @@ class HtmlDeserializer {
       rules: this.rules,
       defaultBlockType: this.rules.defaultBlockType
     })
-    return deserializer.deserialize(cleanedHtml)
+    return deserializer.deserialize(html)
   }
 }
 

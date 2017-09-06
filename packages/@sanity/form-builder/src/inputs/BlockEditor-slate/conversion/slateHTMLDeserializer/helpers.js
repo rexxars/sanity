@@ -44,9 +44,11 @@ function wrapOrphanBrs(doc) {
 }
 
 export function isPastedFromGoogleDocs(el) {
-  return el.attribs
-    && el.attribs.id
-    && el.attribs.id.match(/^docs-internal-guid-/)
+  if (el.nodeType !== 1) {
+    return false
+  }
+  const id = el.getAttribute('id')
+  return id && id.match(/^docs-internal-guid-/)
 }
 
 export function cleanupHtml(html) {
