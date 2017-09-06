@@ -4,10 +4,10 @@ import {get, flatten} from 'lodash'
 function toSanitySpan(blockNode, sanityBlock) {
   if (blockNode.kind === 'text') {
     return blockNode.ranges
-      .map(range => {
+      .map((range, index) => {
         return {
           _type: 'span',
-          _key: blockNode.key,
+          _key: `${sanityBlock._key}-${index}`,
           text: range.text,
           marks: range.marks.map(mark => mark.type)
         }
@@ -46,10 +46,11 @@ function toSanitySpan(blockNode, sanityBlock) {
 
 function toSanityBlock(block) {
   // debugger
-  if (block.type === 'contentBlock' /*<-- hack should probably be fixed better */ || block.type === 'paragraph' /* -->*/) {
+  if (block.type === 'contentBlock') {
     const sanityBlock = {
       ...block.data,
       _type: 'block',
+      _key: block.key,
       markDefs: []
     }
     sanityBlock.children = flatten(block.nodes.map(node => {

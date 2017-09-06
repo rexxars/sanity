@@ -9,14 +9,14 @@ import randomKey from '../util/randomKey'
 import {getSpanType} from './spanHelpers'
 import {SLATE_DEFAULT_STYLE} from '../constants'
 
-// Content previews
+// Preview components of different text types
 import Blockquote from '../preview/Blockquote'
 import Header from '../preview/Header'
 import ListItem from '../preview/ListItem'
 import Decorator from '../preview/Decorator'
 import Normal from '../preview/Normal'
 
-// Set our own key generator
+// Set our own key generator for Slate
 const keyGenerator = () => randomKey(12)
 setKeyGenerator(keyGenerator)
 
@@ -54,7 +54,8 @@ const slateTypeComponentMapping = {
   blockquote: Blockquote,
 }
 
-function createSlatePreviewNode(props) {
+// Create a contentBlock component
+function createContentBlock(props) {
   let component = null
   const style = props.children[0] && props.children[0].props.parent.data.get('style')
   const isListItem = props.children[0] && props.children[0].props.parent.data.get('listItem')
@@ -117,7 +118,7 @@ export default function prepareSlateForBlockEditor(blockEditor) {
       ),
       __unknown: FormBuilderBlock,
       span: createSpanNode(spanType),
-      contentBlock: createSlatePreviewNode,
+      contentBlock: createContentBlock,
     },
     marks: mapToObject(allowedDecorators, decorator => {
       return [decorator, Decorator]
@@ -141,9 +142,29 @@ export default function prepareSlateForBlockEditor(blockEditor) {
             .focus()
         }
       },
-      // Rule to unique annotation's _keys within a block (i.e. copy/pasted within the same block)
+      // Rule to ensure that every non-void block has a style
       {
         match: node => {
+          // contentBlock with no style
+          if (node.kind === 'block' && !node.isVoid && node.text && node.data.get('style') === undefined
+          ) {
+            return node
+          }
+          return undefined
+        },
+        validate: contentBlock => {
+          return contentBlock
+        },
+        normalize: (change, contentBlock) => {
+          const data = {...contentBlock.data.toObject(), style: SLATE_DEFAULT_STYLE}
+          change.setNodeByKey(contentBlock.key, {type: 'contentBlock', ...{data}})
+        }
+      },
+      // Rule to ensure that annotation _key's within a block is unique
+      // This can happen when copy/pasting annotation spans within the same block
+      {
+        match: node => {
+          // contentBlock with annotations
           return node.kind === 'block'
             && node.type === 'contentBlock'
             && node.filterDescendants(desc => {
@@ -151,8 +172,10 @@ export default function prepareSlateForBlockEditor(blockEditor) {
               return annotations && Object.keys(annotations).length
             }).size
         },
-        validate: node => {
-          const duplicateKeys = node.filterDescendants(
+
+        validate: contentBlock => {
+          // return the last occurence of nodes with annotations that has the same _key
+          const duplicateKeyNodes = contentBlock.filterDescendants(
             desc => desc.data && desc.data.get('annotations')
           )
           .toArray()
@@ -164,37 +187,36 @@ export default function prepareSlateForBlockEditor(blockEditor) {
             return a.concat(b)
           }, [])
           .filter((key, i, keys) => keys.lastIndexOf(key) !== i)
-          if (duplicateKeys.length) {
-            return duplicateKeys.map(key => {
+          if (duplicateKeyNodes.length) {
+            return duplicateKeyNodes.map(key => {
               return {
-                dKey: key,
-                aNode: node.filterDescendants(
+                dupKey: key,
+                dupNode: contentBlock.filterDescendants(
                   desc => {
                     const annotations = desc.data && desc.data.get('annotations')
                     return annotations
                       && Object.keys(annotations)
                           .find(name => annotations[name]._key === key)
-                  }).toArray().slice(-1)[0] // The last occurrence, most of the time the one we want
+                  }).toArray().slice(-1)[0] // Last occurence
               }
             })
           }
           return null
         },
-        normalize: (change, node, keysAndNodes) => {
-          keysAndNodes.forEach(keyAndNode => {
-            const {dKey, aNode} = keyAndNode
-            const annotations = {...aNode.data.get('annotations')}
+        normalize: (change, node, dupNodes) => {
+          dupNodes.forEach(dup => {
+            const {dupKey, dupNode} = dup
+            const annotations = {...dupNode.data.get('annotations')}
             const newAnnotations = {}
             Object.keys(annotations).forEach(name => {
               newAnnotations[name] = {...annotations[name]}
-              if (annotations[name]._key === dKey) {
+              if (annotations[name]._key === dupKey) {
                 newAnnotations[name]._key = randomKey(12)
               }
             })
-            const data = {...aNode.data.toObject(), annotations: newAnnotations}
-            change.setNodeByKey(aNode.key, {data})
+            const data = {...dupNode.data.toObject(), annotations: newAnnotations}
+            change.setNodeByKey(dupNode.key, {data})
           })
-          blockEditor.props.onChange(change)
           return change
         }
       }

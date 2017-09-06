@@ -49,7 +49,7 @@ function sanitySpanToRawSlateBlockNode(span, sanityBlock) {
   }
 
   if (!annotations) {
-    return {key: span._key, kind: 'text', ranges: [range]}
+    return {kind: 'text', ranges: [range]}
   }
 
   return {
