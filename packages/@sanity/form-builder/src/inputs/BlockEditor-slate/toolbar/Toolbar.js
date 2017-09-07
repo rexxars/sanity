@@ -77,14 +77,14 @@ export default class Toolbar extends React.Component {
             </div>
           )}
 
-          {listItems && listItems.length && (
+          {listItems && listItems.length > 0 && (
             <div className={styles.listFormatContainer}>
               <ListItems listItems={listItems} onClick={onListButtonClick} />
             </div>
           )}
         </div>
 
-        {annotations && annotations.length && (
+        {annotations && annotations.length > 0 && (
           <div className={styles.annotationsContainer}>
             {
               annotations.map(annotation => {
