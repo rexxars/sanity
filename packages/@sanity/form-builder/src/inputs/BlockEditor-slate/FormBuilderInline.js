@@ -317,7 +317,7 @@ export default class FormBuilderInline extends React.Component {
     const {attributes} = this.props
 
     let className
-    if (this.state.isFocused) {
+    if (this.state.isFocused && !this.state.isSelected) {
       className = styles.focused
     } else if (this.state.isSelected) {
       className = styles.selected
