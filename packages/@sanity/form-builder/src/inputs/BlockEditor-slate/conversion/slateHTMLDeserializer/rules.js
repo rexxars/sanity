@@ -9,9 +9,9 @@ export const defaultBlockType = {
 }
 
 function styledBlock(type, data) {
-  const _variant = Object.assign({}, type)
-  _variant.data = Object.assign({}, type.data || {}, data)
-  return _variant
+  const block = Object.assign({}, type)
+  block.data = Object.assign({}, type.data || {}, data)
+  return block
 }
 
 export const HTML_BLOCK_TAGS = {
@@ -37,6 +37,9 @@ export const HTML_HEADER_TAGS = {
   h6: styledBlock(defaultBlockType, {style: 'h6'})
 }
 
+export const HTML_MISC_TAGS = {
+  br: styledBlock(defaultBlockType, {style: 'normal'}),
+}
 export const HTML_DECORATOR_TAGS = {
 
   b: 'strong',
@@ -61,7 +64,9 @@ export const elementMap = {
   ...HTML_BLOCK_TAGS,
   ...HTML_SPAN_TAGS,
   ...HTML_LIST_CONTAINER_TAGS,
+  ...HTML_LIST_ITEM_TAGS,
   ...HTML_HEADER_TAGS,
+  ...HTML_MISC_TAGS,
 }
 
 const supportedStyles = uniq(
@@ -75,10 +80,12 @@ const supportedDecorators = uniq(
     .map(tag => HTML_DECORATOR_TAGS[tag])
 )
 
-function tagName(el) {
+export function tagName(el) {
+  if (!el || el.nodeType !== 1) {
+    return undefined
+  }
   return el.tagName.toLowerCase()
 }
-
 
 export function createRules(options) {
 
@@ -99,11 +106,11 @@ export function createRules(options) {
       }
     },
 
-    // Block and header tags
+    // Blocks
     {
       deserialize(el, next) {
-        const blockAndHeaderTags = {...HTML_BLOCK_TAGS, ...HTML_HEADER_TAGS}
-        let block = blockAndHeaderTags[tagName(el)]
+        const blocks = {...HTML_BLOCK_TAGS, ...HTML_HEADER_TAGS}
+        let block = blocks[tagName(el)]
         if (!block) {
           return undefined
         }
@@ -144,6 +151,19 @@ export function createRules(options) {
       }
     },
 
+    // Deal with br's
+    {
+      deserialize(el, next) {
+        if (tagName(el) == 'br') {
+          return {
+            kind: 'text',
+            text: '\n'
+          }
+        }
+        return undefined
+      }
+    },
+
     // Deal with list items
     {
       deserialize(el, next) {
@@ -158,7 +178,7 @@ export function createRules(options) {
               listItem,
               {listItem: helpers.resolveListItem(tagName(el.parentNode))}
             ),
-          nodes: next(el.childNodes, true)
+          nodes: next(el.childNodes)
         }
       }
     },
@@ -178,20 +198,26 @@ export function createRules(options) {
       }
     },
 
-    // Special case for hyperlinks, add annotation (if allowed by schema)
+    // Special case for hyperlinks, add annotation (if allowed by schema),
+    // If not supported just write out the link text and href in plain text.
     {
       deserialize(el, next) {
         if (tagName(el) != 'a') {
           return undefined
         }
+        const linkEnabled = enabledAnnotations.includes('link')
+        const href = el.getAttribute('href')
+        if (!href) {
+          return next(el.childNodes)
+        }
         let data
-        if (enabledAnnotations.includes('link')) {
+        if (linkEnabled) {
           data = {
             annotations: {
               link: {
                 _key: randomKey(12),
                 _type: 'link',
-                href: el.getAttribute('href')
+                href: href
               }
             }
           }
@@ -199,7 +225,13 @@ export function createRules(options) {
         return {
           kind: 'inline',
           type: 'span',
-          nodes: next(el.childNodes),
+          nodes: linkEnabled
+            ? next(el.childNodes)
+            : (
+                el.appendChild(
+                  new Text(` (${href})`)
+                ) && next(el.childNodes)
+              ),
           data: data
         }
       }
