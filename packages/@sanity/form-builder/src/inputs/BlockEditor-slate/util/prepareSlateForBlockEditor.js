@@ -137,7 +137,7 @@ export default function prepareSlateForBlockEditor(blockEditor) {
             type: 'contentBlock',
             data: {style: SLATE_DEFAULT_STYLE}
           })
-          change
+          return change
             .insertNodeByKey(document.key, 0, block)
             .focus()
         }
@@ -157,7 +157,8 @@ export default function prepareSlateForBlockEditor(blockEditor) {
         },
         normalize: (change, contentBlock) => {
           const data = {...contentBlock.data.toObject(), style: SLATE_DEFAULT_STYLE}
-          change.setNodeByKey(contentBlock.key, {type: 'contentBlock', ...{data}})
+          return change
+            .setNodeByKey(contentBlock.key, {type: 'contentBlock', ...{data}})
         }
       },
       // Rule to ensure that annotation _key's within a block is unique
