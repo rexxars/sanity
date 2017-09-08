@@ -24,7 +24,6 @@
     "@sanity/mutator": "^0.108.0",
     "@sanity/observable": "^0.108.0",
     "@sanity/schema": "^0.108.0",
-    "cheerio": "^0.22.0",
     "classnames": "^2.2.5",
     "debug": "^2.6.3",
     "get-random-values": "^1.2.0",
