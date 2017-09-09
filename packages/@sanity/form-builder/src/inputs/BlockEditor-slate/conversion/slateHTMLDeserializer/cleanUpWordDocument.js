@@ -41,7 +41,6 @@ function createProcessListNodeFn(doc, element, nodesToBeRemoved) {
   }
 }
 
-
 export default function cleanUpWordDocument(html) {
 
   const doc = new DOMParser().parseFromString(html, 'text/html')
@@ -60,7 +59,13 @@ export default function cleanUpWordDocument(html) {
   }
 
   // Transform titles into H1s
-  const titleElments = document.evaluate("//p[@class='MsoTitle']", doc, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null)
+  const titleElments = document.evaluate(
+    "//p[@class='MsoTitle']",
+    doc,
+    null,
+    XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+    null
+  )
   for (let i = titleElments.snapshotLength - 1; i >= 0; i--) {
     const title = titleElments.snapshotItem(i)
     const h1 = document.createElement('h1')
@@ -69,7 +74,13 @@ export default function cleanUpWordDocument(html) {
   }
 
   // Transform Word-lists into HTML-lists
-  const listFirstElements = document.evaluate("//p[@class='MsoListParagraphCxSpFirst']", doc, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null)
+  const listFirstElements = document.evaluate(
+    "//p[@class='MsoListParagraphCxSpFirst']",
+    doc,
+    null,
+    XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+    null
+  )
   if (listFirstElements.snapshotLength) {
     for (let i = listFirstElements.snapshotLength - 1; i >= 0; i--) {
       const element = listFirstElements.snapshotItem(i)
