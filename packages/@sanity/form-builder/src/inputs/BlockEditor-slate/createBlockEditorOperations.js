@@ -18,15 +18,15 @@ export default function createBlockEditorOperations(blockEditor) {
 
     createFormBuilderSpan(annotationType) {
       const state = getState()
-      const {startOffset} = state
       let change
 
       if (state.isExpanded) {
         change = state.change()
       } else {
-        change = this.expandToFocusedWord()
+        change = this.expandToFocusedWord(state.change())
         if (!change) {
           // No word to expand to
+          console.warn('No text in vincinity to bind span to')
           return null
         }
       }
@@ -38,43 +38,21 @@ export default function createBlockEditorOperations(blockEditor) {
         data: undefined,
         key: key
       }
-
-      change = change
+      change
         .unwrapInline(SLATE_SPAN_TYPE)
         .wrapInline(span)
 
-      // There is a bug (in Slate?) where if you
-      // select the first word in a block text and try to
-      // make a link of it, at this point, it says
-      // that the range is not in the document
-      // Move the selection back to the initial selection
-      if (startOffset === 0 && state.isExpanded && state.inlines.size === 0) {
-        change = change.select(state.selection)
-      }
+      const currentSpan = blockEditor.props.value.inlines
+        .filter(inline => inline.key === key)
+        .first()
 
-      // IDEA: get selected text and set it on the data
-      // could be used to searching etc in the dialogue
-
-      // // Get text of applied new selection
-      // const selecetedText = nextState
-      //   .startText
-      //   .text
-      //   .substring(
-      //     nextState.selection.anchorOffset,
-      //     nextState.selection.focusOffset
-      //   )
-
-      const currentSpan = blockEditor.props.value.inlines.filter(inline => inline.type == SLATE_SPAN_TYPE).toArray()[0]
       const data = {
         annotations: currentSpan ? currentSpan.data.get('annotations') || {} : {},
         focusedAnnotationName: annotationType.name
       }
       data.annotations[annotationType.name] = createProtoValue(annotationType, key)
-      // Update the span with new data
-      const finalChange = change
-        .setInline({data: data})
 
-      return onChange(finalChange)
+      return onChange(change.setInline({data: data}))
     },
 
     removeAnnotationFromSpan(spanNode, annotationType) {
@@ -135,7 +113,7 @@ export default function createBlockEditorOperations(blockEditor) {
       }
       const listItemBlock = {
         type: 'contentBlock',
-        data: {listItem: listItemName, style: SLATE_DEFAULT_STYLE}
+        data: {listItem: listItemName, style: SLATE_DEFAULT_STYLE, level: 1}
       }
       let change = state.change()
 
@@ -247,9 +225,8 @@ export default function createBlockEditorOperations(blockEditor) {
       onChange(nextChange)
     },
 
-    expandToFocusedWord() {
-      const state = getState()
-      const {focusText, focusOffset} = state
+    expandToFocusedWord(change) {
+      const {focusText, focusOffset} = change.state
       const charsBefore = focusText.characters.slice(0, focusOffset)
       const charsAfter = focusText.characters.slice(focusOffset, -1)
       const isEmpty = obj => obj.get('text').match(/\s/g)
@@ -267,9 +244,8 @@ export default function createBlockEditorOperations(blockEditor) {
       if (newStartOffset === newEndOffset) {
         return null
       }
-
       // Select and highlight current word
-      return state.change()
+      return change
         .moveOffsetsTo(newStartOffset, newEndOffset)
         .focus()
     },
