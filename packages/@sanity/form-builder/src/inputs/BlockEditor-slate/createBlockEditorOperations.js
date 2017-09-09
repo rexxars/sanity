@@ -115,17 +115,14 @@ export default function createBlockEditorOperations(blockEditor) {
         type: 'contentBlock',
         data: {listItem: listItemName, style: SLATE_DEFAULT_STYLE, level: 1}
       }
-      let change = state.change()
+      const change = state.change()
 
       if (isActive) {
-        change = change
-          .setBlock(normalBlock)
+        change.setBlock(normalBlock)
       } else {
-        change = change
-          .setBlock(listItemBlock)
+        change.setBlock(listItemBlock)
       }
-      const nextChange = change.focus()
-      onChange(nextChange)
+      onChange(change.focus())
     },
 
     setBlockStyle(styleName) {
@@ -148,7 +145,7 @@ export default function createBlockEditorOperations(blockEditor) {
           const extendForward = selection.isForward
             ? (selection.focusOffset - selection.anchorOffset)
             : (selection.anchorOffset - selection.focusOffset)
-          change = change
+          change
             .collapseToStart()
             .splitBlock()
             .moveForward()
@@ -156,18 +153,16 @@ export default function createBlockEditorOperations(blockEditor) {
             .collapseToEnd()
             .splitBlock()
             .collapseToStartOfPreviousText()
+        } else if (hasTextBefore) {
+          change
+            .collapseToStart()
+            .splitBlock()
+            .moveForward()
         } else {
-          change = hasTextBefore ? (
-            change
-              .collapseToStart()
-              .splitBlock()
-              .moveForward()
-          ) : (
-            change
-              .collapseToEnd()
-              .splitBlock()
-              .select(selection)
-          )
+          change
+            .collapseToEnd()
+            .splitBlock()
+            .select(selection)
         }
       }
       change.focus()
@@ -180,14 +175,13 @@ export default function createBlockEditorOperations(blockEditor) {
             .setNodeByKey(blk.key, {data: newData})
         }
       })
-      const nextChange = change.focus()
-      onChange(nextChange)
+      onChange(change.focus())
     },
 
     insertBlock(type) {
       const state = getState()
       const key = randomKey(12)
-      const props = {
+      const block = {
         type: type.name,
         isVoid: true,
         key: key,
@@ -195,9 +189,7 @@ export default function createBlockEditorOperations(blockEditor) {
           value: createProtoValue(type, key)
         }
       }
-
-      const nextChange = state.change().insertBlock(props)
-      onChange(nextChange)
+      onChange(state.change().insertBlock(block))
     },
 
     insertInline(type) {
@@ -212,17 +204,15 @@ export default function createBlockEditorOperations(blockEditor) {
         }
       }
 
-      const nextChange = state.change().insertInline(props)
-      onChange(nextChange)
+      onChange(state.change().insertInline(props))
     },
 
     toggleMark(mark) {
-      const state = getState()
-      const nextChange = state
+      onChange(getState()
         .change()
         .toggleMark(mark.type)
         .focus()
-      onChange(nextChange)
+      )
     },
 
     expandToFocusedWord(change) {
