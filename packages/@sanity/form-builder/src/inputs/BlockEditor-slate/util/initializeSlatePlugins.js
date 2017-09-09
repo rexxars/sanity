@@ -1,11 +1,12 @@
 import insertBlockOnEnter from 'slate-insert-block-on-enter'
 import softBreak from 'slate-soft-break'
 import onDrop from '../plugins/onDrop'
-import formBuilderNodeOnPaste from '../plugins/formBuilderNodeOnPaste'
+import onPasteSlateContent from '../plugins/onPasteSlateContent'
 import onModKeySetMarkCombos from '../plugins/onModKeySetMarkCombos'
 import onEnterInListItem from '../plugins/onEnterInListItem'
-import textBlockOnEnterKey from '../plugins/textBlockOnEnterKey'
-import editorOnPasteHtml from '../plugins/editorOnPasteHtml'
+import onEnterInTextBlock from '../plugins/onEnterInTextBlock'
+import onPasteHtml from '../plugins/onPasteHtml'
+import onTabSetIntendation from '../plugins/onTabSetIntendation'
 
 import {SLATE_DEFAULT_STYLE} from '../constants'
 
@@ -22,8 +23,8 @@ export default function intializeSlatePlugins(blockEditor) {
     insertBlockOnEnter(insertBlockOnEnterDef),
 
     // Copy paste
-    editorOnPasteHtml(blockEditor),
-    formBuilderNodeOnPaste(blockEditor.context.formBuilder, blockEditor.props.type.of),
+    onPasteHtml(blockEditor),
+    onPasteSlateContent(blockEditor.context.formBuilder, blockEditor.props.type.of),
 
     // Key handling
     onEnterInListItem(SLATE_DEFAULT_STYLE, blockEditor.refreshCSS),
