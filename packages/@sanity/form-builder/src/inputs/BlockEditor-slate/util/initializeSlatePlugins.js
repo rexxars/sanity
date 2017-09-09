@@ -28,7 +28,8 @@ export default function intializeSlatePlugins(blockEditor) {
 
     // Key handling
     onEnterInListItem(SLATE_DEFAULT_STYLE, blockEditor.refreshCSS),
-    textBlockOnEnterKey(SLATE_DEFAULT_STYLE),
+    onEnterInTextBlock(SLATE_DEFAULT_STYLE),
+    onTabSetIntendation(),
 
     // Set mark keyboard shortcuts
     onModKeySetMarkCombos(blockEditor),

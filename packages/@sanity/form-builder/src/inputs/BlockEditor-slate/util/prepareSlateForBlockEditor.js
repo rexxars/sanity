@@ -46,10 +46,12 @@ const slateTypeComponentMapping = {
     // eslint-disable-next-line react/prop-types
     const listItem = props.children[0] && props.children[0].props.parent.data.get('listItem')
     // eslint-disable-next-line react/prop-types
+    const level = props.children[0] && props.children[0].props.parent.data.get('level')
+    // eslint-disable-next-line react/prop-types
     const style = (props.children[0] && props.children[0].props.parent.data.get('style'))
       || SLATE_DEFAULT_STYLE
     const contentComponent = slateTypeComponentMapping[style]
-    return <ListItem contentComponent={contentComponent} listItem={listItem} {...props} />
+    return <ListItem contentComponent={contentComponent} level={level} listItem={listItem} {...props} />
   },
   blockquote: Blockquote,
 }
