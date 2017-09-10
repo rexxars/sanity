@@ -1,6 +1,56 @@
-import cleanUpWordDocument from './cleanUpWordDocument'
+export function isPastedFromWord(html) {
+  return /(class="?Mso|style=(?:"|')[^"]*?\bmso-|w:WordDocument|<o:\w+>|<\/font>)/.test(html)
 
-const wordRegexp = /(class="?Mso|style=(?:"|')[^"]*?\bmso-|w:WordDocument|<o:\w+>|<\/font>)/
+}
+
+function cleanUpWordDocument(html) {
+
+  const unwantedWordDocumentPaths = [
+    '/html/text()',
+    '/html/head/text()',
+    '/html/body/text()',
+    '//span[not(text())]',
+    '//p[not(text())]',
+    '//comment()',
+    "//*[name()='o:p']",
+    '//style',
+    '//xml',
+    '//script',
+    '//meta',
+    '//link',
+  ]
+
+  const doc = new DOMParser().parseFromString(html, 'text/html')
+
+  // Remove cruft
+  const unwantedNodes = document.evaluate(
+    `${unwantedWordDocumentPaths.join('|')}`,
+    doc,
+    null,
+    XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+    null
+  )
+  for (let i = unwantedNodes.snapshotLength - 1; i >= 0; i--) {
+    const unwanted = unwantedNodes.snapshotItem(i)
+    unwanted.parentNode.removeChild(unwanted)
+  }
+
+  // Transform titles into H1s
+  const titleElments = document.evaluate(
+    "//p[@class='MsoTitle']",
+    doc,
+    null,
+    XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+    null
+  )
+  for (let i = titleElments.snapshotLength - 1; i >= 0; i--) {
+    const title = titleElments.snapshotItem(i)
+    const h1 = document.createElement('h1')
+    h1.appendChild(new Text(title.textContent))
+    title.parentNode.replaceChild(h1, title)
+  }
+  return (new XMLSerializer()).serializeToString(doc)
+}
 
 export function isPastedFromGoogleDocs(el) {
   if (el.nodeType !== 1) {
@@ -8,10 +58,6 @@ export function isPastedFromGoogleDocs(el) {
   }
   const id = el.getAttribute('id')
   return id && id.match(/^docs-internal-guid-/)
-}
-
-export function isPastedFromWord(html) {
-  return wordRegexp.test(html)
 }
 
 export function cleanHtml(html) {
@@ -39,4 +85,17 @@ export function resolveListItem(listNodeTagName) {
       listStyle = 'bullet'
   }
   return listStyle
+}
+
+export function styledBlock(type, data) {
+  const block = Object.assign({}, type)
+  block.data = Object.assign({}, type.data || {}, data)
+  return block
+}
+
+export function tagName(el) {
+  if (!el || el.nodeType !== 1) {
+    return undefined
+  }
+  return el.tagName.toLowerCase()
 }

@@ -1,22 +1,14 @@
+import {DEFAULT_BLOCK_TYPE} from '../../constants'
 import * as helpers from './helpers'
 import randomKey from '../../util/randomKey'
 import {uniq} from 'lodash'
+import createWordDocumentRules from './createWordDocumentRules'
 
-export const defaultBlockType = {
-  kind: 'block',
-  type: 'contentBlock',
-  data: {style: 'normal'}
-}
-
-function styledBlock(type, data) {
-  const block = Object.assign({}, type)
-  block.data = Object.assign({}, type.data || {}, data)
-  return block
-}
+const {styledBlock, tagName} = helpers
 
 export const HTML_BLOCK_TAGS = {
-  p: defaultBlockType,
-  blockquote: styledBlock(defaultBlockType, {style: 'blockquote'})
+  p: DEFAULT_BLOCK_TYPE,
+  blockquote: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'blockquote'})
 }
 
 export const HTML_SPAN_TAGS = {
@@ -29,16 +21,16 @@ export const HTML_LIST_CONTAINER_TAGS = {
 }
 
 export const HTML_HEADER_TAGS = {
-  h1: styledBlock(defaultBlockType, {style: 'h1'}),
-  h2: styledBlock(defaultBlockType, {style: 'h2'}),
-  h3: styledBlock(defaultBlockType, {style: 'h3'}),
-  h4: styledBlock(defaultBlockType, {style: 'h4'}),
-  h5: styledBlock(defaultBlockType, {style: 'h5'}),
-  h6: styledBlock(defaultBlockType, {style: 'h6'})
+  h1: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h1'}),
+  h2: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h2'}),
+  h3: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h3'}),
+  h4: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h4'}),
+  h5: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h5'}),
+  h6: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h6'})
 }
 
 export const HTML_MISC_TAGS = {
-  br: styledBlock(defaultBlockType, {style: 'normal'}),
+  br: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'normal'}),
 }
 export const HTML_DECORATOR_TAGS = {
 
@@ -57,7 +49,7 @@ export const HTML_DECORATOR_TAGS = {
 }
 
 export const HTML_LIST_ITEM_TAGS = {
-  li: defaultBlockType
+  li: DEFAULT_BLOCK_TYPE
 }
 
 export const elementMap = {
@@ -80,13 +72,6 @@ const supportedDecorators = uniq(
     .map(tag => HTML_DECORATOR_TAGS[tag])
 )
 
-export function tagName(el) {
-  if (!el || el.nodeType !== 1) {
-    return undefined
-  }
-  return el.tagName.toLowerCase()
-}
-
 export function createRules(options) {
 
   const enabledStyles = options.enabledStyles || supportedStyles
@@ -94,6 +79,8 @@ export function createRules(options) {
   const enabledAnnotations = options.enabledAnnotations || ['link']
 
   return [
+
+    ...createWordDocumentRules(options),
 
     // Special case for Google Docs which always
     // wrap the html data in a <b> tag :/
@@ -120,7 +107,7 @@ export function createRules(options) {
         }
         // If style is not supported, return a defaultBlockType
         if (!enabledStyles.includes(block.data.style)) {
-          block = defaultBlockType
+          block = DEFAULT_BLOCK_TYPE
         }
         return {
           ...block,
