@@ -1,6 +1,5 @@
 export function isPastedFromWord(html) {
   return /(class="?Mso|style=(?:"|')[^"]*?\bmso-|w:WordDocument|<o:\w+>|<\/font>)/.test(html)
-
 }
 
 function cleanUpWordDocument(html) {
@@ -85,12 +84,6 @@ export function resolveListItem(listNodeTagName) {
       listStyle = 'bullet'
   }
   return listStyle
-}
-
-export function styledBlock(type, data) {
-  const block = Object.assign({}, type)
-  block.data = Object.assign({}, type.data || {}, data)
-  return block
 }
 
 export function tagName(el) {

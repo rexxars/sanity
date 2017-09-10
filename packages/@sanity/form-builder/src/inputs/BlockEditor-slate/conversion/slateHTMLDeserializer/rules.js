@@ -1,14 +1,15 @@
-import {DEFAULT_BLOCK_TYPE} from '../../constants'
+import {SLATE_DEFAULT_BLOCK} from '../../constants'
 import * as helpers from './helpers'
 import randomKey from '../../util/randomKey'
 import {uniq} from 'lodash'
 import createWordDocumentRules from './createWordDocumentRules'
 
-const {styledBlock, tagName} = helpers
+const {tagName} = helpers
+
 
 export const HTML_BLOCK_TAGS = {
-  p: DEFAULT_BLOCK_TYPE,
-  blockquote: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'blockquote'})
+  p: SLATE_DEFAULT_BLOCK,
+  blockquote: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'blockquote'}}}
 }
 
 export const HTML_SPAN_TAGS = {
@@ -21,16 +22,16 @@ export const HTML_LIST_CONTAINER_TAGS = {
 }
 
 export const HTML_HEADER_TAGS = {
-  h1: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h1'}),
-  h2: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h2'}),
-  h3: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h3'}),
-  h4: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h4'}),
-  h5: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h5'}),
-  h6: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'h6'})
+  h1: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h1'}}},
+  h2: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h2'}}},
+  h3: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h3'}}},
+  h4: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h4'}}},
+  h5: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h5'}}},
+  h6: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'h6'}}}
 }
 
 export const HTML_MISC_TAGS = {
-  br: styledBlock(DEFAULT_BLOCK_TYPE, {style: 'normal'}),
+  br: {...SLATE_DEFAULT_BLOCK, ...{data: {style: 'normal'}}},
 }
 export const HTML_DECORATOR_TAGS = {
 
@@ -49,7 +50,16 @@ export const HTML_DECORATOR_TAGS = {
 }
 
 export const HTML_LIST_ITEM_TAGS = {
-  li: DEFAULT_BLOCK_TYPE
+  li: {
+    ...SLATE_DEFAULT_BLOCK,
+    ...{
+      data: {
+        style: 'normal',
+        level: 1,
+        listItem: 'bullet'
+      }
+    }
+  }
 }
 
 export const elementMap = {
@@ -77,7 +87,6 @@ export function createRules(options) {
   const enabledStyles = options.enabledStyles || supportedStyles
   const enabledDecorators = options.enabledDecorators || supportedDecorators
   const enabledAnnotations = options.enabledAnnotations || ['link']
-
   return [
 
     ...createWordDocumentRules(options),
@@ -107,7 +116,7 @@ export function createRules(options) {
         }
         // If style is not supported, return a defaultBlockType
         if (!enabledStyles.includes(block.data.style)) {
-          block = DEFAULT_BLOCK_TYPE
+          block = SLATE_DEFAULT_BLOCK
         }
         return {
           ...block,
@@ -160,11 +169,9 @@ export function createRules(options) {
             || !HTML_LIST_CONTAINER_TAGS[tagName(el.parentNode)]) {
           return undefined
         }
+        listItem.data.listItem = helpers.resolveListItem(tagName(el.parentNode))
         return {
-          ...styledBlock(
-              listItem,
-              {listItem: helpers.resolveListItem(tagName(el.parentNode))}
-            ),
+          ...listItem,
           nodes: next(el.childNodes)
         }
       }

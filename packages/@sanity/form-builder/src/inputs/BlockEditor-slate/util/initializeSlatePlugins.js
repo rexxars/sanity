@@ -8,22 +8,22 @@ import onEnterInTextBlock from '../plugins/onEnterInTextBlock'
 import onPasteHtml from '../plugins/onPasteHtml'
 import onTabSetIntendation from '../plugins/onTabSetIntendation'
 
-import {DEFAULT_BLOCK_TYPE} from '../constants'
+import {SLATE_DEFAULT_BLOCK} from '../constants'
 
 export default function intializeSlatePlugins(blockEditor) {
   return [
 
-    insertBlockOnEnter(DEFAULT_BLOCK_TYPE),
+    insertBlockOnEnter(SLATE_DEFAULT_BLOCK),
     softBreak({
-      onlyIn: [DEFAULT_BLOCK_TYPE.type],
+      onlyIn: [SLATE_DEFAULT_BLOCK.type],
       shift: true
     }),
 
     onDrop(),
 
-    onEnterInListItem(DEFAULT_BLOCK_TYPE, blockEditor.refreshCSS),
+    onEnterInListItem(SLATE_DEFAULT_BLOCK, blockEditor.refreshCSS),
 
-    onEnterInTextBlock(DEFAULT_BLOCK_TYPE),
+    onEnterInTextBlock(SLATE_DEFAULT_BLOCK),
 
     onModKeySetMarkCombos(blockEditor),
 

@@ -1,7 +1,7 @@
-import {DEFAULT_BLOCK_TYPE} from '../../constants'
+import {SLATE_DEFAULT_BLOCK} from '../../constants'
 import * as helpers from './helpers'
 
-const {styledBlock, tagName} = helpers
+const {tagName} = helpers
 
 function getListItemStyle(el) {
   return el.getAttribute('style').match('lfo1') ? 'bullet' : 'number'
@@ -22,13 +22,14 @@ export default function (options) {
       deserialize(el, next) {
         if (tagName(el) === 'p' && isWordListElement(el)) {
           return {
-            ...styledBlock(
-              DEFAULT_BLOCK_TYPE,
-              {
+            ...SLATE_DEFAULT_BLOCK,
+            ...{
+              data: {
                 listItem: getListItemStyle(el),
-                level: getListItemLevel(el)
+                level: getListItemLevel(el),
+                style: 'normal'
               }
-            ),
+            },
             nodes: next(el.childNodes)
           }
         }

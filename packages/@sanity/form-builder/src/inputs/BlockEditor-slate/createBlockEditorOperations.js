@@ -1,4 +1,4 @@
-import {SLATE_DEFAULT_STYLE, SLATE_SPAN_TYPE} from './constants'
+import {BLOCK_DEFAULT_STYLE, SLATE_DEFAULT_BLOCK, SLATE_SPAN_TYPE} from './constants'
 import {createProtoValue} from './createProtoValue'
 import randomKey from './util/randomKey'
 
@@ -107,13 +107,10 @@ export default function createBlockEditorOperations(blockEditor) {
 
     toggleListItem(listItemName, isActive) {
       const state = getState()
-      const normalBlock = {
-        type: 'contentBlock',
-        data: {style: SLATE_DEFAULT_STYLE}
-      }
+      const normalBlock = SLATE_DEFAULT_BLOCK
       const listItemBlock = {
         type: 'contentBlock',
-        data: {listItem: listItemName, style: SLATE_DEFAULT_STYLE, level: 1}
+        data: {listItem: listItemName, style: BLOCK_DEFAULT_STYLE, level: 1}
       }
       const change = state.change()
 
