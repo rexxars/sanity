@@ -7,7 +7,7 @@ import mapToObject from './mapToObject'
 import randomKey from '../util/randomKey'
 
 import {getSpanType} from './spanHelpers'
-import {SLATE_DEFAULT_STYLE} from '../constants'
+import {BLOCK_DEFAULT_STYLE, SLATE_DEFAULT_BLOCK} from '../constants'
 
 // Preview components of different text types
 import Blockquote from '../preview/Blockquote'
@@ -49,7 +49,7 @@ const slateTypeComponentMapping = {
     const level = props.children[0] && props.children[0].props.parent.data.get('level')
     // eslint-disable-next-line react/prop-types
     const style = (props.children[0] && props.children[0].props.parent.data.get('style'))
-      || SLATE_DEFAULT_STYLE
+      || BLOCK_DEFAULT_STYLE
     const contentComponent = slateTypeComponentMapping[style]
     return <ListItem contentComponent={contentComponent} level={level} listItem={listItem} {...props} />
   },
@@ -126,22 +126,30 @@ export default function prepareSlateForBlockEditor(blockEditor) {
       return [decorator, Decorator]
     }),
     rules: [
-      // Rule to insert a default block when document is empty
+      // Rule to insert a default block when document is empty,
+      // or only contains one empty contentBlock
       {
         match: node => {
           return node.kind === 'document'
         },
         validate: document => {
-          return document.nodes.size ? null : true
+          return (
+            document.nodes.size === 0
+            || (
+                document.nodes.size === 1
+                && document.nodes.first().type === SLATE_DEFAULT_BLOCK.type
+                && document.nodes.first().text === ''
+                && document.nodes.first().data.get('style') !== BLOCK_DEFAULT_STYLE
+              )
+            ) ? document : null
         },
         normalize: (change, document) => {
-          const block = Block.create({
-            type: 'contentBlock',
-            data: {style: SLATE_DEFAULT_STYLE}
-          })
-          return change
-            .insertNodeByKey(document.key, 0, block)
-            .focus()
+          const hasEmptySingleContentBlock = document.nodes.size === 1
+          change.insertNodeByKey(document.key, 0, Block.create(SLATE_DEFAULT_BLOCK))
+          if (hasEmptySingleContentBlock) {
+            change.removeNodeByKey(document.nodes.first().key)
+          }
+          return change.focus()
         }
       },
       // Rule to ensure that every non-void block has a style
@@ -158,13 +166,13 @@ export default function prepareSlateForBlockEditor(blockEditor) {
           return contentBlock
         },
         normalize: (change, contentBlock) => {
-          const data = {...contentBlock.data.toObject(), style: SLATE_DEFAULT_STYLE}
+          const data = {...contentBlock.data.toObject(), style: BLOCK_DEFAULT_STYLE}
           return change
             .setNodeByKey(contentBlock.key, {type: 'contentBlock', ...{data}})
         }
       },
       // Rule to ensure that annotation _key's within a block is unique
-      // This can happen when copy/pasting annotation spans within the same block
+      // Duplication can happen when copy/pasting annotation spans within the same block
       {
         match: node => {
           // contentBlock with annotations
