@@ -8,38 +8,30 @@ import onEnterInTextBlock from '../plugins/onEnterInTextBlock'
 import onPasteHtml from '../plugins/onPasteHtml'
 import onTabSetIntendation from '../plugins/onTabSetIntendation'
 
-import {SLATE_DEFAULT_STYLE} from '../constants'
-
-const insertBlockOnEnterDef = {
-  type: 'contentBlock',
-  kind: 'block',
-  data: {
-    style: SLATE_DEFAULT_STYLE
-  }
-}
+import {DEFAULT_BLOCK_TYPE} from '../constants'
 
 export default function intializeSlatePlugins(blockEditor) {
   return [
-    insertBlockOnEnter(insertBlockOnEnterDef),
 
-    // Copy paste
-    onPasteHtml(blockEditor),
-    onPasteSlateContent(blockEditor.context.formBuilder, blockEditor.props.type.of),
+    insertBlockOnEnter(DEFAULT_BLOCK_TYPE),
+    softBreak({
+      onlyIn: [DEFAULT_BLOCK_TYPE.type],
+      shift: true
+    }),
 
-    // Key handling
-    onEnterInListItem(SLATE_DEFAULT_STYLE, blockEditor.refreshCSS),
-    onEnterInTextBlock(SLATE_DEFAULT_STYLE),
-    onTabSetIntendation(),
-
-    // Set mark keyboard shortcuts
-    onModKeySetMarkCombos(blockEditor),
-
-    // Dropping stuff
     onDrop(),
 
-    softBreak({
-      onlyIn: ['contentBlock'],
-      shift: true
-    })
+    onEnterInListItem(DEFAULT_BLOCK_TYPE, blockEditor.refreshCSS),
+
+    onEnterInTextBlock(DEFAULT_BLOCK_TYPE),
+
+    onModKeySetMarkCombos(blockEditor),
+
+    onPasteHtml(blockEditor),
+
+    onPasteSlateContent(blockEditor.context.formBuilder, blockEditor.props.type.of),
+
+    onTabSetIntendation()
+
   ]
 }
