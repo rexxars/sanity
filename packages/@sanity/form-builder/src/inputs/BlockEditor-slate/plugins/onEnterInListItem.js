@@ -1,8 +1,7 @@
-// This plugin should only kick in when the cursor is at the last listItem of a list.
-// and the new current list item is empty.
-// OR if no previous block (top of document)
+// This plugin handles enter on empty list elements, deletes it,
+// and either creates a new empty default block or subleveled list block below
 
-function createOnKeyDown(insertBlockStyle, callbackFn) {
+function createOnKeyDown(defaultBlock, callbackFn) {
   return function onKeyDown(event, data, change, editor) {
 
     const {document, startKey, startBlock} = change.state
@@ -28,43 +27,50 @@ function createOnKeyDown(insertBlockStyle, callbackFn) {
       return null
     }
 
-    const blockToInsert = {type: 'contentBlock', data: {style: insertBlockStyle}}
-
     // If on top of document
     // and no text insert a node before
     if (!previousBlock) {
-      change.insertBlock(blockToInsert).focus()
+      change.insertBlock(defaultBlock).focus()
       if (callbackFn) {
-        callbackFn(change.state)
+        callbackFn(change)
       }
       return change
     }
 
-    const nextBlock = document.getNextBlock(startKey)
-
-
     // Delete previous listItem if previous list item is empty
-    if (previousBlock.data.get('listItem') && !previousBlock.nodes.length) {
+    if (previousBlock && previousBlock.data.get('listItem') && !previousBlock.nodes.size) {
       change.deleteBackward(1)
     }
 
+    let blockToInsert = defaultBlock
+
+    // If level is > 1, insert a blank list element with the sublevel below
+    const level = startBlock.data.get('level') || 1
+    if (level > 1) {
+      blockToInsert = {
+        ...defaultBlock,
+        data: startBlock.data.toObject()
+      }
+      blockToInsert.data.level = level - 1
+    }
+
     // Jump to next node if next node is not a listItem or a void block
+    const nextBlock = document.getNextBlock(startKey)
     if (nextBlock && !nextBlock.data.get('listItem') && !nextBlock.isVoid) {
       change.collapseToStartOf(nextBlock)
     } else {
-      // Insert a given block type
       change.insertBlock(blockToInsert).focus()
     }
     if (callbackFn) {
-      callbackFn(change.state)
+      callbackFn(change)
     }
     return change
   }
 }
 
-function onEnterInListItem(insertBlockStyle, callbackFn) {
+function onEnterInListItem(defaultBlock, callbackFn) {
   return {
-    onKeyDown: createOnKeyDown(insertBlockStyle, callbackFn)
+    onKeyDown: createOnKeyDown(defaultBlock, callbackFn)
   }
 }
 
