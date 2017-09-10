@@ -115,6 +115,41 @@
 
   @nest &.level-3 {
     counter-increment: listItemRoman;
+    counter-reset: listItemNumberNext;
+  }
+
+  @nest &.level-4 {
+    counter-increment: listItemNumberNext;
+    counter-reset: listItemLetterNext;
+  }
+
+  @nest &.level-5 {
+    counter-increment: listItemLetterNext;
+    counter-reset: listItemRomanNext;
+  }
+
+  @nest &.level-6 {
+    counter-increment: listItemRomanNext;
+    counter-reset: listItemNumberNextNext;
+  }
+
+  @nest &.level-7 {
+    counter-increment: listItemNumberNextNext;
+    counter-reset: listItemAlphaNextNext;
+  }
+
+  @nest &.level-8 {
+    counter-increment: listItemAlphaNextNext;
+    counter-reset: listItemRomanNextNext;
+  }
+
+  @nest &.level-9 {
+    counter-increment: listItemRomanNextNext;
+    counter-reset: listItemNumberNextNextNext;
+  }
+
+  @nest &.level-10 {
+    counter-increment: listItemNumberNextNextNext;
   }
 
   @nest & + :not(.number) {
@@ -134,6 +169,62 @@
 
     @nest &:before {
       content: counter(listItemRoman, lower-roman) ". ";
+    }
+
+  }
+
+  @nest &.level-4 > * {
+
+    @nest &:before {
+      content: counter(listItemNumberNext) ". ";
+    }
+
+  }
+
+  @nest &.level-5 > * {
+
+    @nest &:before {
+      content: counter(listItemLetterNext, lower-alpha) ". ";
+    }
+
+  }
+
+  @nest &.level-6 > * {
+
+    @nest &:before {
+      content: counter(listItemRomanNext, lower-roman) ". ";
+    }
+
+  }
+
+  @nest &.level-7 > * {
+
+    @nest &:before {
+      content: counter(listItemNumberNextNext) ". ";
+    }
+
+  }
+
+  @nest &.level-8 > * {
+
+    @nest &:before {
+      content: counter(listItemAlphaNextNext, lower-alpha) ". ";
+    }
+
+  }
+
+  @nest &.level-9 > * {
+
+    @nest &:before {
+      content: counter(listItemRomanNextNext, lower-roman) ". ";
+    }
+
+  }
+
+  @nest &.level-10 > * {
+
+    @nest &:before {
+      content: counter(listItemNumberNextNextNext) ". ";
     }
 
   }
