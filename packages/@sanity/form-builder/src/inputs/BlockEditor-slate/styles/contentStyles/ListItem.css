@@ -102,15 +102,46 @@
 
 .number {
   composes: root;
-  counter-increment: listItem;
+
+  @nest &.level-1 {
+    counter-increment: listItemNumber;
+    counter-reset: listItemAlpha;
+  }
+
+  @nest &.level-2 {
+    counter-increment: listItemAlpha;
+    counter-reset: listItemRoman;
+  }
+
+  @nest &.level-3 {
+    counter-increment: listItemRoman;
+  }
 
   @nest & + :not(.number) {
-    counter-reset: listItem;
+    counter-reset: listItemNumber;
   }
+
+
+  @nest &.level-2 > * {
+
+    @nest &:before {
+      content: counter(listItemAlpha, lower-alpha) ". ";
+    }
+
+  }
+
+  @nest &.level-3 > * {
+
+    @nest &:before {
+      content: counter(listItemRoman, lower-roman) ". ";
+    }
+
+  }
+
 }
 
 .number > * {
   @nest &:before {
-    content: counter(listItem) ". ";
+    content: counter(listItemNumber) ". ";
   }
 }
