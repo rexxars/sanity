@@ -10,7 +10,9 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf lib",
-    "test": "jest && eslint ."
+    "test": "jest",
+    "posttest": "npm run lint",
+    "lint": "eslint ."
   },
   "keywords": [
     "sanity",
@@ -18,18 +20,26 @@
     "ndjson"
   ],
   "dependencies": {
-    "@sanity/client": "^0.111.2",
     "@sanity/mutator": "^0.108.0",
+    "debug": "^3.0.1",
+    "get-uri": "^2.0.1",
     "lodash": "^4.17.4",
+    "meow": "^3.7.0",
+    "p-map": "^1.2.0",
+    "simple-concat": "^1.0.0",
     "split2": "^2.1.1",
     "stream-collect": "^1.3.1",
     "through2": "^2.0.3"
   },
   "devDependencies": {
+    "@sanity/client": "^0.111.2",
     "babel-preset-env": "^1.6.0",
     "eslint": "^4.6.1",
     "eslint-config-prettier": "^2.4.0",
     "eslint-config-sanity": "^3.0.1",
+    "file-url": "^2.0.2",
+    "get-it": "^2.1.3",
+    "hard-rejection": "^1.0.0",
     "jest": "^21.0.1",
     "prettier": "^1.6.1",
     "rimraf": "^2.6.1"

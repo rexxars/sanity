@@ -14,3 +14,5 @@ node_modules
 # Compiled code
 lib
 
+# Dev-fixtures
+moviedb.ndjson

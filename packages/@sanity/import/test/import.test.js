@@ -1,7 +1,8 @@
+require('hard-rejection/register')
+
 const fs = require('fs')
 const path = require('path')
 const importer = require('../')
-const assetRefs = require('../src/assetRefs')
 
 const fixturesDir = path.join(__dirname, 'fixtures')
 const getFixture = fix => {
@@ -30,14 +31,13 @@ test('rejects on missing `_type` property', async () => {
   )
 })
 
-/*
-assetRefs({
-  _id: 'movie_123',
-  _type: 'movie',
-  title: 'Rogue One',
-  poster: {
-    _sanityAsset:
-      'image@https://cdn.sanity.io/images/q2tdbkqz/production/Y5bythpg4VBl8nRbQBnNSKs0-3000x1817.jpg?w=2000&fit=max&q=90'
+test('@temp@', async () => {
+  /* eslint-disable */
+  try {
+    const res = await importer(getFixture('unkeyed'))
+    console.log(require('util').inspect(res, {colors: true, depth: 5}))
+  } catch (err) {
+    consol.error(err.stack)
   }
+  /* eslint-enable */
 })
-*/
