@@ -54,7 +54,7 @@ async function importFromStream(stream, opts) {
   await uploadAssets(assetRefs, options)
 
   // Strengthen references
-  debug('Strenthening references')
+  debug('Strengthening references')
   await strengthenReferences(strongRefs, options)
 
   // Return number of documents imported

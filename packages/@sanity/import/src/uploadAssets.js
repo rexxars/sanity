@@ -41,26 +41,26 @@ function getAssetMap(assets) {
   }, new Map())
 }
 
-async function ensureAsset(options, assetKey) {
+async function ensureAsset(options, assetKey, i) {
   const {client} = options
   const [type, url] = assetKey.split('#', 2)
 
   // Download the asset in order for us to create a hash
-  debug('Downloading %s', url)
+  debug('[Asset #%d] Downloading %s', i, url)
   const buffer = await getBufferForUri(url)
   const label = getHash(buffer)
 
   // See if the item exists on the server
-  debug('Checking for asset with hash %s', label)
+  debug('[Asset #%d]Checking for asset with hash %s', i, label)
   const assetId = await getAssetIdForLabel(client, type, label)
   if (assetId) {
     // Same hash means we want to reuse the asset
-    debug('Found %s for hash %s', type, label)
+    debug('[Asset #%d] Found %s for hash %s', i, type, label)
     return assetId
   }
 
   // If it doesn't exist, we want to upload it
-  debug('Uploading %s with URL %s', type, url)
+  debug('[Asset #%d] Uploading %s with URL %s', i, type, url)
   const asset = await client.assets.upload(type, buffer, {label})
   return asset.document._id
 }
