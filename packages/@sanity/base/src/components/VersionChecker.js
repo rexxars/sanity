@@ -1,12 +1,17 @@
+import {omit} from 'lodash'
 import React, {PureComponent} from 'react'
-import FullscreenError from './FullscreenError'
+import semverCompare from 'semver-compare'
+import versions from 'sanity:versions'
 import FullscreenDialog from 'part:@sanity/components/dialogs/fullscreen?'
 import client from 'part:@sanity/base/client'
-import versions from 'sanity:versions'
+import FullscreenError from './FullscreenError'
 
-const onIdle = typeof window.requestIdleCallback === 'function'
-  ? window.requestIdleCallback
-  : cb => setTimeout(cb, 0)
+versions['@sanity/base'] = '0.118.0'
+
+const onIdle =
+  typeof window.requestIdleCallback === 'function'
+    ? window.requestIdleCallback
+    : cb => setTimeout(cb, 0)
 
 // eslint-disable-next-line id-length
 const buildQueryString = () => ({m: Object.keys(versions).map(pkg => `${pkg}@${versions[pkg]}`)})
@@ -37,24 +42,32 @@ const paragraphify = text => {
   })
 }
 
-const checkVersions = () => {
+const getLatestInstalled = () => {
+  const versionNums = Object.keys(versions).map(pkg => versions[pkg])
+  const sorted = versionNums.sort(semverCompare)
+  return sorted[sorted.length - 1]
+}
+
+const checkVersions = (options = {}) => {
+  const {getOutdated} = options
   const query = buildQueryString()
   const hash = hashQuery(query.m)
-  const local = (
-    storage.versionCheck
-    && storage.versionCheck.indexOf(hash) === 0
-    && storage.versionCheck.slice(hash.length + 1)
-  )
+  const local =
+    storage.versionCheck &&
+    storage.versionCheck.indexOf(hash) === 0 &&
+    storage.versionCheck.slice(hash.length + 1)
 
-  if (local) {
+  if (!getOutdated && local) {
     return Promise.resolve({result: JSON.parse(local)})
   }
 
-  return client.request({
-    uri: '/versions',
-    query: buildQueryString(),
-    json: true
-  }).then(result => ({hash, result}))
+  return client
+    .request({
+      uri: '/versions',
+      query: buildQueryString(),
+      json: true
+    })
+    .then(result => ({hash, result}))
 }
 
 class VersionChecker extends PureComponent {
@@ -66,15 +79,16 @@ class VersionChecker extends PureComponent {
   }
 
   onResponse(res) {
+    const result = omit(res.result, ['outdated'])
     if (res.hash && storage) {
-      storage.versionCheck = [res.hash, JSON.stringify(res.result)].join('|')
+      storage.versionCheck = [res.hash, JSON.stringify(result)].join('|')
     }
 
-    if (!res.result.isSupported) {
-      this.setState({result: res.result})
+    if (!result.isSupported) {
+      this.setState({result})
     }
 
-    if (__DEV__ && res.result.outdated) {
+    if (__DEV__ && result.outdated) {
       const modules = res.result.outdated.map(mod => mod.name).join('\n  - ')
       const instructions = 'Run `sanity upgrade` to update them'
       // eslint-disable-next-line no-console
@@ -87,7 +101,11 @@ class VersionChecker extends PureComponent {
   }
 
   componentDidMount() {
-    onIdle(() => checkVersions().then(this.onResponse).catch(onVersionCheckError))
+    onIdle(() => {
+      checkVersions()
+        .then(this.onResponse)
+        .catch(onVersionCheckError)
+    })
   }
 
   render() {
@@ -104,11 +122,16 @@ class VersionChecker extends PureComponent {
         {paragraphify(result.message || '')}
 
         {result.helpUrl && (
-          <p>For more information, please read <a href={result.helpUrl}>{result.helpUrl}</a></p>
+          <p>
+            For more information, please read <a href={result.helpUrl}>{result.helpUrl}</a>
+          </p>
         )}
       </Dialog>
     )
   }
 }
+
+VersionChecker.checkVersions = checkVersions
+VersionChecker.getLatestInstalled = getLatestInstalled
 
 export default VersionChecker

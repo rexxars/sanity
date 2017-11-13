@@ -14,14 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/sanity-io/sanity.git"
   },
-  "keywords": [
-    "sanity",
-    "cms",
-    "headless",
-    "realtime",
-    "content",
-    "base"
-  ],
+  "keywords": ["sanity", "cms", "headless", "realtime", "content", "base"],
   "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "bugs": {
@@ -43,6 +36,7 @@
     "promise-props": "^1.0.0",
     "react-icons": "^2.2.5",
     "react-intl": "^2.2.2",
+    "semver-compare": "^1.0.0",
     "shallow-equals": "^1.0.0",
     "stylelint-config-standard": "^17.0.0"
   },
