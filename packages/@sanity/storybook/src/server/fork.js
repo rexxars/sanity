@@ -6,6 +6,10 @@ const shelljs = require('shelljs')
 const serverPath = path.join(__dirname, 'server.js')
 
 module.exports = config => {
+  if (process.env.DISABLE_STORYBOOK) {
+    return
+  }
+
   const {output, chalk} = config.context
 
   const debug = (process.env.DEBUG || '').indexOf('storybook') >= 0
