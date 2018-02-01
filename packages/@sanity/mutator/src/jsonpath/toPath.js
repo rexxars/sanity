@@ -40,7 +40,10 @@ function toPathInner(expr: Object, inUnion: boolean): string {
       }
       return `[${expr.value}]`
     case 'constraint':
-      const inner = `${toPathInner(expr.lhs, false)} ${expr.operator} ${toPathInner(expr.rhs, false)}`
+      const inner = `${toPathInner(expr.lhs, false)} ${expr.operator} ${toPathInner(
+        expr.rhs,
+        false
+      )}`
       if (inUnion) {
         return inner
       }

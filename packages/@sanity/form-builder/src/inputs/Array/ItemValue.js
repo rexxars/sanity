@@ -250,7 +250,9 @@ export default class RenderItemValue extends React.Component<Props> {
               <LinkIcon />
             </IntentLink>
           )}
-          {!type.readOnly && <ConfirmButton title="Remove this item" onConfirm={this.handleRemove} />}
+          {!type.readOnly && (
+            <ConfirmButton title="Remove this item" onConfirm={this.handleRemove} />
+          )}
         </div>
       </div>
     )

@@ -98,7 +98,8 @@ function verifyImplementationExists(impl, parentDirContent) {
 }
 
 function checkImplementationMsg(impl) {
-  const location = impl.plugin === '(project root)' ? 'Check "sanity.json"' : `Check "${impl.plugin}"`
+  const location =
+    impl.plugin === '(project root)' ? 'Check "sanity.json"' : `Check "${impl.plugin}"`
 
   return `${location} and keep in mind that paths in Sanity are case-sensitive.`
 }

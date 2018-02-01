@@ -154,7 +154,9 @@ export default class ArrayInput extends React.Component<Props, State> {
     }
 
     const key = item._key || randomKey(12)
-    onChange(event.prefixAll({_key: key}).prepend(item._key ? [] : set(key, [value.indexOf(item), '_key'])))
+    onChange(
+      event.prefixAll({_key: key}).prepend(item._key ? [] : set(key, [value.indexOf(item), '_key']))
+    )
   }
 
   handleSortStart = () => {
@@ -226,7 +228,11 @@ export default class ArrayInput extends React.Component<Props, State> {
         {value.map((item, index) => {
           const itemProps = isSortable ? {index} : {}
           return (
-            <Item key={item._key} className={isGrid ? styles.gridItem : listItemClassName} {...itemProps}>
+            <Item
+              key={item._key}
+              className={isGrid ? styles.gridItem : listItemClassName}
+              {...itemProps}
+            >
               <RenderItemValue
                 type={type}
                 value={item}

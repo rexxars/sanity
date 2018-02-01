@@ -52,7 +52,9 @@ export default function traverseSchema(
   })
 
   function getType(typeName) {
-    return typeName === 'type' ? TYPE_TYPE : coreTypesRegistry[typeName] || registry[typeName] || null
+    return typeName === 'type'
+      ? TYPE_TYPE
+      : coreTypesRegistry[typeName] || registry[typeName] || null
   }
 
   const duplicateNames = uniq(flatten(getDupes(typeNames)))
@@ -68,7 +70,14 @@ export default function traverseSchema(
   }
 
   const visitType = isRoot => typeDef => {
-    return visitor(typeDef, {visit: visitType(false), isRoot, getType, getTypeNames, isReserved, isDuplicate})
+    return visitor(typeDef, {
+      visit: visitType(false),
+      isRoot,
+      getType,
+      getTypeNames,
+      isReserved,
+      isDuplicate
+    })
   }
 
   coreTypes.forEach(coreTypeDef => {

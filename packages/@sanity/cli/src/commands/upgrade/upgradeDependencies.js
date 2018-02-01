@@ -48,7 +48,9 @@ export default async (args, context) => {
 
     if (oldManifest.devDependencies && oldManifest.devDependencies[mod.name]) {
       target.devDependencies[mod.name] =
-        mod.latest === 'unknown' ? oldManifest.devDependencies[mod.name] : versionPrefix + mod.latest
+        mod.latest === 'unknown'
+          ? oldManifest.devDependencies[mod.name]
+          : versionPrefix + mod.latest
     }
 
     return target

@@ -89,7 +89,9 @@ export default class Sticky extends React.PureComponent {
     }
 
     if (this._scrollContainerElement) {
-      this._scrollContainerElement.removeEventListener('scroll', this.handleContainerScroll, {passive: true})
+      this._scrollContainerElement.removeEventListener('scroll', this.handleContainerScroll, {
+        passive: true
+      })
     }
 
     if (this._elementResizeDetector && this._contentElement && this._contentElement.firstChild) {
@@ -181,7 +183,10 @@ export default class Sticky extends React.PureComponent {
 
   addMovingListeners = () => {
     if (this._elementResizeDetector && this._contentElement && this._contentElement.firstChild) {
-      this._elementResizeDetector.listenTo(this._contentElement.firstChild, this.handleElementResize)
+      this._elementResizeDetector.listenTo(
+        this._contentElement.firstChild,
+        this.handleElementResize
+      )
     }
   }
 

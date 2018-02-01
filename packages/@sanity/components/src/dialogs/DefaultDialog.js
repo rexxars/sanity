@@ -90,7 +90,16 @@ export default class DefaultDialog extends React.PureComponent {
   }
 
   render() {
-    const {title, actions, isOpen, showHeader, kind, onClose, className, showCloseButton} = this.props
+    const {
+      title,
+      actions,
+      isOpen,
+      showHeader,
+      kind,
+      onClose,
+      className,
+      showCloseButton
+    } = this.props
     const classNames = `
       ${styles[kind]}
       ${isOpen ? styles.isOpen : styles.isClosed}

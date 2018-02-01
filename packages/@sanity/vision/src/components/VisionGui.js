@@ -260,8 +260,12 @@ class VisionGui extends React.PureComponent {
     // Note that because of react-json-inspector, we need at least one
     // addressable, non-generated class name. Therefore;
     // leave `sanity-vision` untouched!
-    const visionClass = ['sanity-vision', this.context.styles.visionGui.root].filter(Boolean).join(' ')
-    const headerClass = ['sanity-vision', this.context.styles.visionGui.header].filter(Boolean).join(' ')
+    const visionClass = ['sanity-vision', this.context.styles.visionGui.root]
+      .filter(Boolean)
+      .join(' ')
+    const headerClass = ['sanity-vision', this.context.styles.visionGui.header]
+      .filter(Boolean)
+      .join(' ')
     return (
       <div className={visionClass}>
         <div className={headerClass}>
@@ -345,7 +349,8 @@ class VisionGui extends React.PureComponent {
                 {hasResult && <ResultView data={result} query={query} />}
                 {Array.isArray(result) &&
                   result.length === 0 && <NoResultsDialog query={query} dataset={dataset} />}
-                {listenMutations && listenMutations.length > 0 && <ResultView data={listenMutations} />}
+                {listenMutations &&
+                  listenMutations.length > 0 && <ResultView data={listenMutations} />}
               </div>
             </div>
           </SplitPane>

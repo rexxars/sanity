@@ -9,7 +9,11 @@ function ResultView(props) {
   const {data, viewMode} = props
 
   const isDumpable = data === null || dumpableTypes.includes(typeof data)
-  return isDumpable ? <JsonDump data={data} /> : <ResultCollection data={data} viewMode={viewMode} />
+  return isDumpable ? (
+    <JsonDump data={data} />
+  ) : (
+    <ResultCollection data={data} viewMode={viewMode} />
+  )
 }
 
 ResultView.propTypes = {

@@ -23,7 +23,9 @@ export function validateSlug(type, slug, myDocId) {
   return client.fetch(query, {slug: slug, id: myDocId}).then(results => {
     if (results[0]) {
       const foundDocId = results[0]._id
-      return `There is already a document (${foundDocId}) ` + `in the dataset with the slug '${slug}'.`
+      return (
+        `There is already a document (${foundDocId}) ` + `in the dataset with the slug '${slug}'.`
+      )
     }
     return null
   })

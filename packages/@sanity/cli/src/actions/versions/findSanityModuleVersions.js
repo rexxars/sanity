@@ -13,14 +13,18 @@ export default async (context, target) => {
   const sanityModules = filterSanityModules(getLocalManifest(context.workDir))
   const resolveOpts = {includeCli: true, target}
   const spin = spinner('Resolving latest versions').start()
-  const versions = await promiseProps(buildPackageArray(sanityModules, context.workDir, resolveOpts))
+  const versions = await promiseProps(
+    buildPackageArray(sanityModules, context.workDir, resolveOpts)
+  )
 
   const packages = values(versions)
   spin.stop()
 
   return packages.map(mod => {
     mod.needsUpdate =
-      target === 'latest' ? semverCompare(mod.version, mod.latest) === -1 : mod.version !== mod.latest
+      target === 'latest'
+        ? semverCompare(mod.version, mod.latest) === -1
+        : mod.version !== mod.latest
     return mod
   })
 }
@@ -34,7 +38,11 @@ function getLocalManifest(workDir) {
 }
 
 function filterSanityModules(manifest) {
-  const dependencies = Object.assign({}, manifest.dependencies || {}, manifest.devDependencies || {})
+  const dependencies = Object.assign(
+    {},
+    manifest.dependencies || {},
+    manifest.devDependencies || {}
+  )
 
   const sanityDeps = Object.keys(dependencies)
     .filter(mod => mod.indexOf('@sanity/') === 0)

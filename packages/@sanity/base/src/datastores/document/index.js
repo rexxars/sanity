@@ -25,7 +25,9 @@ const serverConnection = {
     return Observable.from(
       client.listen('*[_id == $id]', {id: id}, {events: ['welcome', 'mutation']})
     ).concatMap(event => {
-      return event.type === 'welcome' ? Observable.from(fetchDocumentSnapshot(id)) : Observable.of(event)
+      return event.type === 'welcome'
+        ? Observable.from(fetchDocumentSnapshot(id))
+        : Observable.of(event)
     })
   },
 
@@ -41,12 +43,17 @@ const serverConnection = {
 
   mutate(mutations) {
     return Observable.from(
-      client.observable.dataRequest('mutate', mutations, {visibility: 'async', returnDocuments: false})
+      client.observable.dataRequest('mutate', mutations, {
+        visibility: 'async',
+        returnDocuments: false
+      })
     )
   },
 
   delete(id) {
-    return Observable.from(client.observable.delete(id, {visibility: 'async', returnDocuments: false}))
+    return Observable.from(
+      client.observable.delete(id, {visibility: 'async', returnDocuments: false})
+    )
   },
 
   create(doc) {

@@ -9,7 +9,9 @@ const ACTIONS = [
   {name: 'confirm', title: 'Publish now', color: 'success', autoFocus: true, inverted: false},
   {name: 'cancel', title: 'Cancel'}
 ]
-const NOTHING_TO_PUBLISH_ACTIONS = [{name: 'cancel', title: 'Close', color: 'success', autoFocus: true}]
+const NOTHING_TO_PUBLISH_ACTIONS = [
+  {name: 'cancel', title: 'Close', color: 'success', autoFocus: true}
+]
 
 export default class ConfirmPublish extends React.PureComponent {
   static propTypes = {
@@ -64,7 +66,9 @@ export default class ConfirmPublish extends React.PureComponent {
           </p>
           <p>
             {published &&
-              `It was last published ${distanceInWordsToNow(published._updatedAt, {addSuffix: true})}.`}
+              `It was last published ${distanceInWordsToNow(published._updatedAt, {
+                addSuffix: true
+              })}.`}
           </p>
         </div>
       </Dialog>

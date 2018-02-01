@@ -12,7 +12,15 @@ import {
   DEFAULT_DECORATORS
 } from './defaults'
 
-const INHERITED_FIELDS = ['type', 'name', 'title', 'jsonType', 'description', 'options', 'fieldsets']
+const INHERITED_FIELDS = [
+  'type',
+  'name',
+  'title',
+  'jsonType',
+  'description',
+  'options',
+  'fieldsets'
+]
 
 const BLOCK_CORE = {
   name: 'block',
@@ -65,7 +73,9 @@ export const BlockType = {
           if (extensionDef.fields) {
             throw new Error('Cannot override `fields` of subtypes of "block"')
           }
-          const current = Object.assign({}, parent, pick(extensionDef, INHERITED_FIELDS), {type: parent})
+          const current = Object.assign({}, parent, pick(extensionDef, INHERITED_FIELDS), {
+            type: parent
+          })
           return subtype(current)
         }
       }

@@ -12,5 +12,7 @@ type Props = {
 }
 
 export default function SortableGridList(props: Props) {
-  return <Sortable {...props} axis="xy" distance={1} lockToContainerEdges transitionDuration={600} />
+  return (
+    <Sortable {...props} axis="xy" distance={1} lockToContainerEdges transitionDuration={600} />
+  )
 }

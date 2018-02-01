@@ -112,7 +112,11 @@ function resolvePluginPath(plugin, sync) {
 
 function getPluginNotFoundError(pluginName, locations) {
   const err = new Error(
-    [`Plugin "${pluginName}" not found.\n`, 'Locations tried:\n  * ', locations.join('\n  * ')].join('')
+    [
+      `Plugin "${pluginName}" not found.\n`,
+      'Locations tried:\n  * ',
+      locations.join('\n  * ')
+    ].join('')
   )
 
   err.code = 'PluginNotFound'

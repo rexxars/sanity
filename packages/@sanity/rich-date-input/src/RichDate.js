@@ -74,7 +74,8 @@ export default class RichDateInput extends React.PureComponent {
     const timeIntervals = getTimeIntervals(value, options)
     const activeTimeInterval = timeIntervals.find(time => time.isActive === true)
 
-    const placeholder = typeof type.placeholder === 'function' ? type.placeholder() : type.placeholder
+    const placeholder =
+      typeof type.placeholder === 'function' ? type.placeholder() : type.placeholder
 
     return (
       <FormField labelFor={this.inputId} label={title} level={level} description={description}>

@@ -25,8 +25,8 @@ function DefaultRootComponent() {
       <h1>Hello, Sanity!</h1>
 
       <p>
-        If you are seeing this, it means that no plugin has fulfilled the <code>part:@sanity/base/root</code>{' '}
-        role.
+        If you are seeing this, it means that no plugin has fulfilled the{' '}
+        <code>part:@sanity/base/root</code> role.
       </p>
 
       <p>
@@ -35,8 +35,8 @@ function DefaultRootComponent() {
 
       <h2>How do I fix it?</h2>
       <p>
-        In the <code>sanity.json</code> file of your Sanity configuration, add a plugin that fulfills the{' '}
-        <code>part:@sanity/base/root</code> role. For instance:
+        In the <code>sanity.json</code> file of your Sanity configuration, add a plugin that
+        fulfills the <code>part:@sanity/base/root</code> role. For instance:
       </p>
       <pre>
         <code dangerouslySetInnerHTML={{__html: exampleManifest}} />

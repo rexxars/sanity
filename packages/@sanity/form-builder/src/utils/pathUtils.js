@@ -2,7 +2,10 @@
 import type {Path, PathSegment} from '../typedefs/path'
 
 export function isEqual(path: Path, otherPath: Path) {
-  return path.length === otherPath.length && path.every((segment, i) => isSegmentEqual(segment, otherPath[i]))
+  return (
+    path.length === otherPath.length &&
+    path.every((segment, i) => isSegmentEqual(segment, otherPath[i]))
+  )
 }
 
 export const FOCUS_TERMINATOR = '$'
@@ -61,7 +64,11 @@ export function trimRight(suffix, path) {
   }
 
   let i = 0
-  while (i < sufLen && i < pathLen && isSegmentEqual(path[pathLen - i - 1], suffix[sufLen - i - 1])) {
+  while (
+    i < sufLen &&
+    i < pathLen &&
+    isSegmentEqual(path[pathLen - i - 1], suffix[sufLen - i - 1])
+  ) {
     i++
   }
 

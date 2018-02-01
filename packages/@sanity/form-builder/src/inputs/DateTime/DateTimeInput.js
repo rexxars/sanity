@@ -171,7 +171,9 @@ export default class DateInput extends React.Component<Props, State> {
 
     return (
       <FormField labelFor={this.inputId} label={title} level={level} description={description}>
-        {readOnly && <TextInput readOnly value={momentValue ? momentValue.format(getFormat(options)) : ''} />}
+        {readOnly && (
+          <TextInput readOnly value={momentValue ? momentValue.format(getFormat(options)) : ''} />
+        )}
         {!readOnly && (
           <div className={styles.inputWrapper}>
             <DatePicker
@@ -186,7 +188,9 @@ export default class DateInput extends React.Component<Props, State> {
               className={styles.input}
               onChange={this.handleChange}
               onChangeRaw={this.handleInputChange}
-              value={inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))}
+              value={
+                inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))
+              }
               dateFormat={options.dateFormat}
               timeFormat={options.timeFormat}
               timeIntervals={options.timeStep}
@@ -224,7 +228,9 @@ export default class DateInput extends React.Component<Props, State> {
                 className={styles.input}
                 onChange={this.handleChange}
                 onChangeRaw={this.handleInputChange}
-                value={inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))}
+                value={
+                  inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))
+                }
                 showTimeSelect
                 dateFormat={options.dateFormat}
                 timeFormat={options.timeFormat}

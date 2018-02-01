@@ -22,7 +22,9 @@ export default class PertEstimateInput extends React.Component {
 
   handleChange = (field, event) => {
     const {type, onChange} = this.props
-    const value = Object.assign({}, this.props.value || {}, {[field.name]: event.target.valueAsNumber})
+    const value = Object.assign({}, this.props.value || {}, {
+      [field.name]: event.target.valueAsNumber
+    })
     const {calculated} = calculateEstimate(value)
 
     onChange(

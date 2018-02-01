@@ -96,7 +96,10 @@ export default class LoginDialog extends React.Component {
 
   componentWillUpdate(_, nextState) {
     const {providers} = nextState
-    if (providers.length === 1 && (pluginConfig.providers && pluginConfig.providers.redirectOnSingle)) {
+    if (
+      providers.length === 1 &&
+      (pluginConfig.providers && pluginConfig.providers.redirectOnSingle)
+    ) {
       this.redirectToProvier(providers[0])
     }
   }
@@ -109,7 +112,8 @@ export default class LoginDialog extends React.Component {
       this.setState({
         error: {
           message:
-            'This project is missing the required "thirdPartyLogin" ' + 'feature to support custom logins.',
+            'This project is missing the required "thirdPartyLogin" ' +
+            'feature to support custom logins.',
           link: generateHelpUrl('third-party-login')
         }
       })
@@ -136,7 +140,9 @@ export default class LoginDialog extends React.Component {
           {sanityLogo && !SanityLogo && <div className={styles.sanityLogo}>{sanityLogo}</div>}
 
           <div className={styles.branding}>
-            <h1 className={BrandLogo ? styles.projectNameHidden : styles.projectName}>{projectName}</h1>
+            <h1 className={BrandLogo ? styles.projectNameHidden : styles.projectName}>
+              {projectName}
+            </h1>
             {BrandLogo && (
               <div className={styles.brandLogoContainer}>
                 <BrandLogo projectName={projectName} />

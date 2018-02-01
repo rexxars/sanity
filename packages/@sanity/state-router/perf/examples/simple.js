@@ -1,6 +1,9 @@
 exports.routes = [
   '/',
-  [['something/:something'], ['otherthing/:otherthing', [['sub-otherthing/:cow', [['/sub-sub/:sheep']]]]]]
+  [
+    ['something/:something'],
+    ['otherthing/:otherthing', [['sub-otherthing/:cow', [['/sub-sub/:sheep']]]]]
+  ]
 ]
 
 exports.states = [

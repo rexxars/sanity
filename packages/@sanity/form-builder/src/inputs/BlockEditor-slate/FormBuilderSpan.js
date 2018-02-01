@@ -36,7 +36,8 @@ export default class FormBuilderSpan extends React.Component {
   componentWillMount() {
     this.setState({
       isEditing: false,
-      focusedAnnotationName: this.props.node.data && this.props.node.data.get('focusedAnnotationName')
+      focusedAnnotationName:
+        this.props.node.data && this.props.node.data.get('focusedAnnotationName')
     })
   }
 
@@ -242,7 +243,10 @@ export default class FormBuilderSpan extends React.Component {
                   }
                   return (
                     <DefaultButton key={`annotationButton${annotationKey}`} onClick={setFieldFunc}>
-                      {annotationTypes.find(type => type.name === annotations[annotationKey]._type).title}
+                      {
+                        annotationTypes.find(type => type.name === annotations[annotationKey]._type)
+                          .title
+                      }
                     </DefaultButton>
                   )
                 })}

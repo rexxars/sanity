@@ -163,7 +163,9 @@ function calculateHotSpotCrop(sourceAspect, descriptor, spec) {
         outCrop.left = cropIsTaller ? (1 - outCrop.width) / 2 : -hotspotLeft
         break
       default:
-        throw new Error(`Invalid x alignment: '${alignment.x}'. Must be either 'left', 'right' or 'center'`)
+        throw new Error(
+          `Invalid x alignment: '${alignment.x}'. Must be either 'left', 'right' or 'center'`
+        )
     }
     const hotspotTop = hotspot.y * outCrop.height - hotspot.height * outCrop.height / 2
     switch (alignment.y) {
@@ -178,7 +180,9 @@ function calculateHotSpotCrop(sourceAspect, descriptor, spec) {
         outCrop.top = cropIsTaller ? -hotspotTop : (1 - outCrop.height) / 2
         break
       default:
-        throw new Error(`Invalid y alignment: '${alignment.y}'. Must be either 'top', 'bottom' or 'center'`)
+        throw new Error(
+          `Invalid y alignment: '${alignment.y}'. Must be either 'top', 'bottom' or 'center'`
+        )
     }
   } else if (cropIsTaller) {
     // TODO: Clamp hotspot offset to avoid moving image off canvas

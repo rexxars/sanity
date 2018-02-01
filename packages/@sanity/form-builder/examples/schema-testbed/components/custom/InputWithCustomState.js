@@ -92,7 +92,12 @@ export default class InputWithCustomState extends React.Component {
         <h2>{type.title}</h2>
         <h3>Raw value</h3>
         <pre>{JSON.stringify(rawValue, null, 2)}</pre>
-        <ValueSync value={rawValue} serialize={serialize} deserialize={deserialize} applyPatch={applyPatch}>
+        <ValueSync
+          value={rawValue}
+          serialize={serialize}
+          deserialize={deserialize}
+          applyPatch={applyPatch}
+        >
           {({value}) => (
             <div>
               <h3>Internal value (immutable.js)</h3>

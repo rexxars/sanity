@@ -55,7 +55,8 @@ class CorsCheck extends PureComponent {
   render() {
     const {isLoading, result} = this.state
     const origin =
-      window.location.origin || window.location.href.replace(new RegExp(`${window.location.pathname}$`), '')
+      window.location.origin ||
+      window.location.href.replace(new RegExp(`${window.location.pathname}$`), '')
 
     if (isLoading) {
       return <Spinner fullscreen center />
@@ -84,9 +85,9 @@ class CorsCheck extends PureComponent {
     if (result.isCorsError) {
       return this.renderWrapper(
         <p>
-          It seems the error could be caused by the current origin (<code>{origin}</code>) not being an
-          allowed origin for this project. If you are an administrator or developer of the project, you can
-          head to{' '}
+          It seems the error could be caused by the current origin (<code>{origin}</code>) not being
+          an allowed origin for this project. If you are an administrator or developer of the
+          project, you can head to{' '}
           <a rel={linkRel} target="_blank" href={corsUrl}>
             the project management
           </a>{' '}
@@ -98,19 +99,20 @@ class CorsCheck extends PureComponent {
     if (result.pingResponded) {
       return this.renderWrapper(
         <p>
-          The cause of this error is a little uncertain. It could be a temporary glitch, in which case you
-          might want to try hitting the <strong>Retry</strong> button below. If you are the developer of this
-          project, you could take a look at the browsers developer console and see if any issues are reported
-          there.
+          The cause of this error is a little uncertain. It could be a temporary glitch, in which
+          case you might want to try hitting the <strong>Retry</strong> button below. If you are the
+          developer of this project, you could take a look at the browsers developer console and see
+          if any issues are reported there.
         </p>
       )
     }
 
     return this.renderWrapper(
       <p>
-        It might be that your internet connection is unstable or down, or it <em>might</em> be the Sanity API
-        is having some issues, in which case it should hopefully be back up soon! You could also try hitting
-        the <strong>Retry</strong> button and see if it was just a temporary glitch.
+        It might be that your internet connection is unstable or down, or it <em>might</em> be the
+        Sanity API is having some issues, in which case it should hopefully be back up soon! You
+        could also try hitting the <strong>Retry</strong> button and see if it was just a temporary
+        glitch.
       </p>
     )
   }

@@ -97,7 +97,12 @@ export class Rect {
   }
 
   grow(delta) {
-    return new Rect(this.left - delta, this.top - delta, this.width + delta * 2, this.height + delta * 2)
+    return new Rect(
+      this.left - delta,
+      this.top - delta,
+      this.width + delta * 2,
+      this.height + delta * 2
+    )
   }
 
   shrink(delta) {

@@ -105,7 +105,9 @@ export default {
           lists: [{title: 'Bullet', value: 'bullet'}, {title: 'Numbered', value: 'number'}],
           marks: {
             decorators: [{title: 'Strong', value: 'strong'}, {title: 'Emphasis', value: 'em'}],
-            annotations: [{name: 'Author', title: 'Author', type: 'reference', to: {type: 'author'}}]
+            annotations: [
+              {name: 'Author', title: 'Author', type: 'reference', to: {type: 'author'}}
+            ]
           }
         }
       ]
@@ -134,7 +136,9 @@ export default {
               lists: [{title: 'Bullet', value: 'bullet'}, {title: 'Numbered', value: 'number'}],
               marks: {
                 decorators: [{title: 'Strong', value: 'strong'}, {title: 'Emphasis', value: 'em'}],
-                annotations: [{name: 'Author', title: 'Author', type: 'reference', to: {type: 'author'}}]
+                annotations: [
+                  {name: 'Author', title: 'Author', type: 'reference', to: {type: 'author'}}
+                ]
               }
             }
           ]

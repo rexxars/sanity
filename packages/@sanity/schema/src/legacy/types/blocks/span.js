@@ -2,7 +2,15 @@ import {pick} from 'lodash'
 import {lazyGetter} from '../utils'
 import createPreviewGetter from '../../preview/createPreviewGetter'
 
-const INHERITED_FIELDS = ['type', 'name', 'title', 'jsonType', 'description', 'options', 'fieldsets']
+const INHERITED_FIELDS = [
+  'type',
+  'name',
+  'title',
+  'jsonType',
+  'description',
+  'options',
+  'fieldsets'
+]
 
 const SPAN_CORE = {
   name: 'span',
@@ -52,7 +60,9 @@ export const SpanType = {
           if (extensionDef.fields) {
             throw new Error('Cannot override `fields` of subtypes of "span"')
           }
-          const current = Object.assign({}, parent, pick(extensionDef, INHERITED_FIELDS), {type: parent})
+          const current = Object.assign({}, parent, pick(extensionDef, INHERITED_FIELDS), {
+            type: parent
+          })
           return subtype(current)
         }
       }

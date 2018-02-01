@@ -47,7 +47,12 @@ export default function clientWrapper(manifest, configPath) {
     const userApiConf = userConfig.get('api')
     const token = userConfig.get('authToken')
     const apiHost = apiHosts[sanityEnv]
-    const apiConfig = Object.assign({}, userApiConf || {}, (manifest && manifest.api) || {}, api || {})
+    const apiConfig = Object.assign(
+      {},
+      userApiConf || {},
+      (manifest && manifest.api) || {},
+      api || {}
+    )
 
     if (apiHost) {
       apiConfig.apiHost = apiHost

@@ -79,7 +79,11 @@ storiesOf('Icons')
 
           {createIconPreview('Upload', UploadIcon, 'part:@sanity/base/upload-icon')}
           {createIconPreview('Format bold', FormatBoldIcon, 'part:@sanity/base/format-bold-icon')}
-          {createIconPreview('Format italic', FormatItalicIcon, 'part:@sanity/base/format-italic-icon')}
+          {createIconPreview(
+            'Format italic',
+            FormatItalicIcon,
+            'part:@sanity/base/format-italic-icon'
+          )}
           {createIconPreview(
             'Format List (bulleted)',
             FormatListBulletedIcon,
@@ -90,7 +94,11 @@ storiesOf('Icons')
             FormatListNumberedIcon,
             'part:@sanity/base/format-list-numbered-icon'
           )}
-          {createIconPreview('Format quote', FormatQuoteIcon, 'part:@sanity/base/format-quote-icon')}
+          {createIconPreview(
+            'Format quote',
+            FormatQuoteIcon,
+            'part:@sanity/base/format-quote-icon'
+          )}
           {createIconPreview(
             'Format strikethrough',
             FormatStrikethroughIcon,
@@ -102,12 +110,24 @@ storiesOf('Icons')
             'part:@sanity/base/format-underlined-icon'
           )}
           {createIconPreview('Fullscreen', FullscreenIcon, 'part:@sanity/base/fullscreen-icon')}
-          {createIconPreview('Fullscreen exit', FullscreenExitIcon, 'part:@sanity/base/fullscreen-exit-icon')}
+          {createIconPreview(
+            'Fullscreen exit',
+            FullscreenExitIcon,
+            'part:@sanity/base/fullscreen-exit-icon'
+          )}
           {createIconPreview('Plus', PlusIcon, 'part:@sanity/base/plus-icon')}
-          {createIconPreview('Arrow Drop Down', ArrowDropDownIcon, 'part:@sanity/base/arrow-drop-down')}
+          {createIconPreview(
+            'Arrow Drop Down',
+            ArrowDropDownIcon,
+            'part:@sanity/base/arrow-drop-down'
+          )}
           {createIconPreview('Trash', TrashIcon, 'part:@sanity/base/trash-icon')}
           {createIconPreview('Undo', UndoIcon, 'part:@sanity/base/undo-icon')}
-          {createIconPreview('Visibility off', VisibilityOffIcon, 'part:@sanity/base/visibility-off-icon')}
+          {createIconPreview(
+            'Visibility off',
+            VisibilityOffIcon,
+            'part:@sanity/base/visibility-off-icon'
+          )}
         </ul>
       )
     },

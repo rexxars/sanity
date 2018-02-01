@@ -3,7 +3,15 @@ import {lazyGetter} from './utils'
 import {ASSET_FIELD, HOTSPOT_FIELD, CROP_FIELD} from './image/fieldDefs'
 import createPreviewGetter from '../preview/createPreviewGetter'
 
-const OVERRIDABLE_FIELDS = ['jsonType', 'type', 'name', 'title', 'description', 'options', 'fieldsets']
+const OVERRIDABLE_FIELDS = [
+  'jsonType',
+  'type',
+  'name',
+  'title',
+  'description',
+  'options',
+  'fieldsets'
+]
 
 const IMAGE_CORE = {
   name: 'image',
@@ -53,7 +61,9 @@ export const ImageType = {
           if (extensionDef.fields) {
             throw new Error('Cannot override `fields` of subtypes of "image"')
           }
-          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {type: parent})
+          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {
+            type: parent
+          })
           return subtype(current)
         }
       }

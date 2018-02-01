@@ -36,7 +36,10 @@ test('it works with full fledged rx observables', t => {
         })
     )
 
-  t.ok(stream instanceof SanityObservable, 'Expected flatMap to maintain original observable constructor')
+  t.ok(
+    stream instanceof SanityObservable,
+    'Expected flatMap to maintain original observable constructor'
+  )
 
   stream.reduce(toArray, []).subscribe(values => {
     t.same(values, ['prefix-FOO', 'prefix-BAR', 'prefix-BAZ'])
@@ -52,7 +55,10 @@ test('SanityObservable with flatMap returning an instance of SanityObservableMin
     })
   })
 
-  t.ok(stream instanceof SanityObservable, 'Expected flatMap to maintain original observable constructor')
+  t.ok(
+    stream instanceof SanityObservable,
+    'Expected flatMap to maintain original observable constructor'
+  )
 
   stream.reduce(toArray, []).subscribe(squares => {
     t.same(squares, [1, 4])
@@ -68,7 +74,10 @@ test('Works with zen-observable', t => {
     })
   })
 
-  t.ok(stream instanceof SanityObservable, 'Expected flatMap to maintain original observable constructor')
+  t.ok(
+    stream instanceof SanityObservable,
+    'Expected flatMap to maintain original observable constructor'
+  )
 
   stream.reduce(toArray, []).subscribe(squares => {
     t.same(squares, [1, 4])

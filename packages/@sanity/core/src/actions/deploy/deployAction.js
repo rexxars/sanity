@@ -7,7 +7,10 @@ import lazyRequire from '@sanity/util/lib/lazyRequire'
 export default async (args, context) => {
   const {apiClient, workDir, chalk, output, prompt} = context
   const flags = Object.assign({build: true}, args.extOptions)
-  const sourceDir = path.resolve(process.cwd(), args.argsWithoutOptions[0] || path.join(workDir, 'dist'))
+  const sourceDir = path.resolve(
+    process.cwd(),
+    args.argsWithoutOptions[0] || path.join(workDir, 'dist')
+  )
 
   const client = apiClient({
     requireUser: true,

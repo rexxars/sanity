@@ -11,7 +11,9 @@ export function printResult(versions, print) {
   versions.forEach(mod => {
     const version = padStart(mod.version, versionLength)
     const latest =
-      mod.version === mod.latest ? chalk.green('(up to date)') : `(latest: ${chalk.yellow(mod.latest)})`
+      mod.version === mod.latest
+        ? chalk.green('(up to date)')
+        : `(latest: ${chalk.yellow(mod.latest)})`
     print(`${formatName(mod.name)} ${version} ${latest}`)
   })
 }
@@ -20,7 +22,10 @@ export function getFormatters(versions) {
   const nameLength = versions.reduce(longestProp('name'), 0)
   const versionLength = versions.reduce(longestProp('version'), 0)
   const formatName = name =>
-    padEnd(name, nameLength + 1).replace(/^@sanity\/(.*)/, `${chalk.yellow('@sanity/')}${chalk.cyan('$1')}`)
+    padEnd(name, nameLength + 1).replace(
+      /^@sanity\/(.*)/,
+      `${chalk.yellow('@sanity/')}${chalk.cyan('$1')}`
+    )
 
   return {nameLength, versionLength, formatName}
 }

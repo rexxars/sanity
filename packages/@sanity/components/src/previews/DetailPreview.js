@@ -38,7 +38,16 @@ export default class DetailPreview extends React.PureComponent {
   index = index++
 
   render() {
-    const {title, subtitle, description, mediaDimensions, media, status, children, isPlaceholder} = this.props
+    const {
+      title,
+      subtitle,
+      description,
+      mediaDimensions,
+      media,
+      status,
+      children,
+      isPlaceholder
+    } = this.props
 
     if (isPlaceholder) {
       return (

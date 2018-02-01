@@ -40,7 +40,12 @@ type State = {
   value?: Value // cache value for moar fps
 }
 
-const PREVIEW_ASPECT_RATIOS = [['Landscape', 16 / 9], ['Portrait', 9 / 16], ['Square', 1], ['Panorama', 4]]
+const PREVIEW_ASPECT_RATIOS = [
+  ['Landscape', 16 / 9],
+  ['Portrait', 9 / 16],
+  ['Square', 1],
+  ['Panorama', 4]
+]
 
 export default class ImageToolInput extends React.Component<Props, State> {
   constructor(props) {

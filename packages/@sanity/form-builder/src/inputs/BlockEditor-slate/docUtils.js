@@ -74,7 +74,9 @@ export function spanAccessorsToSlateNodes(spans) {
         // eslint-disable-line max-depth
         next++
       }
-      joined = joined.push(consecutiveSanitySpansToSlateText(span.key, spans.slice(i, next), firstIndex))
+      joined = joined.push(
+        consecutiveSanitySpansToSlateText(span.key, spans.slice(i, next), firstIndex)
+      )
       i = next
     }
   }

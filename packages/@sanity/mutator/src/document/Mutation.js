@@ -116,7 +116,9 @@ export default class Mutation {
     this.compiled = doc => {
       if (prevRev && prevRev != doc._rev) {
         throw new Error(
-          `Previous revision for this mutation was ${prevRev}, but the document revision is ${doc._rev}`
+          `Previous revision for this mutation was ${prevRev}, but the document revision is ${
+            doc._rev
+          }`
         )
       }
       let result = operations.reduce((revision, operation) => operation(revision), doc)
@@ -133,7 +135,9 @@ export default class Mutation {
     }
   }
   apply(document: Object): Object {
-    debug(`Applying mutation ${JSON.stringify(this.mutations)} to document ${JSON.stringify(document)}`)
+    debug(
+      `Applying mutation ${JSON.stringify(this.mutations)} to document ${JSON.stringify(document)}`
+    )
     if (!this.compiled) {
       this.compile()
     }
@@ -149,7 +153,10 @@ export default class Mutation {
   // that all mutations are on the same document.
   // TOOO: Optimize mutations, eliminating mutations that overwrite themselves!
   static squash(document: Object, mutations: Array<Mutation>): Mutation {
-    const squashed = mutations.reduce((result, mutation) => result.concat(...mutation.mutations), [])
+    const squashed = mutations.reduce(
+      (result, mutation) => result.concat(...mutation.mutations),
+      []
+    )
     return new Mutation({mutations: squashed})
   }
 }

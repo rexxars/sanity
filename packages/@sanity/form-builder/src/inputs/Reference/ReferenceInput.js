@@ -114,7 +114,9 @@ export default class ReferenceInput extends React.Component<Props, State> {
 
   handleFixWeak = () => {
     const {type} = this.props
-    this.props.onChange(PatchEvent.from(type.weak === true ? set(true, ['_weak']) : unset(['_weak'])))
+    this.props.onChange(
+      PatchEvent.from(type.weak === true ? set(true, ['_weak']) : unset(['_weak']))
+    )
   }
 
   handleClear = () => {
@@ -209,8 +211,8 @@ export default class ReferenceInput extends React.Component<Props, State> {
         <div className={hasWeakMismatch || isMissing ? styles.hasWarnings : ''}>
           {hasWeakMismatch && (
             <div className={styles.weakRefMismatchWarning}>
-              Warning: This reference is <em>{weakIs}</em>, but should be <em>{weakShouldBe}</em> according to
-              schema.
+              Warning: This reference is <em>{weakIs}</em>, but should be <em>{weakShouldBe}</em>{' '}
+              according to schema.
               <div>
                 <Button onClick={this.handleFixWeak}>Convert to {weakShouldBe}</Button>
               </div>

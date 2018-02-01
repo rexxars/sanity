@@ -38,7 +38,9 @@ function getDocumentKey(document) {
 }
 
 function toGradientOrderClause(orderBy) {
-  return orderBy.map(ordering => [ordering.field, ordering.direction].filter(Boolean).join(' ')).join(', ')
+  return orderBy
+    .map(ordering => [ordering.field, ordering.direction].filter(Boolean).join(' '))
+    .join(', ')
 }
 
 const ORDER_BY_UPDATED_AT = {
@@ -214,7 +216,9 @@ export default withRouterHOC(
       const {selectedType, selectedDocumentId} = this.props
       const {settings} = this.state
 
-      const ordering = this.getOrderingOptions(selectedType).find(option => option.name === settings.ordering)
+      const ordering = this.getOrderingOptions(selectedType).find(
+        option => option.name === settings.ordering
+      )
 
       const type = schema.get(selectedType)
       const linkState = {
@@ -223,7 +227,8 @@ export default withRouterHOC(
         action: 'edit'
       }
 
-      const isSelected = selectedDocumentId && getPublishedId(item._id) === getPublishedId(selectedDocumentId)
+      const isSelected =
+        selectedDocumentId && getPublishedId(item._id) === getPublishedId(selectedDocumentId)
 
       return (
         <StateLink state={linkState} className={styles.link} tabIndex={0}>
@@ -264,8 +269,9 @@ export default withRouterHOC(
 
       const {settings} = this.state
       const currentOrderingOption =
-        this.getOrderingOptions(schemaType.name).find(option => option.name === settings.ordering) ||
-        DEFAULT_SELECTED_ORDERING_OPTION
+        this.getOrderingOptions(schemaType.name).find(
+          option => option.name === settings.ordering
+        ) || DEFAULT_SELECTED_ORDERING_OPTION
       const params = {type: schemaType.name, draftsPath: `${DRAFTS_FOLDER}.**`}
       const query = `*[_type == $type] | order(${toGradientOrderClause(
         currentOrderingOption.by

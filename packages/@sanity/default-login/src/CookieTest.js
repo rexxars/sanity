@@ -57,7 +57,9 @@ class CookieTest extends PureComponent {
           )}
           {sanityLogo && !SanityLogo && <div className={styles.sanityLogo}>{sanityLogo}</div>}
           <div className={styles.branding}>
-            <h1 className={BrandLogo ? styles.projectNameHidden : styles.projectName}>{projectName}</h1>
+            <h1 className={BrandLogo ? styles.projectNameHidden : styles.projectName}>
+              {projectName}
+            </h1>
             {BrandLogo && (
               <div className={styles.brandLogoContainer}>
                 <BrandLogo projectName={projectName} />
@@ -69,7 +71,10 @@ class CookieTest extends PureComponent {
             <h2 className={styles.headline}>Accept the Cookie</h2>
           </div>
           <div className={styles.description}>
-            <p>Your browser didn&apos;t accept our cookie so we&apos;re having trouble logging you in.</p>
+            <p>
+              Your browser didn&apos;t accept our cookie so we&apos;re having trouble logging you
+              in.
+            </p>
             <p>You can explicitly accept it though by clicking below.</p>
           </div>
           <form

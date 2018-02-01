@@ -86,7 +86,11 @@ export default class EditItemPopOver extends React.PureComponent {
 
     return (
       <div style={{display: 'span'}} ref={this.setRootElement}>
-        <StickyPortal isOpen={isOpen} onResize={this.handlePortalResize} wantedHeight={wantedHeight}>
+        <StickyPortal
+          isOpen={isOpen}
+          onResize={this.handlePortalResize}
+          wantedHeight={wantedHeight}
+        >
           <Stacked>
             {isActive => (
               <div ref={this.setPopoverInnerElement} className={styles.root}>

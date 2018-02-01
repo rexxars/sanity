@@ -68,7 +68,9 @@ async function getOutputPath(destination, dataset) {
     return null
   }
 
-  const dstPath = path.isAbsolute(destination) ? destination : path.resolve(process.cwd(), destination)
+  const dstPath = path.isAbsolute(destination)
+    ? destination
+    : path.resolve(process.cwd(), destination)
 
   let dstStats = null
   try {

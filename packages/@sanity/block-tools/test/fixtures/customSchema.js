@@ -31,7 +31,9 @@ export default Schema.compile({
                 // Only allow these decorators
                 decorators: [{title: 'Strong', value: 'strong'}, {title: 'Emphasis', value: 'em'}],
                 // Support annotating text with a reference to an author
-                annotations: [{name: 'author', title: 'Author', type: 'reference', to: {type: 'author'}}]
+                annotations: [
+                  {name: 'author', title: 'Author', type: 'reference', to: {type: 'author'}}
+                ]
               }
             }
           ]

@@ -70,7 +70,10 @@ export default class SlugInput extends React.Component {
 
   constructor(props) {
     super(props)
-    this.updateValueWithUniquenessCheck = debounce(this.updateValueWithUniquenessCheck.bind(this), 500)
+    this.updateValueWithUniquenessCheck = debounce(
+      this.updateValueWithUniquenessCheck.bind(this),
+      500
+    )
   }
 
   updateValue(value) {
@@ -115,7 +118,8 @@ export default class SlugInput extends React.Component {
         this.setState({
           loading: false,
           validationError:
-            'Got javascript error trying to validate the slug. ' + 'See javascript console for more info.'
+            'Got javascript error trying to validate the slug. ' +
+            'See javascript console for more info.'
         })
         this.updateValue({current: value.current, auto: false})
         return Promise.resolve()
@@ -229,9 +233,13 @@ export default class SlugInput extends React.Component {
           <div className={InInputStyles.container}>
             {loading && <Spinner inline message="Loading…" />}
             {hasSourceField &&
-              value.auto && <InInputButton onClick={this.handleChangeButtonClick}>Edit</InInputButton>}
+              value.auto && (
+                <InInputButton onClick={this.handleChangeButtonClick}>Edit</InInputButton>
+              )}
             {hasSourceField &&
-              !value.auto && <InInputButton onClick={this.handleAutoButtonClicked}>Auto</InInputButton>}
+              !value.auto && (
+                <InInputButton onClick={this.handleAutoButtonClicked}>Auto</InInputButton>
+              )}
           </div>
         </div>
       </DefaultFormField>

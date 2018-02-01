@@ -182,7 +182,12 @@ export default class ProteinInput extends React.Component {
         <div style={{height: '500px', width: '100%', position: 'relative', overflow: 'hidden'}}>
           {isLoading && (
             <div
-              style={{zIndex: 100, backgroundColor: 'rgba(255,255,255,0.8)', width: '100%', height: '100%'}}
+              style={{
+                zIndex: 100,
+                backgroundColor: 'rgba(255,255,255,0.8)',
+                width: '100%',
+                height: '100%'
+              }}
             >
               <Spinner center />
             </div>

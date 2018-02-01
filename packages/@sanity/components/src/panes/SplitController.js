@@ -70,7 +70,9 @@ export default class PanesSplitController extends React.Component {
           onDragFinished={this.handleDragFinished}
           onChange={newSize => this.handleSplitPaneChange(newSize, pane1)}
         >
-          <div className={isCollapsed ? styles.paneInSplittedCollapsed : styles.paneInSplitted}>{pane1}</div>
+          <div className={isCollapsed ? styles.paneInSplittedCollapsed : styles.paneInSplitted}>
+            {pane1}
+          </div>
 
           {/* <div className={styles.paneInSplitted}></div> */}
           {pane2 || ' '}

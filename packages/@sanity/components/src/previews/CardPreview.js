@@ -143,7 +143,8 @@ export default class CardPreview extends React.PureComponent {
                 }}
               />
               <div className={aspect ? styles.mediaContent : styles.mediaContentRelative}>
-                {typeof media === 'function' && media({dimensions: mediaDimensions, layout: 'default'})}
+                {typeof media === 'function' &&
+                  media({dimensions: mediaDimensions, layout: 'default'})}
                 {typeof media === 'string' && <div className={styles.mediaString}>{media}</div>}
                 {React.isValidElement(media) && media}
               </div>

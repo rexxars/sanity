@@ -31,7 +31,9 @@ export default withRouterHOC((props: Props) => {
         <StateLink state={{userId: 'me'}}>Show profile</StateLink>
       </p>
       <p>
-        <StateLink state={{product: {id: 55, userId: 'me'}}}>Show both product and profile</StateLink>
+        <StateLink state={{product: {id: 55, userId: 'me'}}}>
+          Show both product and profile
+        </StateLink>
       </p>
       <p>
         <Link

@@ -142,7 +142,12 @@ export default class CodeInput extends PureComponent {
   handleLanguageChange = item => {
     const {type, onChange} = this.props
     const path = ['language']
-    onChange(PatchEvent.from([setIfMissing({_type: type.name}), item ? set(item.value, path) : unset(path)]))
+    onChange(
+      PatchEvent.from([
+        setIfMissing({_type: type.name}),
+        item ? set(item.value, path) : unset(path)
+      ])
+    )
   }
 
   getLanguageAlternatives() {
@@ -167,7 +172,9 @@ export default class CodeInput extends PureComponent {
         onChange={this.handleCodeChange}
         name={`${this._inputId}__aceEditor`}
         value={(value && value.code) || ''}
-        markers={value && value.highlightedLines ? createHighlightMarkers(value.highlightedLines) : null}
+        markers={
+          value && value.highlightedLines ? createHighlightMarkers(value.highlightedLines) : null
+        }
         onLoad={this.handleEditorLoad}
         tabSize={2}
         setOptions={ACE_SET_OPTIONS}
@@ -201,7 +208,11 @@ export default class CodeInput extends PureComponent {
     return (
       <Fieldset legend={type.title} description={type.description}>
         <FormField level={level + 1} label={languageField.type.title}>
-          <DefaultSelect onChange={this.handleLanguageChange} value={selectedLanguage} items={languages} />
+          <DefaultSelect
+            onChange={this.handleLanguageChange}
+            value={selectedLanguage}
+            items={languages}
+          />
         </FormField>
         <FormField label={type.title} level={level + 1}>
           {this.renderEditor()}

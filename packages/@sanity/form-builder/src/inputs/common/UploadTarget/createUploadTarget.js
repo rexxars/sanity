@@ -42,7 +42,9 @@ function convertImagesToFilesAndClearContentEditable(
 ): Promise<Array<File>> {
   if (!element.isContentEditable) {
     throw new Error(
-      `Expected element to be contentEditable="true". Instead found a non contenteditable ${element.tagName}`
+      `Expected element to be contentEditable="true". Instead found a non contenteditable ${
+        element.tagName
+      }`
     )
   }
 
@@ -53,7 +55,9 @@ function convertImagesToFilesAndClearContentEditable(
       return imageElements
     })
     .then(images => Promise.all(images.map(img => imageUrlToBlob(img.src))))
-    .then(imageBlobs => imageBlobs.map(blob => new File([blob], 'pasted-image.jpg', {type: targetFormat})))
+    .then(imageBlobs =>
+      imageBlobs.map(blob => new File([blob], 'pasted-image.jpg', {type: targetFormat}))
+    )
 }
 // needed by Edge
 function select(el) {
@@ -167,7 +171,10 @@ export function createUploadTarget(Component) {
       //   .filter(task => task.uploaderCandidates.length > 1)
 
       ready.forEach(task => {
-        this.uploadFile(task.file, sortBy(task.uploaderCandidates, cand => cand.uploader.priority)[0])
+        this.uploadFile(
+          task.file,
+          sortBy(task.uploaderCandidates, cand => cand.uploader.priority)[0]
+        )
       })
     }
 
@@ -216,8 +223,8 @@ export function createUploadTarget(Component) {
             >
               {ambiguous.map(task => (
                 <div key={task.file.name}>
-                  The file {task.file.name} can be converted to several types of content. Please select how
-                  you want to represent it:
+                  The file {task.file.name} can be converted to several types of content. Please
+                  select how you want to represent it:
                   <ul>
                     {task.uploaderCandidates.map(uploaderCandidate => (
                       <li key={uploaderCandidate.type.name}>
@@ -237,7 +244,11 @@ export function createUploadTarget(Component) {
             </Dialog>
           )}
           {rejected.length > 0 && (
-            <Snackbar kind="warning" action={{title: 'OK'}} onAction={() => this.setState({rejected: []})}>
+            <Snackbar
+              kind="warning"
+              action={{title: 'OK'}}
+              onAction={() => this.setState({rejected: []})}
+            >
               File(s) not accepted:
               {humanize(rejected.map(task => task.file.name))}
             </Snackbar>

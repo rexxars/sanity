@@ -83,7 +83,8 @@ export default {
         },
         {
           name: 'checkTwo',
-          title: 'Check two?, But this one we but a long label on. Very very very long. Like REALLY long.',
+          title:
+            'Check two?, But this one we but a long label on. Very very very long. Like REALLY long.',
           description: 'Description',
           type: 'boolean',
           fieldset: 'checkboxes'

@@ -49,7 +49,13 @@ const ColorPicker = ({width, rgb, hex, hsv, hsl, onChange, disableAlpha, rendere
           />
         </div>
         <div className={styles.fields}>
-          <ColorPickerFields rgb={rgb} hsl={hsl} hex={hex} onChange={onChange} disableAlpha={disableAlpha} />
+          <ColorPickerFields
+            rgb={rgb}
+            hsl={hsl}
+            hex={hex}
+            onChange={onChange}
+            disableAlpha={disableAlpha}
+          />
         </div>
       </div>
     </div>

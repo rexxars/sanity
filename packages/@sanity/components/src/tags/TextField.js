@@ -100,7 +100,11 @@ export default class TagsTextField extends React.Component {
                   return (
                     <li key={i} className={styles.tag}>
                       {tag}
-                      <a onClick={this.handleRemoveTagClick} data-index={i} className={styles.clearTag}>
+                      <a
+                        onClick={this.handleRemoveTagClick}
+                        data-index={i}
+                        className={styles.clearTag}
+                      >
                         ×
                       </a>
                     </li>

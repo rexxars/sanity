@@ -152,7 +152,18 @@ export const FormBuilderInput = class FormBuilderInput extends React.PureCompone
   }
 
   render() {
-    const {onChange, onFocus, onBlur, path, value, type, level, focusPath, isRoot, ...rest} = this.props
+    const {
+      onChange,
+      onFocus,
+      onBlur,
+      path,
+      value,
+      type,
+      level,
+      focusPath,
+      isRoot,
+      ...rest
+    } = this.props
 
     const InputComponent = this.resolveInputComponent(type)
 

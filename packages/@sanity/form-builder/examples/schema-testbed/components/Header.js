@@ -22,7 +22,10 @@ export default function Header(props) {
       {selectedSchemaName && (
         <span>
           Type:{' '}
-          <select value={selectedTypeName} onChange={e => goto(selectedSchemaName, e.currentTarget.value)}>
+          <select
+            value={selectedTypeName}
+            onChange={e => goto(selectedSchemaName, e.currentTarget.value)}
+          >
             {!selectedTypeName && <option>Select type…</option>}
             {typeNames.map(typeName => <option key={typeName}>{typeName}</option>)}
           </select>

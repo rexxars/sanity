@@ -166,7 +166,8 @@ export default class Document {
   // check current consistency state, update flag and invoke callback if needed
   updateConsistencyFlag() {
     const wasConsistent = this.isConsistent()
-    const isConsistent = this.pending.length == 0 && this.submitted.length == 0 && this.incoming.length == 0
+    const isConsistent =
+      this.pending.length == 0 && this.submitted.length == 0 && this.incoming.length == 0
     // Update the consistency state, taking care not to update the timestamp if we were inconsistent and still are
     if (isConsistent) {
       this.inconsistentAt = null
@@ -189,7 +190,12 @@ export default class Document {
     if (!mut) {
       return false
     }
-    debug('Applying mutation %s -> %s to rev %s', mut.previousRev, mut.resultRev, this.HEAD && this.HEAD._rev)
+    debug(
+      'Applying mutation %s -> %s to rev %s',
+      mut.previousRev,
+      mut.resultRev,
+      this.HEAD && this.HEAD._rev
+    )
 
     this.HEAD = mut.apply(this.HEAD)
 
@@ -208,7 +214,9 @@ export default class Document {
       debug(`needRebase == ${needRebase}`)
       return needRebase
     }
-    debug(`Remote mutation ${mut.transactionId} arrived w/o any pending or submitted local mutations`)
+    debug(
+      `Remote mutation ${mut.transactionId} arrived w/o any pending or submitted local mutations`
+    )
     this.EDGE = this.HEAD
     if (this.onMutation) {
       this.onMutation({
@@ -249,14 +257,16 @@ export default class Document {
       }
     } else if (this.pending.length > 0 && this.pending[0].transactionId == txnId) {
       // There are no submitted, but some are pending so let's check the upcoming pending
-      debug(`Remote mutation ${txnId} matches upcoming pending mutation, consumed from 'pending' buffer`)
+      debug(
+        `Remote mutation ${txnId} matches upcoming pending mutation, consumed from 'pending' buffer`
+      )
       this.pending.shift()
       return false
     }
     debug(
-      `The mutation was not the upcoming mutation, scrubbing. Pending: ${this.pending.length}, Submitted: ${
-        this.submitted.length
-      }`
+      `The mutation was not the upcoming mutation, scrubbing. Pending: ${
+        this.pending.length
+      }, Submitted: ${this.submitted.length}`
     )
     // The mutation was not the upcoming mutation, so we'll have to check everything to
     // see if we have an out of order situation

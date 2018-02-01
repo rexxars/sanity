@@ -64,7 +64,10 @@ export default withPatchSubscriber(
         isOutOfSync: false,
         deprecatedSchema,
         deprecatedBlockValue,
-        value: deprecatedSchema || deprecatedBlockValue ? undefined : deserialize(props.value, props.type)
+        value:
+          deprecatedSchema || deprecatedBlockValue
+            ? undefined
+            : deserialize(props.value, props.type)
       }
       this.unsubscribe = props.subscribe(this.receivePatches)
     }
@@ -176,8 +179,12 @@ export default withPatchSubscriber(
                 <p>
                   You&apos;re using a new version of the Studio with
                   {deprecatedSchema && " a block schema that hasn't been updated."}
-                  {deprecatedSchema && deprecatedBlockValue && ' Also block text needs to be updated.'}
-                  {deprecatedBlockValue && !deprecatedSchema && " block text that hasn't been updated."}
+                  {deprecatedSchema &&
+                    deprecatedBlockValue &&
+                    ' Also block text needs to be updated.'}
+                  {deprecatedBlockValue &&
+                    !deprecatedSchema &&
+                    " block text that hasn't been updated."}
                 </p>
                 <p>
                   <a
@@ -194,8 +201,8 @@ export default withPatchSubscriber(
 
           {isOutOfSync && (
             <div className={styles.isOutOfSyncWarning}>
-              Heads up! Someone else edited this field. Make sure to let your co-workers know that you are
-              working on this part of the document!
+              Heads up! Someone else edited this field. Make sure to let your co-workers know that
+              you are working on this part of the document!
               <br />
               We&apos;re sorry for the inconvenience and working hard to get it working properly.
               <p>

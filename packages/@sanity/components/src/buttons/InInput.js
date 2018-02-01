@@ -38,7 +38,10 @@ export default class InInputButton extends React.Component {
   }
 
   render() {
-    const {kind, ripple, inverted, colored, icon, loading, className, ...rest} = omit(this.props, 'onAction')
+    const {kind, ripple, inverted, colored, icon, loading, className, ...rest} = omit(
+      this.props,
+      'onAction'
+    )
 
     const Icon = icon
 

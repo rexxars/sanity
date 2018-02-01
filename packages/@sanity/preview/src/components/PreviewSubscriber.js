@@ -75,7 +75,9 @@ export default class PreviewSubscriber extends React.PureComponent {
       .switchMap(isVisible => (isVisible ? inViewport$ : Observable.of(false)))
       .distinctUntilChanged()
       .switchMap(isInViewport => {
-        return isInViewport ? observeForPreview(value, type, fields, viewOptions) : Observable.of(null)
+        return isInViewport
+          ? observeForPreview(value, type, fields, viewOptions)
+          : Observable.of(null)
       })
       .subscribe(result => {
         if (result) {
@@ -96,7 +98,13 @@ export default class PreviewSubscriber extends React.PureComponent {
     return (
       // note: the root element here should be a span since this component may be used to display inline previews
       <span ref={this.setElement}>
-        <Child snapshot={result.snapshot} type={result.type} isLive={isLive} error={error} {...props} />
+        <Child
+          snapshot={result.snapshot}
+          type={result.type}
+          isLive={isLive}
+          error={error}
+          {...props}
+        />
       </span>
     )
   }

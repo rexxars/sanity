@@ -168,7 +168,8 @@ export default class StatelessSearchableSelect extends React.PureComponent {
             ref={this.setInput}
           />
           <div className={styles.functions}>
-            {openItemElement && value && <span className={styles.openItem}>{openItemElement(value)}</span>}
+            {openItemElement &&
+              value && <span className={styles.openItem}>{openItemElement(value)}</span>}
             {onClear &&
               value && (
                 <button type="button" className={styles.clearButton} onClick={onClear}>
@@ -206,13 +207,18 @@ export default class StatelessSearchableSelect extends React.PureComponent {
                     <div
                       className={`
                         ${isOpen ? styles.listContainer : styles.listContainerHidden}
-                        ${dropdownPosition === 'top' ? styles.listContainerTop : styles.listContainerBottom}
+                        ${
+                          dropdownPosition === 'top'
+                            ? styles.listContainerTop
+                            : styles.listContainerBottom
+                        }
                         ${items.length === 0 ? styles.listContainerEmpty : ''}
                       `}
                       style={{width: `${this.props.width}px`}}
                       ref={this.setListElement}
                     >
-                      {items.length === 0 && !isLoading && <p className={styles.noResultText}>No results</p>}
+                      {items.length === 0 &&
+                        !isLoading && <p className={styles.noResultText}>No results</p>}
                       {items.length === 0 &&
                         isLoading && (
                           <div className={styles.listSpinner}>

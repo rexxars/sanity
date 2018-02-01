@@ -6,13 +6,22 @@ describe('urlForHotspotImage', () => {
   it('does not crop when no crop is required', () => {
     should(
       urlForHotspotImage({source: uncroppedImage(), projectId: 'zp7mbokg', dataset: 'production'})
-    ).equal('https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg')
+    ).equal(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg'
+    )
   })
 
   it('does does not crop, but limits size when only width dimension is specified', () => {
     should(
-      urlForHotspotImage({source: uncroppedImage(), projectId: 'zp7mbokg', dataset: 'production', width: 100})
-    ).equal('https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100')
+      urlForHotspotImage({
+        source: uncroppedImage(),
+        projectId: 'zp7mbokg',
+        dataset: 'production',
+        width: 100
+      })
+    ).equal(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?w=100'
+    )
   })
 
   it('does does not crop, but limits size when only height dimension is specified', () => {
@@ -23,7 +32,9 @@ describe('urlForHotspotImage', () => {
         dataset: 'production',
         height: 100
       })
-    ).equal('https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100')
+    ).equal(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100'
+    )
   })
 
   it('a tall crop is centered on the hotspot', () => {
@@ -69,7 +80,9 @@ describe('urlForHotspotImage', () => {
   })
 
   it('respects the crop, even when no explicit crop is asked for', () => {
-    should(urlForHotspotImage({source: croppedImage(), projectId: 'zp7mbokg', dataset: 'production'})).equal(
+    should(
+      urlForHotspotImage({source: croppedImage(), projectId: 'zp7mbokg', dataset: 'production'})
+    ).equal(
       'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?rect=200,300,1600,2400'
     )
   })
@@ -111,6 +124,8 @@ describe('urlForHotspotImage', () => {
         dataset: 'production',
         height: 100
       })
-    ).equal('https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100')
+    ).equal(
+      'https://cdn.sanity.io/images/zp7mbokg/production/Tb9Ew8CXIwaY6R1kjMvI0uRR-2000x3000.jpg?h=100'
+    )
   })
 })

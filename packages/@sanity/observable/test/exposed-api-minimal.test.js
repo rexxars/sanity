@@ -46,8 +46,13 @@ function run(t) {
       'forEach', // spec
       'pipe'
     ])
-    ;['map', 'filter', 'reduce', 'toPromise', 'lift', 'pipe', 'subscribe', 'forEach'].forEach(method =>
-      t.type(instance[method], 'function', `Expected observable instance to expose the method ${method}`)
+    ;['map', 'filter', 'reduce', 'toPromise', 'lift', 'pipe', 'subscribe', 'forEach'].forEach(
+      method =>
+        t.type(
+          instance[method],
+          'function',
+          `Expected observable instance to expose the method ${method}`
+        )
     )
 
     t.end()

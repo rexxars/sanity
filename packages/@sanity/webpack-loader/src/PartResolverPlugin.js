@@ -111,7 +111,12 @@ PartResolverPlugin.prototype.apply = function(compiler) {
       // are postfixed with `?` (returns undefined)
       if (!part) {
         if (allowUnimplemented) {
-          return this.doResolve(target, {request: unimplementedPart, path: unimplementedPart}, null, callback)
+          return this.doResolve(
+            target,
+            {request: unimplementedPart, path: unimplementedPart},
+            null,
+            callback
+          )
         }
 
         if (loadAll) {

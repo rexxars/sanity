@@ -57,7 +57,9 @@ const slateTypeComponentMapping = {
     const style =
       (props.children[0] && props.children[0].props.parent.data.get('style')) || BLOCK_DEFAULT_STYLE
     const contentComponent = slateTypeComponentMapping[style]
-    return <ListItem contentComponent={contentComponent} level={level} listItem={listItem} {...props} />
+    return (
+      <ListItem contentComponent={contentComponent} level={level} listItem={listItem} {...props} />
+    )
   },
   blockquote: Blockquote
 }
@@ -92,10 +94,12 @@ export default function prepareSlateForBlockEditor(blockEditor) {
     throw new Error("A field with name 'style' is not defined in the block type (required).")
   }
 
-  const textStyles = styleField.type.options.list && styleField.type.options.list.filter(style => style.value)
+  const textStyles =
+    styleField.type.options.list && styleField.type.options.list.filter(style => style.value)
   if (!textStyles || textStyles.length === 0) {
     throw new Error(
-      'The style fields need at least one style ' + "defined. I.e: {title: 'Normal', value: 'normal'}."
+      'The style fields need at least one style ' +
+        "defined. I.e: {title: 'Normal', value: 'normal'}."
     )
   }
 
@@ -103,7 +107,8 @@ export default function prepareSlateForBlockEditor(blockEditor) {
   let listItems = []
   if (listField) {
     listItems =
-      listField.type.options.list && listField.type.options.list.filter(listStyle => listStyle.value)
+      listField.type.options.list &&
+      listField.type.options.list.filter(listStyle => listStyle.value)
   }
 
   const memberTypesExceptBlock = type.of.filter(ofType => ofType.name !== 'block')
@@ -204,7 +209,8 @@ export default function prepareSlateForBlockEditor(blockEditor) {
                   .filterDescendants(desc => {
                     const annotations = desc.data && desc.data.get('annotations')
                     return (
-                      annotations && Object.keys(annotations).find(name => annotations[name]._key === key)
+                      annotations &&
+                      Object.keys(annotations).find(name => annotations[name]._key === key)
                     )
                   })
                   .toArray()

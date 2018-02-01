@@ -69,7 +69,9 @@ assign(SanityClient.prototype, {
       uri.indexOf('/data/') === 0
 
     return httpRequest(
-      mergeOptions(getRequestOptions(this.clientConfig), options, {url: this.getUrl(uri, canUseCdn)}),
+      mergeOptions(getRequestOptions(this.clientConfig), options, {
+        url: this.getUrl(uri, canUseCdn)
+      }),
       this.clientConfig.requester
     )
   },

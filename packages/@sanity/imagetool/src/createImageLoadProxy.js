@@ -6,7 +6,9 @@ export default function createImageLoadProxy(
   {error: ErrorComponent, loader: LoaderComponent} = {}
 ) {
   return class ImageLoadProxy extends React.Component {
-    static displayName = `${Component.displayName || Component.name || '<Anonymous>'}$ImageLoadProxy`
+    static displayName = `${Component.displayName ||
+      Component.name ||
+      '<Anonymous>'}$ImageLoadProxy`
     static propTypes = {
       src: PropTypes.string.isRequired
     }
@@ -35,7 +37,9 @@ export default function createImageLoadProxy(
       }
 
       image.onerror = () => {
-        this.setState({error: new Error(`Could not load image from ${JSON.stringify(this.props.src)}`)})
+        this.setState({
+          error: new Error(`Could not load image from ${JSON.stringify(this.props.src)}`)
+        })
       }
 
       image.src = src

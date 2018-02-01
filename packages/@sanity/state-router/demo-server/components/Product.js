@@ -30,7 +30,9 @@ export default class Product extends React.Component {
         <p>
           <WithRouter>
             {router => (
-              <button onClick={() => router.navigateIntent('open', {type: 'product', id: 'foobar'})}>
+              <button
+                onClick={() => router.navigateIntent('open', {type: 'product', id: 'foobar'})}
+              >
                 Click to programmatically navigate to intent <b>open:</b> product foobar
               </button>
             )}

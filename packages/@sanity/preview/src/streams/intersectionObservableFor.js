@@ -30,7 +30,9 @@ function isIntersectionObserverSupported() {
   return false
 }
 
-export default (isIntersectionObserverSupported() ? createIntersectionObserverBased() : createLegacyBased())
+export default (isIntersectionObserverSupported()
+  ? createIntersectionObserverBased()
+  : createLegacyBased())
 
 function createIntersectionObserverBased() {
   const intersectionObserverEntries$$ = new Multicast()

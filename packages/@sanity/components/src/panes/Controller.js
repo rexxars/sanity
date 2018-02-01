@@ -91,7 +91,9 @@ export default class PanesController extends React.Component {
     const newPanesStatus = React.Children.toArray(panes).map((pane, i) => {
       const minWidth = pane.props.minWidth
       const width =
-        this.panesStatus[i] && this.panesStatus[i].element && this.panesStatus[i].element.offsetWidth
+        this.panesStatus[i] &&
+        this.panesStatus[i].element &&
+        this.panesStatus[i].element.offsetWidth
       let isCollapsed = this.panesStatus[i] && this.panesStatus[i].isCollapsed
 
       if (width < minWidth) {

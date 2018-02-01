@@ -38,7 +38,8 @@ export default class BlockImagePreview extends React.PureComponent {
       <div className={styles.root}>
         {media && (
           <div className={`${styles.media}`}>
-            {typeof media === 'function' && media({dimensions: mediaDimensions, layout: 'blockImage'})}
+            {typeof media === 'function' &&
+              media({dimensions: mediaDimensions, layout: 'blockImage'})}
             {typeof media === 'string' && <div className={styles.mediaString}>{media}</div>}
             {React.isValidElement(media) && media}
           </div>

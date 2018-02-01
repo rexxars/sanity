@@ -95,8 +95,8 @@ class GeopointInput extends React.Component {
       return (
         <div>
           <p>
-            The <a href="https://sanity.io/docs/schema-types/geopoint-type">Geopoint type</a> needs a Google
-            Maps API key with access to:
+            The <a href="https://sanity.io/docs/schema-types/geopoint-type">Geopoint type</a> needs
+            a Google Maps API key with access to:
           </p>
           <ul>
             <li>Google Maps JavaScript API</li>

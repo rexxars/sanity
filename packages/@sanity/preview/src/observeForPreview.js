@@ -26,7 +26,9 @@ export default function observeForPreview(value, type, fields, viewOptions) {
   const selection = type.preview.select
   if (selection) {
     const configFields = Object.keys(selection)
-    const targetFields = fields ? configFields.filter(fieldName => fields.includes(fieldName)) : configFields
+    const targetFields = fields
+      ? configFields.filter(fieldName => fields.includes(fieldName))
+      : configFields
     const paths = targetFields.map(key => selection[key].split('.'))
     return materializePaths(value, paths).map(snapshot => ({
       type: type,

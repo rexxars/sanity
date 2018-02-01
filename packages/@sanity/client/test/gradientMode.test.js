@@ -17,7 +17,11 @@ const getClient = conf => sanityClient(assign({}, clientConfig, conf || {}))
  * GRADIENT MODE *
  *****************/
 test('[gradient] throws when creating client without specifying namespace', t => {
-  t.throws(() => sanityClient({gradientMode: true}), /must contain `namespace`/, 'throws on create()')
+  t.throws(
+    () => sanityClient({gradientMode: true}),
+    /must contain `namespace`/,
+    'throws on create()'
+  )
   t.end()
 })
 

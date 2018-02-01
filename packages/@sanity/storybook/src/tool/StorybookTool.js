@@ -42,6 +42,12 @@ export default class StorybookTool extends PureComponent {
   }
 
   render() {
-    return <iframe ref={this.assignRef} src={`http://localhost:${config.port}/`} style={this.state.styles} />
+    return (
+      <iframe
+        ref={this.assignRef}
+        src={`http://localhost:${config.port}/`}
+        style={this.state.styles}
+      />
+    )
   }
 }

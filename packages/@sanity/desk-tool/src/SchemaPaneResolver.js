@@ -68,7 +68,10 @@ export default class SchemaPaneResolver extends React.Component {
 
     return (
       <div className={styles.container}>
-        <SplitController onSholdCollapse={this.handleShouldCollapse} onSholdExpand={this.handleShouldExpand}>
+        <SplitController
+          onSholdCollapse={this.handleShouldCollapse}
+          onSholdExpand={this.handleShouldExpand}
+        >
           <SplitPaneWrapper
             defaultWidth={200}
             minWidth={100}

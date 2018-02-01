@@ -66,7 +66,9 @@ export default async (args, context) => {
     const hasWarnings = stats.hasWarnings()
 
     if (!hasErrors && !hasWarnings) {
-      output.print(chalk.green(`Compiled successfully! Server listening on http://${httpHost}:${httpPort}`))
+      output.print(
+        chalk.green(`Compiled successfully! Server listening on http://${httpHost}:${httpPort}`)
+      )
       return
     }
 

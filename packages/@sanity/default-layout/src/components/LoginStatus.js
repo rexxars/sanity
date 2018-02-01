@@ -19,7 +19,9 @@ class LoginStatus extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.userSubscription = userStore.currentUser.subscribe(event => this.setState({user: event.user}))
+    this.userSubscription = userStore.currentUser.subscribe(event =>
+      this.setState({user: event.user})
+    )
   }
 
   componentWillUnmount() {

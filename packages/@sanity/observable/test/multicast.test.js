@@ -46,7 +46,9 @@ test('It handles unsubscribe/resubscribe', t => {
   const observable = multicast.asObservable()
   const observable2 = multicast.asObservable()
 
-  observable.subscribe(() => t.fail('Unsubscribed observer should never have been called')).unsubscribe()
+  observable
+    .subscribe(() => t.fail('Unsubscribed observer should never have been called'))
+    .unsubscribe()
 
   multicast.next()
 

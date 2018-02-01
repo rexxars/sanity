@@ -30,8 +30,9 @@ export default function Placeholder() {
   return (
     <div>
       <p>
-        You have a type of type slug, but not configured a function to validate that the slug is not already
-        in use. Please create a slug input component and make sure it is resolved as the input for slug types.
+        You have a type of type slug, but not configured a function to validate that the slug is not
+        already in use. Please create a slug input component and make sure it is resolved as the
+        input for slug types.
       </p>
       <pre>
         <code>{CODE_SNIPPET}</code>

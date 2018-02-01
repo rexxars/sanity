@@ -82,7 +82,9 @@ export default class EditorPane extends React.Component {
 
     this.subscription = this.published.events
       .map(event => ({...event, version: 'published'}))
-      .merge(this.draft.events.do(this.receiveDraftEvent).map(event => ({...event, version: 'draft'})))
+      .merge(
+        this.draft.events.do(this.receiveDraftEvent).map(event => ({...event, version: 'draft'}))
+      )
       .subscribe(event => {
         this.setState(prevState => {
           const version = event.version // either 'draft' or 'published'

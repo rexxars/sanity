@@ -74,7 +74,9 @@ function mergeResult(plugins, options = {}) {
 
       if (!Array.isArray(plugin.manifest.parts)) {
         const help = `See ${generateHelpUrl('plugin-parts-syntax')}`
-        throw new Error(`Plugin "${plugin.name}" has a "parts" property which is not an array\n${help}`)
+        throw new Error(
+          `Plugin "${plugin.name}" has a "parts" property which is not an array\n${help}`
+        )
       }
 
       return {
@@ -185,7 +187,9 @@ function assignPartImplementation(plugin, part, implementations, definitions, op
 
 function getDefinitionDeclaration(plugin, part, options = {}) {
   const isAbstract =
-    typeof options.isAbstract === 'undefined' ? typeof part.path === 'undefined' : options.isAbstract
+    typeof options.isAbstract === 'undefined'
+      ? typeof part.path === 'undefined'
+      : options.isAbstract
 
   return {
     plugin: plugin.name,
@@ -198,14 +202,17 @@ function getDefinitionDeclaration(plugin, part, options = {}) {
 
 function getImplementationDeclaration(plugin, part, options) {
   const paths = plugin.manifest.paths || {}
-  const isLib = options.useCompiledPaths || plugin.path.split(path.sep).indexOf('node_modules') !== -1
+  const isLib =
+    options.useCompiledPaths || plugin.path.split(path.sep).indexOf('node_modules') !== -1
   const isDotPath = /^\.{1,2}[\\/]/.test(part.path)
 
   const basePath = isDotPath
     ? plugin.path
     : path.join(plugin.path, (isLib ? paths.compiled : paths.source) || '')
 
-  const filePath = path.isAbsolute(part.path) ? part.path : path.resolve(path.join(basePath, part.path))
+  const filePath = path.isAbsolute(part.path)
+    ? part.path
+    : path.resolve(path.join(basePath, part.path))
 
   return {
     plugin: plugin.name,

@@ -30,14 +30,15 @@ export default {
       return {
         title: title,
         subtitle:
-          location && `${Number(location.lat).toPrecision(5)}, ${Number(location.lng).toPrecision(5)}`,
+          location &&
+          `${Number(location.lat).toPrecision(5)}, ${Number(location.lng).toPrecision(5)}`,
         media: ({dimensions}) => {
           if (location && location.lat && location.lng && apiKey) {
             return (
               <img
-                src={`https://maps.googleapis.com/maps/api/staticmap?zoom=11&center=${location.lat},${
-                  location.lng
-                }&size=${dimensions.width}x${dimensions.height}&key=${apiKey}`}
+                src={`https://maps.googleapis.com/maps/api/staticmap?zoom=11&center=${
+                  location.lat
+                },${location.lng}&size=${dimensions.width}x${dimensions.height}&key=${apiKey}`}
                 alt={title}
               />
             )

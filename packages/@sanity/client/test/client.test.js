@@ -100,7 +100,10 @@ test('throws on invalid project ids', t => {
 })
 
 test('throws on invalid dataset names', t => {
-  t.throws(() => sanityClient({projectId: 'abc123', dataset: '*foo*'}), /Datasets can only contain/i)
+  t.throws(
+    () => sanityClient({projectId: 'abc123', dataset: '*foo*'}),
+    /Datasets can only contain/i
+  )
   t.end()
 })
 
@@ -237,7 +240,8 @@ test('can list datasets', t => {
 test('can query for documents', t => {
   const query = 'beerfiesta.beer[.title == $beerName]'
   const params = {beerName: 'Headroom Double IPA'}
-  const qs = 'beerfiesta.beer%5B.title%20%3D%3D%20%24beerName%5D&%24beerName=%22Headroom%20Double%20IPA%22'
+  const qs =
+    'beerfiesta.beer%5B.title%20%3D%3D%20%24beerName%5D&%24beerName=%22Headroom%20Double%20IPA%22'
 
   nock(projectHost())
     .get(`/v1/data/query/foo?query=${qs}`)
@@ -260,7 +264,8 @@ test('can query for documents', t => {
 test('can query for documents and return full response', t => {
   const query = 'beerfiesta.beer[.title == $beerName]'
   const params = {beerName: 'Headroom Double IPA'}
-  const qs = 'beerfiesta.beer%5B.title%20%3D%3D%20%24beerName%5D&%24beerName=%22Headroom%20Double%20IPA%22'
+  const qs =
+    'beerfiesta.beer%5B.title%20%3D%3D%20%24beerName%5D&%24beerName=%22Headroom%20Double%20IPA%22'
 
   nock(projectHost())
     .get(`/v1/data/query/foo?query=${qs}`)
@@ -396,7 +401,11 @@ test('populates response body on errors', t => {
 })
 
 test('throws if trying to perform data request without dataset', t => {
-  t.throws(() => sanityClient({projectId: 'foo'}).fetch('blah'), Error, /dataset.*?must be provided/)
+  t.throws(
+    () => sanityClient({projectId: 'foo'}).fetch('blah'),
+    Error,
+    /dataset.*?must be provided/
+  )
   t.end()
 })
 
@@ -473,7 +482,10 @@ test('can tell create() to use non-default visibility mode', t => {
     .post('/v1/data/mutate/foo?returnIds=true&returnDocuments=true&visibility=async', {
       mutations: [{create: doc}]
     })
-    .reply(200, {transactionId: 'abc123', results: [{id: 'abc123', document: doc, operation: 'create'}]})
+    .reply(200, {
+      transactionId: 'abc123',
+      results: [{id: 'abc123', document: doc, operation: 'create'}]
+    })
 
   getClient()
     .create(doc, {visibility: 'async'})
@@ -489,7 +501,10 @@ test('createIfNotExists() sends correct mutation', t => {
   const expectedBody = {mutations: [{createIfNotExists: doc}]}
   nock(projectHost())
     .post('/v1/data/mutate/foo?returnIds=true&returnDocuments=true&visibility=sync', expectedBody)
-    .reply(200, {transactionId: '123abc', results: [{id: 'abc123', document: doc, operation: 'create'}]})
+    .reply(200, {
+      transactionId: '123abc',
+      results: [{id: 'abc123', document: doc, operation: 'create'}]
+    })
 
   getClient()
     .createIfNotExists(doc)
@@ -917,7 +932,11 @@ test('all patch methods throw on non-objects being passed as argument', t => {
     /setIfMissing\(\) takes an object of properties/,
     'setIfMissing throws'
   )
-  t.throws(() => patch.replace('foo'), /replace\(\) takes an object of properties/, 'replace throws')
+  t.throws(
+    () => patch.replace('foo'),
+    /replace\(\) takes an object of properties/,
+    'replace throws'
+  )
   t.throws(() => patch.inc('foo'), /inc\(\) takes an object of properties/, 'inc throws')
   t.throws(() => patch.dec('foo'), /dec\(\) takes an object of properties/, 'dec throws')
   t.throws(
@@ -1033,7 +1052,10 @@ test('patch has toJSON() which serializes patch', t => {
   const patch = getClient()
     .patch('abc123')
     .inc({count: 1})
-  t.deepEqual(JSON.parse(JSON.stringify(patch)), JSON.parse(JSON.stringify({id: 'abc123', inc: {count: 1}})))
+  t.deepEqual(
+    JSON.parse(JSON.stringify(patch)),
+    JSON.parse(JSON.stringify({id: 'abc123', inc: {count: 1}}))
+  )
   t.end()
 })
 

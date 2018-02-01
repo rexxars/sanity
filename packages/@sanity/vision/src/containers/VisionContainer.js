@@ -14,7 +14,12 @@ class VisionContainer extends LoadingContainer {
 
   render() {
     if (this.state.error) {
-      return <ErrorDialog heading="An error occured while loading project data" error={this.state.error} />
+      return (
+        <ErrorDialog
+          heading="An error occured while loading project data"
+          error={this.state.error}
+        />
+      )
     }
 
     if (!this.hasAllData()) {

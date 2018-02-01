@@ -8,7 +8,9 @@ import cx from 'classnames'
 export default function createButtonLike(Component, {displayName, defaultProps = {}}) {
   return class ButtonLike extends React.Component {
     static displayName = displayName ||
-      `ButtonLike(${typeof Component === 'string' ? Component : Component.displayName || Component.name})`
+      `ButtonLike(${
+        typeof Component === 'string' ? Component : Component.displayName || Component.name
+      })`
 
     static propTypes = {
       kind: PropTypes.oneOf(['default', 'simple']),
@@ -64,7 +66,17 @@ export default function createButtonLike(Component, {displayName, defaultProps =
     }
 
     render() {
-      const {kind, ripple, inverted, color, icon: Icon, loading, className, children, ...rest} = this.props
+      const {
+        kind,
+        ripple,
+        inverted,
+        color,
+        icon: Icon,
+        loading,
+        className,
+        children,
+        ...rest
+      } = this.props
 
       // Should not be part of the destructing, cause it should be passed to component through rest
       const disabled = this.props.disabled

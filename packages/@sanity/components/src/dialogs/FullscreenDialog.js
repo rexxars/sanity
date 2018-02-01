@@ -79,7 +79,9 @@ export default class FullScreenDialog extends React.PureComponent {
                               data-action-index={i}
                               color={color === 'default' ? action.color : 'white'}
                               disabled={action.disabled}
-                              inverted={typeof action.inverted === 'boolean' ? action.inverted : true}
+                              inverted={
+                                typeof action.inverted === 'boolean' ? action.inverted : true
+                              }
                               kind={action.kind}
                               autoFocus={action.autoFocus}
                               className={`

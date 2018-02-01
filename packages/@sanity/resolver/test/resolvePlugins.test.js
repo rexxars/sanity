@@ -168,7 +168,14 @@ describe('plugin resolver', () => {
     return resolvePlugins(opts).then(plugins => {
       plugins
         .map(plugin => plugin.name)
-        .should.eql(['@sanity/default-layout', '@sanity/core', 'baz', 'bar', 'foo', '(project root)'])
+        .should.eql([
+          '@sanity/default-layout',
+          '@sanity/core',
+          'baz',
+          'bar',
+          'foo',
+          '(project root)'
+        ])
     })
   })
 
@@ -206,7 +213,9 @@ describe('plugin resolver', () => {
     it(`prefers fully qualified in parent plugin node_modules as 3rd option (${subPath})`, () => {
       mockFs(getResolutionOrderFixture({chosenMethod: 'subNodeModules'}))
       return resolvePlugins(opts).then(plugins => {
-        plugins[0].path.should.equal('/sanity/node_modules/sanity-plugin-foo/node_modules/sanity-plugin-bar')
+        plugins[0].path.should.equal(
+          '/sanity/node_modules/sanity-plugin-foo/node_modules/sanity-plugin-bar'
+        )
       })
     })
 

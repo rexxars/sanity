@@ -26,7 +26,8 @@ function matchPath(node: Node, path: string): ?{[key: string]: string} {
 
   const rest = parts.slice(segmentsLength)
   let childState = null
-  const children = typeof node.children === 'function' ? arrayify(node.children(state)) : node.children
+  const children =
+    typeof node.children === 'function' ? arrayify(node.children(state)) : node.children
   children.some(childNode => {
     // console.log('----childNode')
     // console.log(childNode)

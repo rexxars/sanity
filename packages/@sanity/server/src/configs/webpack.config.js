@@ -46,7 +46,8 @@ export default (config = {}) => {
 
   const cssLoaderLocation = resolve('css-loader')
   const baseCssLoader = `${cssLoaderLocation}?modules&localIdentName=[name]_[local]_[hash:base64:5]&importLoaders=1`
-  const cssLoader = isProd && !skipMinify ? `${baseCssLoader}&minimize` : `${baseCssLoader}&sourceMap`
+  const cssLoader =
+    isProd && !skipMinify ? `${baseCssLoader}&minimize` : `${baseCssLoader}&sourceMap`
 
   const commonChunkPlugin =
     (typeof config.commonChunkPlugin === 'undefined' || config.commonChunkPlugin) &&

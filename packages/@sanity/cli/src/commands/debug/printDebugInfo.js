@@ -124,7 +124,9 @@ async function gatherProjectConfigInfo(context) {
   try {
     const config = await fse.readJson(configLocation)
     if (!config.api || !config.api.projectId) {
-      throw new Error(`Project config (${configLocation}) does not contain required "api.projectId" key`)
+      throw new Error(
+        `Project config (${configLocation}) does not contain required "api.projectId" key`
+      )
     }
 
     return config

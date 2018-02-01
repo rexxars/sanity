@@ -64,7 +64,12 @@ export default class SquashingBuffer {
 
   addOperation(op: Operation) {
     // Is this a set patch, and only a set patch, and does it apply to the document at hand?
-    if (op.patch && op.patch.set && op.patch.id === this.PRESTAGE._id && Object.keys(op.patch).length == 2) {
+    if (
+      op.patch &&
+      op.patch.set &&
+      op.patch.id === this.PRESTAGE._id &&
+      Object.keys(op.patch).length == 2
+    ) {
       // console.log("Attempting to apply optimised set patch")
       const setPatch = op.patch.set
       const unoptimizable = {}

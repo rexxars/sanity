@@ -5,7 +5,9 @@ import blockTools from '../../src'
 describe('blockTools', () => {
   describe('getBlockContentTypeFeatures', () => {
     it('gives blockType features', () => {
-      const blockContentType = defaultSchema.get('blogPost').fields.find(field => field.name === 'body').type
+      const blockContentType = defaultSchema
+        .get('blogPost')
+        .fields.find(field => field.name === 'body').type
 
       const expected = {
         enabledBlockAnnotations: ['link'],

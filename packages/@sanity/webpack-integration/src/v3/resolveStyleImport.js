@@ -75,7 +75,9 @@ function realPath(path) {
 function getStyleResolver(opts) {
   return function resolveStyleProxy(moduleId, basedir) {
     const id = moduleId.replace(/^\.\/(part|all:)/, '$1')
-    const resolveStyleImport = isSanityPart(id) ? sanityCache.get(id, opts.from) : nodeCache.get(id, basedir)
+    const resolveStyleImport = isSanityPart(id)
+      ? sanityCache.get(id, opts.from)
+      : nodeCache.get(id, basedir)
 
     return resolveStyleImport.then(res => res.value)
   }

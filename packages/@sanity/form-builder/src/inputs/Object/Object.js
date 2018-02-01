@@ -113,7 +113,8 @@ export default class ObjectInput extends React.PureComponent {
 
     const collapsibleOpts = getCollapsedWithDefaults(fieldset.options)
 
-    const isExpanded = focusPath.length > 0 && fieldset.fields.some(field => focusPath[0] === field.name)
+    const isExpanded =
+      focusPath.length > 0 && fieldset.fields.some(field => focusPath[0] === field.name)
 
     return (
       <div key={fieldset.name} className={fieldStyles.root}>

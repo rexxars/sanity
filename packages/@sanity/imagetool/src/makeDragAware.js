@@ -55,7 +55,9 @@ export default function makeDragAware(Component) {
         dragging = true
         const nextPos = getPos(event)
         debug('Drag started %o', nextPos)
-        onDragStart(getPositionRelativeToRect(nextPos.x, nextPos.y, domNode.getBoundingClientRect()))
+        onDragStart(
+          getPositionRelativeToRect(nextPos.x, nextPos.y, domNode.getBoundingClientRect())
+        )
         moveListener = listen(win, EVENT_NAMES.move, handleMouseMove)
         endListener = listen(win, EVENT_NAMES.end, handleMouseUp)
         currentPos = nextPos
@@ -102,7 +104,12 @@ export default function makeDragAware(Component) {
     }
 
     render() {
-      return <Component ref={this.setDomNode} {...omit(this.props, ['onDragStart', 'onDragEnd', 'onDrag'])} />
+      return (
+        <Component
+          ref={this.setDomNode}
+          {...omit(this.props, ['onDragStart', 'onDragEnd', 'onDrag'])}
+        />
+      )
     }
   }
 }

@@ -71,7 +71,10 @@ test('stashing of changes when unoptimizable operations arrive', tap => {
   const sb = new SquashingBuffer(initial)
   patch(sb, {id: '1', set: {a: 'Another value'}})
   patch(sb, {id: '1', set: {a: {b: 'A wrapped value'}}})
-  tap.true(sb.out != null, 'There should be a stashed mutation since that last patch was not optimisable')
+  tap.true(
+    sb.out != null,
+    'There should be a stashed mutation since that last patch was not optimisable'
+  )
   tap.same(
     Object.keys(sb.setOperations),
     [],

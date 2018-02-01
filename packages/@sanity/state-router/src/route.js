@@ -32,7 +32,11 @@ function normalizeArgs(
   if (typeof path === 'object') {
     return path
   }
-  if (Array.isArray(childrenOrOpts) || typeof childrenOrOpts === 'function' || isRoute(childrenOrOpts)) {
+  if (
+    Array.isArray(childrenOrOpts) ||
+    typeof childrenOrOpts === 'function' ||
+    isRoute(childrenOrOpts)
+  ) {
     return {path, children: normalizeChildren(childrenOrOpts)}
   }
   if (children) {

@@ -11,7 +11,9 @@ async function reinitializePluginConfigs(options, flags = {}) {
 
   const localChecksums = await getChecksums(workDir)
   const allPlugins = await resolveTree({basePath: workDir})
-  const pluginsWithDistConfig = (await Promise.all(allPlugins.map(pluginHasDistConfig))).filter(Boolean)
+  const pluginsWithDistConfig = (await Promise.all(allPlugins.map(pluginHasDistConfig))).filter(
+    Boolean
+  )
   const distChecksums = await Promise.all(pluginsWithDistConfig.map(getPluginConfigChecksum))
   const withLocalConfigs = await Promise.all(distChecksums.map(hasLocalConfig))
   const missingConfigs = await Promise.all(withLocalConfigs.map(createMissingConfig))
@@ -35,7 +37,9 @@ async function reinitializePluginConfigs(options, flags = {}) {
     const prtPath = path.relative(workDir, dstPath)
 
     if (!flags.quiet) {
-      output.print(`Plugin "${plugin.name}" is missing local configuration file, creating ${prtPath}`)
+      output.print(
+        `Plugin "${plugin.name}" is missing local configuration file, creating ${prtPath}`
+      )
     }
 
     return fse.copy(srcPath, dstPath).then(() => plugin)
@@ -77,9 +81,13 @@ export async function tryInitializePluginConfigs(options, flags = {}) {
       throw err
     }
 
-    const manifest = await fse.readJson(path.join(options.workDir, 'package.json')).catch(() => ({}))
+    const manifest = await fse
+      .readJson(path.join(options.workDir, 'package.json'))
+      .catch(() => ({}))
 
-    const dependencies = Object.keys(Object.assign({}, manifest.dependencies, manifest.devDependencies))
+    const dependencies = Object.keys(
+      Object.assign({}, manifest.dependencies, manifest.devDependencies)
+    )
     const depName = err.plugin[0] === '@' ? err.plugin : `sanity-plugin-${err.plugin}`
     if (dependencies.includes(depName)) {
       err.message = `${err.message}\n\nTry running "sanity install"?`

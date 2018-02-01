@@ -46,7 +46,9 @@ export default class WithMaterializedDocument extends React.Component<Props, Sta
       this.setState({materialized: null})
       return
     }
-    this.subscription = this.props.materialize(docId).subscribe(materialized => this.setState({materialized}))
+    this.subscription = this.props
+      .materialize(docId)
+      .subscribe(materialized => this.setState({materialized}))
   }
 
   render() {

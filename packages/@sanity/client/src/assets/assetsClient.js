@@ -20,7 +20,9 @@ function resolveWithDocument(body) {
     enumerable: false,
     get: () => {
       // eslint-disable-next-line no-console
-      console.warn('The promise returned from client.asset.upload(...) now resolves with the asset document')
+      console.warn(
+        'The promise returned from client.asset.upload(...) now resolves with the asset document'
+      )
       return document
     }
   })
@@ -108,7 +110,9 @@ assign(AssetsClient.prototype, {
     }
 
     if (!/^image-[A-Za-z0-9_]+-\d+x\d+-[a-z]{1,5}$/.test(id)) {
-      throw new Error(`Unsupported asset ID "${id}". URL generation only works for auto-generated IDs.`)
+      throw new Error(
+        `Unsupported asset ID "${id}". URL generation only works for auto-generated IDs.`
+      )
     }
 
     const [, assetId, size, format] = id.split('-')

@@ -18,12 +18,13 @@ const backgroundStuff = function(storyFn) {
   return (
     <div>
       <div style={style}>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-        industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-        scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-        into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-        release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-        software like Aldus PageMaker including versions of Lorem Ipsum.
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+        been the industrys standard dummy text ever since the 1500s, when an unknown printer took a
+        galley of type and scrambled it to make a type specimen book. It has survived not only five
+        centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum
+        passages, and more recently with desktop publishing software like Aldus PageMaker including
+        versions of Lorem Ipsum.
       </div>
       {storyFn()}
     </div>
@@ -141,7 +142,14 @@ storiesOf('Dialogs')
       <Sanity part="part:@sanity/components/dialogs/confirm" propTables={[ConfirmDialog]}>
         <ConfirmDialog
           color={select('color (prop)', [false, 'danger', 'success', 'info', 'warning', false])}
-          confirmColor={select('confirmColor (prop)', [false, 'danger', 'success', 'info', 'warning', false])}
+          confirmColor={select('confirmColor (prop)', [
+            false,
+            'danger',
+            'success',
+            'info',
+            'warning',
+            false
+          ])}
           onConfirm={action('onConfirm')}
           onCancel={action('onCancel')}
           confirmButtonText={text('confirmButtonText (prop)')}

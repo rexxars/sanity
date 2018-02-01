@@ -70,9 +70,24 @@ storiesOf('Fieldsets')
               level={2}
               tabIndex="0"
             >
-              <Fieldset legend="In a fieldset…" description={chance.paragraph()} level={3} tabIndex="0">
-                <Fieldset legend="In a fieldset!" description={chance.paragraph()} level={4} tabIndex="0">
-                  <Fieldset legend="In a fieldset!" description={chance.paragraph()} level={5} tabIndex="0">
+              <Fieldset
+                legend="In a fieldset…"
+                description={chance.paragraph()}
+                level={3}
+                tabIndex="0"
+              >
+                <Fieldset
+                  legend="In a fieldset!"
+                  description={chance.paragraph()}
+                  level={4}
+                  tabIndex="0"
+                >
+                  <Fieldset
+                    legend="In a fieldset!"
+                    description={chance.paragraph()}
+                    level={5}
+                    tabIndex="0"
+                  >
                     Content
                   </Fieldset>
                 </Fieldset>
@@ -101,7 +116,11 @@ storiesOf('Fieldsets')
             <DefaultTextField label="Content" level={level + 1} />
             <DefaultTextField label="Content" level={level + 1} />
           </Fieldset>
-          <Fieldset legend="Fieldsets can be collapsed" description={chance.sentence()} level={level}>
+          <Fieldset
+            legend="Fieldsets can be collapsed"
+            description={chance.sentence()}
+            level={level}
+          >
             <Fieldset
               isCollapsible={isCollapsible}
               legend="Open me"

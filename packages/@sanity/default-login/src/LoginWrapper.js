@@ -53,7 +53,11 @@ export default class LoginWrapper extends React.PureComponent {
     const {error, user, isLoading} = this.state
     const {children, LoadingScreen, SanityLogo, sanityLogo} = this.props
     if (isLoading) {
-      return typeof LoadingScreen === 'function' ? <LoadingScreen center fullscreen /> : LoadingScreen
+      return typeof LoadingScreen === 'function' ? (
+        <LoadingScreen center fullscreen />
+      ) : (
+        LoadingScreen
+      )
     }
 
     if (error) {

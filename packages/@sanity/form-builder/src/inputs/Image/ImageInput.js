@@ -145,7 +145,8 @@ export default class ImageInput extends React.PureComponent<Props, State> {
 
   renderUploadState(uploadState: any) {
     const {isUploading} = this.state
-    const isComplete = uploadState.progress === 100 && !!(this.props.value && this.props.value.asset)
+    const isComplete =
+      uploadState.progress === 100 && !!(this.props.value && this.props.value.asset)
     return (
       <div className={styles.progress}>
         <div>
@@ -238,7 +239,12 @@ export default class ImageInput extends React.PureComponent<Props, State> {
           value.asset && (
             <WithMaterializedReference materialize={materialize} reference={value.asset}>
               {imageAsset => (
-                <ImageToolInput level={level} imageUrl={imageAsset.url} value={value} onChange={onChange} />
+                <ImageToolInput
+                  level={level}
+                  imageUrl={imageAsset.url}
+                  value={value}
+                  onChange={onChange}
+                />
               )}
             </WithMaterializedReference>
           )}
@@ -318,7 +324,11 @@ export default class ImageInput extends React.PureComponent<Props, State> {
         ref={this.setFocusArea}
       >
         {uploadError && (
-          <Snackbar kind="error" action={{title: 'OK'}} onAction={() => this.setState({uploadError: null})}>
+          <Snackbar
+            kind="error"
+            action={{title: 'OK'}}
+            onAction={() => this.setState({uploadError: null})}
+          >
             {"We're"} really sorry, but the upload could not be completed.
           </Snackbar>
         )}
@@ -352,7 +362,12 @@ export default class ImageInput extends React.PureComponent<Props, State> {
             Select from library
           </Button>
           {showAdvancedEditButton && (
-            <Button icon={EditIcon} kind="simple" title="Edit details" onClick={this.handleStartAdvancedEdit}>
+            <Button
+              icon={EditIcon}
+              kind="simple"
+              title="Edit details"
+              onClick={this.handleStartAdvancedEdit}
+            >
               Edit
             </Button>
           )}

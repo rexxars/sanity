@@ -12,7 +12,14 @@ export default function createSlugInput({validate, slugify}) {
         this._input = input
       }
       render() {
-        return <SlugInput ref={this.setRef} {...this.props} checkValidityFn={validate} slugifyFn={slugify} />
+        return (
+          <SlugInput
+            ref={this.setRef}
+            {...this.props}
+            checkValidityFn={validate}
+            slugifyFn={slugify}
+          />
+        )
       }
     }
   )

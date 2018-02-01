@@ -4,9 +4,10 @@ const ROUTES = 100
 const DEPTH = 10
 
 function addLevel(prefix, depth, n = 0) {
-  return [`/deeper-${prefix}/:level-${prefix}-${n}`, n <= depth && [addLevel(prefix, depth, n + 1)]].filter(
-    Boolean
-  )
+  return [
+    `/deeper-${prefix}/:level-${prefix}-${n}`,
+    n <= depth && [addLevel(prefix, depth, n + 1)]
+  ].filter(Boolean)
 }
 
 exports.routes = [

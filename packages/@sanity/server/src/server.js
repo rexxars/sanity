@@ -10,7 +10,9 @@ import {getDocumentElement} from './baseServer'
 
 const getWebpackCompiler = baseConfig => {
   const config =
-    baseConfig.env === 'production' ? getWebpackProdConfig(baseConfig) : getWebpackDevConfig(baseConfig)
+    baseConfig.env === 'production'
+      ? getWebpackProdConfig(baseConfig)
+      : getWebpackDevConfig(baseConfig)
 
   return webpack(config)
 }

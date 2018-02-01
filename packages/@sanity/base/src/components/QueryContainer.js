@@ -65,7 +65,9 @@ export default class QueryContainer extends React.Component {
     this.unsubscribe()
     this._subscription = store
       .query(query, params)
-      .filter(event => event.type === 'snapshot' || RESPOND_TO_TRANSITIONS.includes(event.transition))
+      .filter(
+        event => event.type === 'snapshot' || RESPOND_TO_TRANSITIONS.includes(event.transition)
+      )
       .subscribe(this)
   }
 
@@ -121,7 +123,9 @@ export default class QueryContainer extends React.Component {
     const hasCreateOrDelete =
       event.type === 'mutation' &&
       event.mutations.some(
-        mut => mut.create || (mut.delete && (result.documents || []).some(doc => doc._id === mut.delete.id))
+        mut =>
+          mut.create ||
+          (mut.delete && (result.documents || []).some(doc => doc._id === mut.delete.id))
       )
 
     if (hasCreateOrDelete) {
@@ -158,7 +162,10 @@ export default class QueryContainer extends React.Component {
     if (!shallowEquals(this.state, nextState)) {
       return true
     }
-    if (nextProps.query !== this.props.query || !shallowEquals(nextProps.params, this.props.params)) {
+    if (
+      nextProps.query !== this.props.query ||
+      !shallowEquals(nextProps.params, this.props.params)
+    ) {
       return true
     }
 
@@ -166,7 +173,10 @@ export default class QueryContainer extends React.Component {
   }
 
   renderDeprecated() {
-    return React.cloneElement(React.Children.only(this.props.children), this.props.mapFn(this.state))
+    return React.cloneElement(
+      React.Children.only(this.props.children),
+      this.props.mapFn(this.state)
+    )
   }
 
   render() {

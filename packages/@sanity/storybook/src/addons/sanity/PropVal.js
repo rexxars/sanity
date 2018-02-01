@@ -82,7 +82,9 @@ function previewProp(value) {
     content = <span>…</span>
   } else if (React.isValidElement(val)) {
     content = (
-      <span style={valueStyles.object}>{`<${val.type.displayName || val.type.name || val.type} />`}</span>
+      <span style={valueStyles.object}>{`<${val.type.displayName ||
+        val.type.name ||
+        val.type} />`}</span>
     )
   } else {
     content = previewObject(val)

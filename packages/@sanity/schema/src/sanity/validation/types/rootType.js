@@ -12,7 +12,9 @@ export default (typeDef, visitorContext) => {
 
   if (visitorContext.isDuplicate(typeDef.name)) {
     problems.push(
-      error(`Invalid type name: A type with name "${typeDef.name}" is already defined in the schema.`)
+      error(
+        `Invalid type name: A type with name "${typeDef.name}" is already defined in the schema.`
+      )
     )
   }
 

@@ -60,7 +60,15 @@ export default class DefaultTextInput extends React.PureComponent {
   }
 
   render() {
-    const {onClear, hasError, isClearable, isSelected, disabled, styles: passedStyles, ...rest} = this.props
+    const {
+      onClear,
+      hasError,
+      isClearable,
+      isSelected,
+      disabled,
+      styles: passedStyles,
+      ...rest
+    } = this.props
 
     const styles = {
       ...defaultStyles,

@@ -65,7 +65,11 @@ export default class Toolbar extends React.Component {
     return (
       <div className={`${styles.root} ${className}`} style={style}>
         <div className={styles.blockFormatContainer}>
-          <BlockStyle value={blockStyles.value} items={blockStyles.items} onSelect={onBlockStyleChange} />
+          <BlockStyle
+            value={blockStyles.value}
+            items={blockStyles.items}
+            onSelect={onBlockStyleChange}
+          />
         </div>
 
         <div className={styles.canBeMinimized}>

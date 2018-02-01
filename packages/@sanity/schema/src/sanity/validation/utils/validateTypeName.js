@@ -40,9 +40,15 @@ export function validateTypeName(typeName: string, visitorContext) {
       .map(([_, name]) => name)
 
     const suggestion =
-      suggestions.length > 0 ? ` Did you mean ${humanize(suggestions.map(quote), {conjunction: 'or'})}?` : ''
+      suggestions.length > 0
+        ? ` Did you mean ${humanize(suggestions.map(quote), {conjunction: 'or'})}?`
+        : ''
 
-    return [error(`Unknown type: ${typeName}.${suggestion} Valid types are: ${humanize(possibleTypeNames)}`)]
+    return [
+      error(
+        `Unknown type: ${typeName}.${suggestion} Valid types are: ${humanize(possibleTypeNames)}`
+      )
+    ]
   }
   return []
 }

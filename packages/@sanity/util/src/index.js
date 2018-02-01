@@ -6,4 +6,12 @@ import safeJson from './safeJson'
 import getSanityVersions from './getSanityVersions'
 import * as pathTools from './pathTools'
 
-export {getConfig, reduceConfig, lazyRequire, dynamicRequire, safeJson, getSanityVersions, pathTools}
+export {
+  getConfig,
+  reduceConfig,
+  lazyRequire,
+  dynamicRequire,
+  safeJson,
+  getSanityVersions,
+  pathTools
+}

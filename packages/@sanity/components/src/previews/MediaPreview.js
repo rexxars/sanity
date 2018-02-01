@@ -31,12 +31,23 @@ export default class MediaPreview extends React.PureComponent {
   }
 
   render() {
-    const {title, subtitle, description, media, mediaDimensions, children, isPlaceholder} = this.props
+    const {
+      title,
+      subtitle,
+      description,
+      media,
+      mediaDimensions,
+      children,
+      isPlaceholder
+    } = this.props
 
     if (isPlaceholder) {
       return (
         <div className={styles.root}>
-          <div className={styles.padder} style={{paddingTop: `${100 / mediaDimensions.aspect || 100}%`}} />
+          <div
+            className={styles.padder}
+            style={{paddingTop: `${100 / mediaDimensions.aspect || 100}%`}}
+          />
           <div className={styles.mediaContainer}>
             <SvgPlaceholder styles={styles} />
           </div>
@@ -46,7 +57,10 @@ export default class MediaPreview extends React.PureComponent {
 
     return (
       <div className={styles.root} title={title}>
-        <div className={styles.padder} style={{paddingTop: `${100 / mediaDimensions.aspect || 100}%`}} />
+        <div
+          className={styles.padder}
+          style={{paddingTop: `${100 / mediaDimensions.aspect || 100}%`}}
+        />
         <div className={styles.mediaContainer}>
           {typeof media === 'undefined' && <div className={styles.mediaString}>{title}</div>}
           {typeof media === 'function' && media({dimensions: mediaDimensions, layout: 'media'})}

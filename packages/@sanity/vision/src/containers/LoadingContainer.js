@@ -9,7 +9,9 @@ class LoadingContainer extends React.PureComponent {
 
     if (!this.getSubscriptions) {
       throw new Error(
-        `${this.constructor.name} extended LoadingContainer but did not define a getSubscriptions() method`
+        `${
+          this.constructor.name
+        } extended LoadingContainer but did not define a getSubscriptions() method`
       )
     }
 

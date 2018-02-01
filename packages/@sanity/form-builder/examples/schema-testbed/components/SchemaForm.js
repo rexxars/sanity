@@ -25,7 +25,8 @@ import {resolvePreviewComponent} from '../../../src/defaultConfig'
 const SCHEMA_NAMES = Object.keys(sourceSchemas)
 const params = parseParams(document.location.pathname)
 
-const schema = params.schemaName && params.typeName && Schema.compile(sourceSchemas[params.schemaName])
+const schema =
+  params.schemaName && params.typeName && Schema.compile(sourceSchemas[params.schemaName])
 
 const PERSISTKEY = `form-builder-value-${params.schemaName}-${params.typeName}`
 
@@ -170,7 +171,10 @@ export default class Main extends React.Component {
     const {value, inspect} = this.state
     return (
       <div className={styles[inspect === 'docked' ? 'inspectPane' : 'inspectPaneFullScreen']}>
-        <button className={styles.closeInspectPaneButton} onClick={() => this.setState({inspect: false})}>
+        <button
+          className={styles.closeInspectPaneButton}
+          onClick={() => this.setState({inspect: false})}
+        >
           x
         </button>
         {inspect === 'docked' && (
@@ -189,7 +193,11 @@ export default class Main extends React.Component {
             ↓
           </button>
         )}
-        <div className={styles[inspect === 'docked' ? 'inspectPaneInner' : 'inspectPaneInnerFullScreen']}>
+        <div
+          className={
+            styles[inspect === 'docked' ? 'inspectPaneInner' : 'inspectPaneInnerFullScreen']
+          }
+        >
           <Inspector inspect={value} />
         </div>
       </div>

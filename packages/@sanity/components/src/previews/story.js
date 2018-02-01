@@ -170,7 +170,9 @@ storiesOf('Previews')
               </span>
             }
             description={
-              <span>This is the long the descriptions that should no be to long, beacuse we will cap it</span>
+              <span>
+                This is the long the descriptions that should no be to long, beacuse we will cap it
+              </span>
             }
             isPlaceholder={boolean('placeholder (prop)', false)}
             media={boolean('Show image', true) ? renderMedia : undefined}
@@ -254,7 +256,9 @@ storiesOf('Previews')
               </span>
             }
             description={
-              <span>This is the long the descriptions that should no be to long, beacuse we will cap it</span>
+              <span>
+                This is the long the descriptions that should no be to long, beacuse we will cap it
+              </span>
             }
             isPlaceholder={boolean('placeholder (prop)', false)}
             media={boolean('Show image', false) ? renderMedia : undefined}
@@ -330,7 +334,9 @@ storiesOf('Previews')
               </span>
             }
             description={
-              <span>This is the long the descriptions that should no be to long, beacuse we will cap it</span>
+              <span>
+                This is the long the descriptions that should no be to long, beacuse we will cap it
+              </span>
             }
             status={
               <div>
@@ -356,11 +362,11 @@ storiesOf('Previews')
           description={
             <span>
               This is the long the <strong style={{color: 'magenta'}}>description</strong>
-              &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and that is
-              why it is har to cap. This is the long the{' '}
+              &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and
+              that is why it is har to cap. This is the long the{' '}
               <strong style={{color: 'magenta'}}>description</strong>
-              &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and that is
-              why it is har to cap.
+              &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and
+              that is why it is har to cap.
             </span>
           }
           status={text('status', 'status')}
@@ -484,7 +490,9 @@ storiesOf('Previews')
               </span>
             }
             description={
-              <span>This is the long the descriptions that should no be to long, beacuse we will cap it</span>
+              <span>
+                This is the long the descriptions that should no be to long, beacuse we will cap it
+              </span>
             }
             status={
               <div>
@@ -556,11 +564,11 @@ storiesOf('Previews')
             description={
               <span>
                 This is the long the <strong style={{color: 'magenta'}}>description</strong>
-                &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and that is
-                why it is har to cap. This is the long the{' '}
+                &nbsp; that should no be to long, beacuse we will cap it. But this is an element,
+                and that is why it is har to cap. This is the long the{' '}
                 <strong style={{color: 'magenta'}}>description</strong>
-                &nbsp; that should no be to long, beacuse we will cap it. But this is an element, and that is
-                why it is har to cap.
+                &nbsp; that should no be to long, beacuse we will cap it. But this is an element,
+                and that is why it is har to cap.
               </span>
             }
             status={

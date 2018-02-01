@@ -13,7 +13,8 @@ import DefaultTextInput from 'part:@sanity/components/textinputs/default'
 import Sanity from 'part:@sanity/storybook/addons/sanity'
 
 const getButtonKinds = () => select('kind (prop)', ['default', 'simple', 'secondary'], 'default')
-const getColorKinds = () => select('color (prop)', [false, 'primary', 'success', 'danger', 'white'], false)
+const getColorKinds = () =>
+  select('color (prop)', [false, 'primary', 'success', 'danger', 'white'], false)
 
 storiesOf('Buttons', module)
   .addDecorator(withKnobs)
@@ -114,15 +115,31 @@ storiesOf('Buttons', module)
         <Button onClick={action('clicked')} icon={SanityLogoIcon} disabled={disabled}>
           With icon
         </Button>
-        <Button onClick={action('clicked')} color="danger" icon={SanityLogoIcon} disabled={disabled}>
+        <Button
+          onClick={action('clicked')}
+          color="danger"
+          icon={SanityLogoIcon}
+          disabled={disabled}
+        >
           Colored with icon
         </Button>
-        <Button onClick={action('clicked')} color="danger" icon={SanityLogoIcon} inverted disabled={disabled}>
+        <Button
+          onClick={action('clicked')}
+          color="danger"
+          icon={SanityLogoIcon}
+          inverted
+          disabled={disabled}
+        >
           Danger, inverted & icon
         </Button>
 
         <h2>Only icons</h2>
-        <Button onClick={action('clicked')} icon={SanityLogoIcon} title="Default" disabled={disabled} />
+        <Button
+          onClick={action('clicked')}
+          icon={SanityLogoIcon}
+          title="Default"
+          disabled={disabled}
+        />
         <Button
           onClick={action('clicked')}
           icon={SanityLogoIcon}

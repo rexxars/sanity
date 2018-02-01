@@ -66,7 +66,9 @@ function search(query) {
 
   const uniqueFields = combineFields(candidateTypes.map(type => type.__unstable_searchFields))
   const constraints = terms.map(term => uniqueFields.map(field => `${field} match '${term}*'`))
-  const constraintString = constraints.map(constraint => `(${constraint.join(' || ')})`).join(' && ')
+  const constraintString = constraints
+    .map(constraint => `(${constraint.join(' || ')})`)
+    .join(' && ')
   return client.observable.fetch(`*[${constraintString}][0...10]`)
 }
 

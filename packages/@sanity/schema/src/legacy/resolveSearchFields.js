@@ -6,7 +6,8 @@ function reduceType(type, reducer, accumulator, path = [], maxDepth = 10) {
   }
   if (Array.isArray(type.fields)) {
     return type.fields.reduce(
-      (acc, field, index) => reduceType(field.type, reducer, acc, path.concat(field.name), maxDepth - 1),
+      (acc, field, index) =>
+        reduceType(field.type, reducer, acc, path.concat(field.name), maxDepth - 1),
       reducer(accumulator, type, path)
     )
   }

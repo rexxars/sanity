@@ -30,7 +30,9 @@ function registerLoader(options) {
 
   // Resolve actual parts only if basePath is set,
   // otherwise use empty defaults
-  const parts = options.basePath ? resolveParts({basePath, sync: true}) : Object.assign({}, defaultResult)
+  const parts = options.basePath
+    ? resolveParts({basePath, sync: true})
+    : Object.assign({}, defaultResult)
 
   // Configuration files are loaded with a custom prefix
   const configPath = path.join(basePath, 'config')

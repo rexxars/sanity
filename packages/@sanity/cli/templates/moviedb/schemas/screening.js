@@ -59,7 +59,8 @@ export default {
       name: 'infoUrl',
       title: 'More info at',
       type: 'url',
-      description: 'URL to imdb.com, rottentomatoes.com or some other place with reviews, stats, etc'
+      description:
+        'URL to imdb.com, rottentomatoes.com or some other place with reviews, stats, etc'
     },
     {
       name: 'ticket',

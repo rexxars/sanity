@@ -3,7 +3,11 @@ import React from 'react'
 import {storiesOf, action} from 'part:@sanity/storybook'
 
 import {List as DefaultList, Item as DefaultItem} from 'part:@sanity/components/lists/default'
-import {List as SortableList, Item as SortableItem, DragHandle} from 'part:@sanity/components/lists/sortable'
+import {
+  List as SortableList,
+  Item as SortableItem,
+  DragHandle
+} from 'part:@sanity/components/lists/sortable'
 
 import {arrayMove} from 'react-sortable-hoc'
 import {range, random} from 'lodash'

@@ -5,7 +5,9 @@ import defaultSchema from '../../fixtures/defaultSchema'
 
 describe('blockContentTypeToOptions', () => {
   it('will give sane default options for default schema', () => {
-    const blockContentType = defaultSchema.get('blogPost').fields.find(field => field.name === 'body').type
+    const blockContentType = defaultSchema
+      .get('blogPost')
+      .fields.find(field => field.name === 'body').type
 
     const expected = {
       enabledBlockAnnotations: ['link'],
@@ -16,7 +18,9 @@ describe('blockContentTypeToOptions', () => {
   })
 
   it('will give spesific options for custom schema', () => {
-    const blockContentType = customSchema.get('blogPost').fields.find(field => field.name === 'body').type
+    const blockContentType = customSchema
+      .get('blogPost')
+      .fields.find(field => field.name === 'body').type
 
     const expected = {
       enabledBlockAnnotations: ['author'],

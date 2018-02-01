@@ -63,9 +63,13 @@ function checkPath() {
   const state = router.decode(pathname)
   if (state && state.intent) {
     // get intent redirect url
-    const handler = intentHandlers.find(candidate => candidate.canHandle(state.intent, state.params))
+    const handler = intentHandlers.find(candidate =>
+      candidate.canHandle(state.intent, state.params)
+    )
     if (handler) {
-      handleNavigate(router.encode(handler.resolveRedirectState(state.intent, state.params)), {replace: true})
+      handleNavigate(router.encode(handler.resolveRedirectState(state.intent, state.params)), {
+        replace: true
+      })
       return
     }
     // eslint-disable-next-line no-console

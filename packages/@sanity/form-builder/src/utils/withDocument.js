@@ -35,7 +35,9 @@ export default function withDocument(ComposedComponent: any) {
       this._input = input
     }
     render() {
-      return <ComposedComponent ref={this.setInput} document={this.state.document} {...this.props} />
+      return (
+        <ComposedComponent ref={this.setInput} document={this.state.document} {...this.props} />
+      )
     }
   }
 }

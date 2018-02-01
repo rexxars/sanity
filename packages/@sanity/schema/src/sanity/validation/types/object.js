@@ -7,7 +7,12 @@ const CONVENTIONAL_FIELD_RE = /^[A-Za-z_]+[0-9A-Za-z_]*$/
 
 function validateFieldName(name): Array<any> {
   if (typeof name !== 'string') {
-    return [error(`Field names must be strings. Saw "${inspect(name)}"`, HELP_IDS.OBJECT_FIELD_NAME_INVALID)]
+    return [
+      error(
+        `Field names must be strings. Saw "${inspect(name)}"`,
+        HELP_IDS.OBJECT_FIELD_NAME_INVALID
+      )
+    ]
   }
   if (name.startsWith('_')) {
     return [

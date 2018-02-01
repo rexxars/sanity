@@ -84,8 +84,9 @@ class StateMenu extends React.Component {
 
     return (
       <div
-        className={`${this.props.opened ? styles.opened : styles.closed} ${originStyle} ${fullWidth &&
-          styles.fullWidth} ${className}`}
+        className={`${
+          this.props.opened ? styles.opened : styles.closed
+        } ${originStyle} ${fullWidth && styles.fullWidth} ${className}`}
       >
         <ul className={styles.list}>
           {items.map((item, i) => {

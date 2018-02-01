@@ -24,7 +24,11 @@ async function uploadAssets(assets, options) {
 
   // Loop over all unique URLs and ensure they exist, and if not, upload them
   const mapOptions = {concurrency: ASSET_UPLOAD_CONCURRENCY}
-  const assetIds = await pMap(assetMap.keys(), ensureAsset.bind(null, options, progress), mapOptions)
+  const assetIds = await pMap(
+    assetMap.keys(),
+    ensureAsset.bind(null, options, progress),
+    mapOptions
+  )
 
   // Loop over all documents that need asset references to be set
   const batches = await setAssetReferences(assetMap, assetIds, options)

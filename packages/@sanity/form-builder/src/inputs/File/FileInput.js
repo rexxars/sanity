@@ -265,7 +265,11 @@ export default class FileInput extends React.PureComponent<Props, State> {
         ref={this.setFocusArea}
       >
         {uploadError && (
-          <Snackbar kind="error" action={{title: 'OK'}} onAction={() => this.setState({uploadError: null})}>
+          <Snackbar
+            kind="error"
+            action={{title: 'OK'}}
+            onAction={() => this.setState({uploadError: null})}
+          >
             {"We're"} really sorry, but the upload could not be completed.
           </Snackbar>
         )}

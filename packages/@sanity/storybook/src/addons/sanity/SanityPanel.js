@@ -96,7 +96,8 @@ class SanityPanel extends React.PureComponent {
               <ul>
                 {(implementations || []).reverse().map(impl => (
                   <li key={impl.path}>
-                    {impl.plugin} <span className={styles.light}>({this.normalizePath(impl.path)})</span>
+                    {impl.plugin}{' '}
+                    <span className={styles.light}>({this.normalizePath(impl.path)})</span>
                   </li>
                 ))}
               </ul>

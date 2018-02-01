@@ -9,10 +9,12 @@ function resolveEnabledStyles(blockType) {
   if (!styleField) {
     throw new Error("A field with name 'style' is not defined in the block type (required).")
   }
-  const textStyles = styleField.type.options.list && styleField.type.options.list.filter(style => style.value)
+  const textStyles =
+    styleField.type.options.list && styleField.type.options.list.filter(style => style.value)
   if (!textStyles || textStyles.length === 0) {
     throw new Error(
-      'The style fields need at least one style ' + "defined. I.e: {title: 'Normal', value: 'normal'}."
+      'The style fields need at least one style ' +
+        "defined. I.e: {title: 'Normal', value: 'normal'}."
     )
   }
   return textStyles.map(style => style.value)
@@ -40,7 +42,9 @@ export default function blockContentTypeToOptions(blockContentType) {
   }
   return {
     enabledBlockStyles: blockType ? resolveEnabledStyles(blockType) : DEFAULT_SUPPORTED_STYLES,
-    enabledSpanDecorators: spanType ? resolveEnabledDecorators(spanType) : DEFAULT_SUPPORTED_DECORATORS,
+    enabledSpanDecorators: spanType
+      ? resolveEnabledDecorators(spanType)
+      : DEFAULT_SUPPORTED_DECORATORS,
     enabledBlockAnnotations: spanType
       ? resolveEnabledAnnotationTypes(spanType)
       : DEFAULT_SUPPORTED_ANNOTATIONS

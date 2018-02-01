@@ -19,7 +19,9 @@ function resolveImageAssetPath(typeDef) {
   if (imageAssetField) {
     return imageAssetField.name
   }
-  const fieldWithImageAsset = fields.find(fieldDef => (fieldDef.fields || []).some(isImageAssetField))
+  const fieldWithImageAsset = fields.find(fieldDef =>
+    (fieldDef.fields || []).some(isImageAssetField)
+  )
 
   return fieldWithImageAsset ? `${fieldWithImageAsset.name}.asset` : undefined
 }

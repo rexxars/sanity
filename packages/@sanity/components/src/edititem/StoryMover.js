@@ -42,8 +42,16 @@ export default class Mover extends React.Component {
             Move me
           </div>
         </Draggable>
-        <div style={{position: 'absolute', top: `${this.state.y + 50}px`, left: `${this.state.x - 10}px`}}>
-          <div style={{color: 'red', position: 'absolute', zIndex: '5000', backgroundColor: 'black'}}>
+        <div
+          style={{
+            position: 'absolute',
+            top: `${this.state.y + 50}px`,
+            left: `${this.state.x - 10}px`
+          }}
+        >
+          <div
+            style={{color: 'red', position: 'absolute', zIndex: '5000', backgroundColor: 'black'}}
+          >
             x: {this.state.x - 10} y: {this.state.y + 50}
           </div>
           {this.props.children}

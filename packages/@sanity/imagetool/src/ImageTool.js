@@ -71,7 +71,9 @@ export default class ImageTool extends React.PureComponent {
     const {value, image} = this.props
 
     const hotspot = value.hotspot || DEFAULT_HOTSPOT
-    const hotspotRect = new Rect().setSize(hotspot.width, hotspot.height).setCenter(hotspot.x, hotspot.y)
+    const hotspotRect = new Rect()
+      .setSize(hotspot.width, hotspot.height)
+      .setCenter(hotspot.x, hotspot.y)
 
     return new Rect()
       .setSize(image.width, image.height)
@@ -97,16 +99,40 @@ export default class ImageTool extends React.PureComponent {
 
     const cropHandle = new Rect(0, 0, handleSize, handleSize)
     return {
-      left: cropHandle.setTopLeft(inner.left - halfCropHandleSize, inner.center.y - halfCropHandleSize),
-      right: cropHandle.setTopLeft(inner.right - halfCropHandleSize, inner.center.y - halfCropHandleSize),
+      left: cropHandle.setTopLeft(
+        inner.left - halfCropHandleSize,
+        inner.center.y - halfCropHandleSize
+      ),
+      right: cropHandle.setTopLeft(
+        inner.right - halfCropHandleSize,
+        inner.center.y - halfCropHandleSize
+      ),
 
-      top: cropHandle.setTopLeft(inner.center.x - halfCropHandleSize, inner.top - halfCropHandleSize),
-      topLeft: cropHandle.setTopLeft(inner.left - halfCropHandleSize, inner.top - halfCropHandleSize),
-      topRight: cropHandle.setTopLeft(inner.right - halfCropHandleSize, inner.top - halfCropHandleSize),
+      top: cropHandle.setTopLeft(
+        inner.center.x - halfCropHandleSize,
+        inner.top - halfCropHandleSize
+      ),
+      topLeft: cropHandle.setTopLeft(
+        inner.left - halfCropHandleSize,
+        inner.top - halfCropHandleSize
+      ),
+      topRight: cropHandle.setTopLeft(
+        inner.right - halfCropHandleSize,
+        inner.top - halfCropHandleSize
+      ),
 
-      bottom: cropHandle.setTopLeft(inner.center.x - halfCropHandleSize, inner.bottom - halfCropHandleSize),
-      bottomLeft: cropHandle.setTopLeft(inner.left - halfCropHandleSize, inner.bottom - halfCropHandleSize),
-      bottomRight: cropHandle.setTopLeft(inner.right - halfCropHandleSize, inner.bottom - halfCropHandleSize)
+      bottom: cropHandle.setTopLeft(
+        inner.center.x - halfCropHandleSize,
+        inner.bottom - halfCropHandleSize
+      ),
+      bottomLeft: cropHandle.setTopLeft(
+        inner.left - halfCropHandleSize,
+        inner.bottom - halfCropHandleSize
+      ),
+      bottomRight: cropHandle.setTopLeft(
+        inner.right - halfCropHandleSize,
+        inner.bottom - halfCropHandleSize
+      )
     }
   }
 
@@ -261,7 +287,14 @@ export default class ImageTool extends React.PureComponent {
       context.scale(1, scaleY)
       context.beginPath()
       context.globalAlpha = 0.8
-      context.arc(dest.center.x, dest.center.y / scaleY, Math.abs(dest.width / 2), 0, 2 * Math.PI, false)
+      context.arc(
+        dest.center.x,
+        dest.center.y / scaleY,
+        Math.abs(dest.width / 2),
+        0,
+        2 * Math.PI,
+        false
+      )
       context.strokeStyle = 'white'
       context.lineWidth = 1.5 * scale
       context.stroke()
@@ -281,7 +314,16 @@ export default class ImageTool extends React.PureComponent {
 
       const dest = imageRect.shrink(margin).multiply(hotspot)
 
-      drawImage(src.left, src.top, src.width, src.height, dest.left, dest.top, dest.width, dest.height)
+      drawImage(
+        src.left,
+        src.top,
+        src.width,
+        src.height,
+        dest.left,
+        dest.top,
+        dest.width,
+        dest.height
+      )
     }
 
     function drawBackdrop() {
@@ -290,7 +332,16 @@ export default class ImageTool extends React.PureComponent {
       const dest = imageRect.shrink(margin).cropRelative(crop)
 
       context.save()
-      drawImage(src.left, src.top, src.width, src.height, dest.left, dest.top, dest.width, dest.height)
+      drawImage(
+        src.left,
+        src.top,
+        src.width,
+        src.height,
+        dest.left,
+        dest.top,
+        dest.width,
+        dest.height
+      )
       context.globalAlpha = 0.5
       context.fillStyle = 'black'
       context.fillRect(dest.left, dest.top, dest.width, dest.height)

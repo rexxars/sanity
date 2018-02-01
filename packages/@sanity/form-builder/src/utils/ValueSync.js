@@ -44,7 +44,9 @@ export default withPatchSubscriber(
       this.unsubscribe = props.subscribe(({snapshot, patches, shouldReset}) => {
         if (shouldReset) {
           // eslint-disable-next-line no-console
-          console.warn('Serialized local input value was reset due to a patch that targeted an ancestor')
+          console.warn(
+            'Serialized local input value was reset due to a patch that targeted an ancestor'
+          )
           this.setState({value: props.deserialize(snapshot)})
         }
         this.receivePatches(patches)

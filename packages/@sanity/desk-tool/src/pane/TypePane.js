@@ -18,7 +18,14 @@ export default withRouterHOC(
     renderTypePaneItem = item => {
       const {selectedType} = this.props.router.state
       const selected = item.name === selectedType
-      return <TypePaneItem key={item.key} selected={selected} type={item} onClick={this.handleItemClick} />
+      return (
+        <TypePaneItem
+          key={item.key}
+          selected={selected}
+          type={item}
+          onClick={this.handleItemClick}
+        />
+      )
     }
 
     render() {

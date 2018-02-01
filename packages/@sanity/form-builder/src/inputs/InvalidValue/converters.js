@@ -34,7 +34,8 @@ export default {
     boolean: {
       test: value => BOOL_STRINGS.includes(value.toLowerCase()),
       convert: value =>
-        TRUTHY_STRINGS.includes(value.toLowerCase()) || !FALSEY_STRINGS.includes(value.toLowerCase())
+        TRUTHY_STRINGS.includes(value.toLowerCase()) ||
+        !FALSEY_STRINGS.includes(value.toLowerCase())
     },
     richDate: {
       test: val => isValidDate(parseDate(val)),

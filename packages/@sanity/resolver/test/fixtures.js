@@ -105,7 +105,8 @@ export function getResolutionOrderFixture({chosenMethod}) {
   const paths = {
     fullLocalPath: '/sanity/plugins/sanity-plugin-bar/sanity.json',
     shortLocalPath: '/sanity/plugins/bar/sanity.json',
-    subNodeModules: '/sanity/node_modules/sanity-plugin-foo/node_modules/sanity-plugin-bar/sanity.json',
+    subNodeModules:
+      '/sanity/node_modules/sanity-plugin-foo/node_modules/sanity-plugin-bar/sanity.json',
     nodeModules: '/sanity/node_modules/sanity-plugin-bar/sanity.json'
   }
 
@@ -340,9 +341,13 @@ export function getInvalidPartDeclaration(opts) {
     '/sanity/sanity.json': sanityManifest(['foo']),
     '/sanity/plugins/foo/sanity.json': pluginManifest({
       parts: [
-        opts.missingDescription ? {name: 'part:foo/thing'} : {name: 'part:foo/thing', description: 'Thing'},
+        opts.missingDescription
+          ? {name: 'part:foo/thing'}
+          : {name: 'part:foo/thing', description: 'Thing'},
 
-        opts.unprefixed ? {name: 'foo/bar', description: 'Bar'} : {name: 'part:foo/bar', description: 'Bar'},
+        opts.unprefixed
+          ? {name: 'foo/bar', description: 'Bar'}
+          : {name: 'part:foo/bar', description: 'Bar'},
 
         opts.allPrefixed
           ? {name: 'all:part:foo/baz', description: 'Baz'}
@@ -360,11 +365,15 @@ export function getInvalidPartDeclaration(opts) {
           ? {name: 'part:foo/', description: 'Baz'}
           : {name: 'part:foo/bar', description: 'Baz'},
 
-        opts.missingImplements ? {path: 'file.js'} : {path: 'file.js', implements: 'part:foo/thing'},
+        opts.missingImplements
+          ? {path: 'file.js'}
+          : {path: 'file.js', implements: 'part:foo/thing'},
 
         opts.missingName ? {path: 'file.js'} : {path: 'file.js', name: 'part:foo/thingie'},
 
-        opts.missingPath ? {implements: 'part:foo/bar'} : {path: 'bar.js', implements: 'part:foo/bar'}
+        opts.missingPath
+          ? {implements: 'part:foo/bar'}
+          : {path: 'bar.js', implements: 'part:foo/bar'}
       ]
     })
   }
@@ -626,7 +635,11 @@ export function getParentDirTree() {
 
 export function getNodeResolutionTree() {
   return Object.assign({}, getBasicTree(), {
-    '/sanity/app/sanity.json': sanityManifest(['@sanity/core', '@sanity/strawberry', 'rebeltastic']),
+    '/sanity/app/sanity.json': sanityManifest([
+      '@sanity/core',
+      '@sanity/strawberry',
+      'rebeltastic'
+    ]),
     '/node_modules': {
       '@sanity': {
         strawberry: {

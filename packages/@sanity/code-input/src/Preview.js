@@ -74,7 +74,11 @@ export default class CodePreview extends PureComponent {
             highlightActiveLine={false}
             cursorStart={-1}
             value={(value && value.code) || ''}
-            markers={value && value.highlightedLines ? createHighlightMarkers(value.highlightedLines) : null}
+            markers={
+              value && value.highlightedLines
+                ? createHighlightMarkers(value.highlightedLines)
+                : null
+            }
             onLoad={this.handleEditorLoad}
             tabSize={2}
             showGutter={false}

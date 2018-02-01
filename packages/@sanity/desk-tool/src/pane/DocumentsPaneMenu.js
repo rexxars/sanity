@@ -84,6 +84,13 @@ export default class DocumentsPaneMenu extends React.PureComponent {
       }))
       .concat(LIST_VIEW_ITEMS)
 
-    return <Menu onAction={this.handleMenuAction} items={orderingItems} origin="top-right" {...this.props} />
+    return (
+      <Menu
+        onAction={this.handleMenuAction}
+        items={orderingItems}
+        origin="top-right"
+        {...this.props}
+      />
+    )
   }
 }

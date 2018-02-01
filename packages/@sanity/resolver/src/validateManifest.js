@@ -82,11 +82,15 @@ function validatePartName(name, baseError) {
   }
 
   if (matchers.partMultiPrefixed.test(name)) {
-    throw new Error(`${baseError}\nPart "${name}" is invalid - can't contain multiple ":". ${examples}`)
+    throw new Error(
+      `${baseError}\nPart "${name}" is invalid - can't contain multiple ":". ${examples}`
+    )
   }
 
   if (!matchers.partPrefix.test(name)) {
-    throw new Error(`${baseError}\nPart "${name}" is invalid - it needs a "part:"-prefix. ${examples}`)
+    throw new Error(
+      `${baseError}\nPart "${name}" is invalid - it needs a "part:"-prefix. ${examples}`
+    )
   }
 
   if (!matchers.partPackage.test(name)) {

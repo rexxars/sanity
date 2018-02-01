@@ -368,7 +368,9 @@ export default class FormBuilderBlock extends React.Component {
         <span ref={this.refPreview} className={styles.previewContainer}>
           <div className={styles.preview}>{this.renderPreview()}</div>
           <div className={styles.functions}>
-            {memberType && <span className={styles.type}>{memberType.title || memberType.name}</span>}
+            {memberType && (
+              <span className={styles.type}>{memberType.title || memberType.name}</span>
+            )}
             <div>
               <Button kind="simple" icon={EditIcon} title="Delete" />
             </div>

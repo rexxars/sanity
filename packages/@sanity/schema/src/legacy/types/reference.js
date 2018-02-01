@@ -39,7 +39,9 @@ export const ReferenceType = {
   },
   extend(subTypeDef, createMemberType) {
     if (!subTypeDef.to) {
-      throw new Error(`Missing "to" field in reference definition. Check the type ${subTypeDef.name}`)
+      throw new Error(
+        `Missing "to" field in reference definition. Check the type ${subTypeDef.name}`
+      )
     }
     const parsed = Object.assign(pick(REFERENCE_CORE, OVERRIDABLE_FIELDS), subTypeDef, {
       type: REFERENCE_CORE,
@@ -61,7 +63,9 @@ export const ReferenceType = {
           if (extensionDef.of) {
             throw new Error('Cannot override `of` of subtypes of "reference"')
           }
-          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {type: parent})
+          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {
+            type: parent
+          })
           return subtype(current)
         }
       }

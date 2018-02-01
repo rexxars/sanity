@@ -1,5 +1,8 @@
 import {List as DefaultList, Item as DefaultListItem} from 'part:@sanity/components/lists/default'
-import {List as SortableList, Item as SortableListItem} from 'part:@sanity/components/lists/sortable'
+import {
+  List as SortableList,
+  Item as SortableListItem
+} from 'part:@sanity/components/lists/sortable'
 import {List as GridList, Item as GridListItem} from 'part:@sanity/components/lists/grid'
 import {
   List as SortableGridList,

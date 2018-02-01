@@ -42,7 +42,9 @@ class Root extends React.Component {
         <StateLink state={{demoName: 'imagetool'}}>ImageTool</StateLink>
         <StateLink state={{demoName: 'hotspotimage'}}>Hotspot Image</StateLink>
         {router.state.demoName && (
-          <RouteScope scope={router.state.demoName}>{this.renderDemo(router.state.demoName)}</RouteScope>
+          <RouteScope scope={router.state.demoName}>
+            {this.renderDemo(router.state.demoName)}
+          </RouteScope>
         )}
       </div>
     )

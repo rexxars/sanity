@@ -306,7 +306,8 @@ storiesOf('Selects')
     //   When an onInputChange is provided. Populate the items, and remember to set _loading prop_ when waiting for server.
     // `,
     () => {
-      const value = radioItems[number('value', 0, {range: true, min: 0, max: radioItems.length - 1})]
+      const value =
+        radioItems[number('value', 0, {range: true, min: 0, max: radioItems.length - 1})]
 
       return (
         <Sanity part="part:@sanity/components/selects/radio" propTables={[RadioSelect]}>

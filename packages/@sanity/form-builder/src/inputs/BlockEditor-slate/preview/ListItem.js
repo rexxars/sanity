@@ -8,7 +8,8 @@ function ListItem(props) {
   const listItem = props.listItem
   if (!listItems.includes(listItem)) {
     throw new Error(
-      `Don't know how to handle listItem '${listItem}'. ` + `Expected one of '${listItems.join("', '")}'`
+      `Don't know how to handle listItem '${listItem}'. ` +
+        `Expected one of '${listItems.join("', '")}'`
     )
   }
   const className = `${styles[listItem]} ${styles[`level-${props.level}`]}`

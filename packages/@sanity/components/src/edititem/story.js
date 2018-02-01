@@ -27,7 +27,10 @@ storiesOf('Edit item')
         Things is in the background here.
         <Button onClick={action('oh noes! I should not ble clickable!')}>Try click me</Button>
         <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
-          <EditItemPopOver title={text('title (prop)', 'Edit this item')} onClose={action('onClose')}>
+          <EditItemPopOver
+            title={text('title (prop)', 'Edit this item')}
+            onClose={action('onClose')}
+          >
             Put your form here
           </EditItemPopOver>
         </Sanity>

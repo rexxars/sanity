@@ -14,7 +14,9 @@ export default function findMatchingRoutes(node: Node, _state: ?Object): MatchRe
 
   const state = node.scope ? _state[node.scope] : _state
 
-  const requiredParams = node.route.segments.filter(seg => seg.type === 'param').map(seg => seg.name)
+  const requiredParams = node.route.segments
+    .filter(seg => seg.type === 'param')
+    .map(seg => seg.name)
 
   const stateKeys = state ? Object.keys(state) : []
 
@@ -30,7 +32,8 @@ export default function findMatchingRoutes(node: Node, _state: ?Object): MatchRe
     return createMatchResult([node], [], [])
   }
 
-  const children = (typeof node.children === 'function' ? node.children(state) : node.children) || []
+  const children =
+    (typeof node.children === 'function' ? node.children(state) : node.children) || []
 
   if (remainingParams.length > 0 && children.length === 0) {
     return createMatchResult([], remainingParams, [])
@@ -49,5 +52,9 @@ export default function findMatchingRoutes(node: Node, _state: ?Object): MatchRe
     return createMatchResult([], missingParams, remainingParams)
   }
 
-  return createMatchResult([node, ...matchingChild.nodes], matchingChild.missing, matchingChild.remaining)
+  return createMatchResult(
+    [node, ...matchingChild.nodes],
+    matchingChild.missing,
+    matchingChild.remaining
+  )
 }

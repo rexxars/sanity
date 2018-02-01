@@ -71,7 +71,9 @@ export default class OptionsArrayInput extends React.PureComponent {
     const nextValue = list
       .filter(
         item =>
-          isEqual(optionValue, item) ? isChecked : inArray(value, resolveValueWithLegacyOptionsSupport(item))
+          isEqual(optionValue, item)
+            ? isChecked
+            : inArray(value, resolveValueWithLegacyOptionsSupport(item))
       )
       .map(resolveValueWithLegacyOptionsSupport)
 
@@ -81,7 +83,8 @@ export default class OptionsArrayInput extends React.PureComponent {
   getMemberTypeOfItem(option) {
     const {type} = this.props
     return type.of.find(
-      memberType => memberType.name === resolveTypeName(resolveValueWithLegacyOptionsSupport(option))
+      memberType =>
+        memberType.name === resolveTypeName(resolveValueWithLegacyOptionsSupport(option))
     )
   }
 
@@ -110,7 +113,9 @@ export default class OptionsArrayInput extends React.PureComponent {
           return (
             <div
               key={option._key || index}
-              className={direction === 'vertical' ? styles.itemWrapperVertical : styles.itemWrapperHorizontal}
+              className={
+                direction === 'vertical' ? styles.itemWrapperVertical : styles.itemWrapperHorizontal
+              }
             >
               <Item
                 layout="inline"

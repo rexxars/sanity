@@ -29,7 +29,13 @@ export default enhanceWithReferringDocuments(
     }
 
     render() {
-      const {isCheckingReferringDocuments, referringDocuments, draft, published, onCancel} = this.props
+      const {
+        isCheckingReferringDocuments,
+        referringDocuments,
+        draft,
+        published,
+        onCancel
+      } = this.props
 
       const hasReferringDocuments = referringDocuments.length > 0
 
@@ -60,7 +66,9 @@ export default enhanceWithReferringDocuments(
             <div>
               <h3>
                 Warning: Found{' '}
-                {referringDocuments.length === 1 ? 'a document' : `${referringDocuments.length} documents`}{' '}
+                {referringDocuments.length === 1
+                  ? 'a document'
+                  : `${referringDocuments.length} documents`}{' '}
                 that refers to {'"'}
                 <DocTitle document={draft || published} />
                 {'"'}
@@ -86,8 +94,8 @@ export default enhanceWithReferringDocuments(
                 </p>
                 <h2>Careful!</h2>
                 <p>
-                  If you unpublish, this document will no longer be available for the public, but it will not
-                  be deleted and can be published again later if you change your mind.
+                  If you unpublish, this document will no longer be available for the public, but it
+                  will not be deleted and can be published again later if you change your mind.
                 </p>
               </div>
             )}

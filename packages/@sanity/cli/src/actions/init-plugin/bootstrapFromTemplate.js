@@ -49,7 +49,9 @@ module.exports = async (context, url) => {
   if (minimumBaseVersion) {
     const installed = getSanityVersion(workDir)
     if (semver.lt(installed, minimumBaseVersion)) {
-      throw new Error(`Template requires Sanity at version ${minimumBaseVersion}, installed is ${installed}`)
+      throw new Error(
+        `Template requires Sanity at version ${minimumBaseVersion}, installed is ${installed}`
+      )
     }
   }
 

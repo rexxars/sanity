@@ -43,7 +43,13 @@ test('[listener] can listen for mutations', t => {
     identity: 'uid',
     mutations: [{patch: {id: 'beer-123', set: {abv: 8}}}],
     previousRev: 'MOmofa',
-    result: {_id: 'beer-123', _type: 'beer', brewery: 'Trillium', title: 'Headroom Double IPA', abv: 8},
+    result: {
+      _id: 'beer-123',
+      _type: 'beer',
+      brewery: 'Trillium',
+      title: 'Headroom Double IPA',
+      abv: 8
+    },
     resultRev: 'Blatti',
     timestamp: '2017-03-29T12:36:20.506516Z',
     transactionId: 'foo',
@@ -70,7 +76,11 @@ test('[listener] can listen for mutations', t => {
 
       const subscription = client.listen(query, params).subscribe({
         next: msg => {
-          t.deepEqual(msg, assign({}, eventData, {type: 'mutation'}), 'event data should be correct')
+          t.deepEqual(
+            msg,
+            assign({}, eventData, {type: 'mutation'}),
+            'event data should be correct'
+          )
           subscription.unsubscribe()
           server.close()
           t.end()

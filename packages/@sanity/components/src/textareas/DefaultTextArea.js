@@ -50,7 +50,17 @@ export default class DefaultTextArea extends React.Component {
   }
 
   render() {
-    const {value, isClearable, rows, onKeyPress, onChange, onFocus, onBlur, onClear, ...rest} = this.props
+    const {
+      value,
+      isClearable,
+      rows,
+      onKeyPress,
+      onChange,
+      onFocus,
+      onBlur,
+      onClear,
+      ...rest
+    } = this.props
 
     return (
       <div className={styles.root}>

@@ -10,7 +10,9 @@ export function isPointInEllipse(point, ellipse) {
   const normalized = {x: point.x - center.x, y: point.y - center.y}
 
   return (
-    Math.pow(normalized.x, 2) / Math.pow(xradius, 2) + Math.pow(normalized.y, 2) / Math.pow(yradius, 2) <= 1
+    Math.pow(normalized.x, 2) / Math.pow(xradius, 2) +
+      Math.pow(normalized.y, 2) / Math.pow(yradius, 2) <=
+    1
   )
 }
 

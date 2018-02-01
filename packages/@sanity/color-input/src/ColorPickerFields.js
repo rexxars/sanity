@@ -70,7 +70,12 @@ export const ColorPickerFields = ({onChange, rgb, hsl, hex, disableAlpha}) => {
   return (
     <div className={styles.fields}>
       <div className={styles.double}>
-        <EditableInput style={inputStyles} label="hex" value={hex.replace('#', '')} onChange={handleChange} />
+        <EditableInput
+          style={inputStyles}
+          label="hex"
+          value={hex.replace('#', '')}
+          onChange={handleChange}
+        />
       </div>
       <div className={styles.single}>
         <EditableInput

@@ -14,7 +14,9 @@ function createSegment(segment: string): ?Segment {
         ? ' Splats are not supported. Consider using child routes instead'
         : ''
       // eslint-disable-next-line no-console
-      console.error(new Error(`Warning: Param segments "${segment}" includes invalid characters.${addendum}`))
+      console.error(
+        new Error(`Warning: Param segments "${segment}" includes invalid characters.${addendum}`)
+      )
     }
     return {type: 'param', name: paramName}
   }

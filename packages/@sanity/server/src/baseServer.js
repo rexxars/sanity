@@ -26,7 +26,9 @@ const getDocumentComponent = basePath =>
   resolveParts({basePath}).then(res => {
     const part = res.implementations[docPart]
     if (!part) {
-      throw new Error(`Part '${docPart}' is not implemented by any plugins, are you missing @sanity/base?`)
+      throw new Error(
+        `Part '${docPart}' is not implemented by any plugins, are you missing @sanity/base?`
+      )
     }
 
     return getDefaultModule(requireUncached(part[0].path))
@@ -45,7 +47,9 @@ export function getDocumentElement({project, basePath, hashes}, props = {}) {
         {
           title: getTitle(project),
           stylesheets: ['css/main.css'].map(item => assetify(item, assetHashes)),
-          scripts: ['js/vendor.bundle.js', 'js/app.bundle.js'].map(item => assetify(item, assetHashes))
+          scripts: ['js/vendor.bundle.js', 'js/app.bundle.js'].map(item =>
+            assetify(item, assetHashes)
+          )
         },
         props
       )

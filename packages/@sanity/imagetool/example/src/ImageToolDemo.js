@@ -70,7 +70,12 @@ export default class ImageToolDemo extends React.PureComponent {
       <div>
         <h3>{aspectRatio.title}</h3>
         <div style={{...previewStyle, outline: '1px solid #eee'}}>
-          <Preview src={src} aspectRatio={aspectRatio.aspect} hotspot={value.hotspot} crop={value.crop} />
+          <Preview
+            src={src}
+            aspectRatio={aspectRatio.aspect}
+            hotspot={value.hotspot}
+            crop={value.crop}
+          />
         </div>
       </div>
     )
@@ -122,7 +127,11 @@ export default class ImageToolDemo extends React.PureComponent {
           </label>
           <label>
             right:
-            <this.range value={value.crop.right} onChange={this.handleCropChange} property="right" />
+            <this.range
+              value={value.crop.right}
+              onChange={this.handleCropChange}
+              property="right"
+            />
           </label>
           <label>
             top:
@@ -130,7 +139,11 @@ export default class ImageToolDemo extends React.PureComponent {
           </label>
           <label>
             bottom:
-            <this.range value={value.crop.bottom} onChange={this.handleCropChange} property="bottom" />
+            <this.range
+              value={value.crop.bottom}
+              onChange={this.handleCropChange}
+              property="bottom"
+            />
           </label>
           <h2>Value</h2>
           <pre>{JSON.stringify(value, null, 2)}</pre>

@@ -36,7 +36,9 @@ export default function createBlockEditorOperations(blockEditor) {
       }
       change.unwrapInline(SLATE_SPAN_TYPE).wrapInline(span)
 
-      const currentSpan = blockEditor.props.value.inlines.filter(inline => inline.key === key).first()
+      const currentSpan = blockEditor.props.value.inlines
+        .filter(inline => inline.key === key)
+        .first()
 
       const data = {
         annotations: currentSpan ? currentSpan.data.get('annotations') || {} : {},
@@ -210,7 +212,8 @@ export default function createBlockEditorOperations(blockEditor) {
       const isEmpty = obj => obj.get('text').match(/\s/g)
       const whiteSpaceBeforeIndex = charsBefore.reverse().findIndex(obj => isEmpty(obj))
 
-      const newStartOffset = whiteSpaceBeforeIndex > -1 ? charsBefore.size - whiteSpaceBeforeIndex : -1
+      const newStartOffset =
+        whiteSpaceBeforeIndex > -1 ? charsBefore.size - whiteSpaceBeforeIndex : -1
 
       const whiteSpaceAfterIndex = charsAfter.findIndex(obj => isEmpty(obj))
       const newEndOffset =

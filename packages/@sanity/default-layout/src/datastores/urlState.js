@@ -33,7 +33,9 @@ function makeBackwardsCompatible(state) {
 
 function resolveDefaultState(state) {
   const urlStateWithDefaultTool = resolveUrlStateWithDefaultTool(makeBackwardsCompatible(state))
-  return HAS_SPACES ? resolveUrlStateWithDefaultSpace(urlStateWithDefaultTool) : urlStateWithDefaultTool
+  return HAS_SPACES
+    ? resolveUrlStateWithDefaultSpace(urlStateWithDefaultTool)
+    : urlStateWithDefaultTool
 }
 
 function resolveIntentState(currentState, intentState) {
@@ -45,7 +47,8 @@ function resolveIntentState(currentState, intentState) {
 
   // If current tool can handle intent and if so, give it precedence
   const matchingTool = (currentTool ? [currentTool, ...tools] : tools).find(
-    tool => tool && typeof tool.canHandleIntent === 'function' && tool.canHandleIntent(intent, params)
+    tool =>
+      tool && typeof tool.canHandleIntent === 'function' && tool.canHandleIntent(intent, params)
   )
 
   if (matchingTool) {

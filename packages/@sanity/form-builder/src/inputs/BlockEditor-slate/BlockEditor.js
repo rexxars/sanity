@@ -327,7 +327,11 @@ export default class BlockEditor extends React.Component {
               plugins={this.slatePlugins}
               schema={this.slateSchema}
             />
-            <div ref={this.refBlockDragMarker} style={{display: 'none'}} className={styles.blockDragMarker} />
+            <div
+              ref={this.refBlockDragMarker}
+              style={{display: 'none'}}
+              className={styles.blockDragMarker}
+            />
           </div>
         </div>
       </div>
@@ -360,7 +364,12 @@ export default class BlockEditor extends React.Component {
     const {fullscreen} = this.state
     const blockEditor = this.renderBlockEditor()
     return (
-      <FormField label={type.title} description={type.description} labelFor={this._inputId} level={level}>
+      <FormField
+        label={type.title}
+        description={type.description}
+        labelFor={this._inputId}
+        level={level}
+      >
         <button tabIndex={0} className={styles.focusSkipper} onClick={() => this.focus()}>
           Jump to editor
         </button>

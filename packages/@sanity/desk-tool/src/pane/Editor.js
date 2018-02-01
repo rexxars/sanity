@@ -96,7 +96,9 @@ const getProductionPreviewItem = (draft, published) => {
   try {
     previewUrl = resolveProductionPreviewUrl(snapshot)
   } catch (error) {
-    error.message = `An error was thrown while trying to get production preview url: ${error.message}`
+    error.message = `An error was thrown while trying to get production preview url: ${
+      error.message
+    }`
     // eslint-disable-next-line no-console
     console.error(error)
     return null
@@ -240,7 +242,11 @@ export default withRouterHOC(
     handleCreateCopy = () => {
       const {router, draft, published} = this.props
       documentStore.create(newDraftFrom(copyDocument(draft || published))).subscribe(copied => {
-        router.navigate({...router.state, action: 'edit', selectedDocumentId: getPublishedId(copied._id)})
+        router.navigate({
+          ...router.state,
+          action: 'edit',
+          selectedDocumentId: getPublishedId(copied._id)
+        })
       })
     }
 
@@ -511,7 +517,9 @@ export default withRouterHOC(
               <AfterEditorComponent key={i} documentId={published._id} />
             ))}
 
-            {inspect && <InspectView value={value} onClose={() => this.setState({inspect: false})} />}
+            {inspect && (
+              <InspectView value={value} onClose={() => this.setState({inspect: false})} />
+            )}
             {showConfirmPublish && (
               <ConfirmPublish
                 draft={draft}
@@ -547,7 +555,11 @@ export default withRouterHOC(
 
             {transactionResult &&
               transactionResult.type === 'error' && (
-                <Snackbar kind={'danger'} action={{title: 'Ok, got it'}} onAction={onClearTransactionResult}>
+                <Snackbar
+                  kind={'danger'}
+                  action={{title: 'Ok, got it'}}
+                  onAction={onClearTransactionResult}
+                >
                   <div>
                     {transactionResult.message}
                     <details>{transactionResult.error.message}</details>

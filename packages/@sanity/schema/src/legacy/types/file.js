@@ -8,7 +8,15 @@ export const ASSET_FIELD = {
   to: {type: 'sanity.fileAsset'}
 }
 
-const OVERRIDABLE_FIELDS = ['jsonType', 'type', 'name', 'title', 'description', 'options', 'fieldsets']
+const OVERRIDABLE_FIELDS = [
+  'jsonType',
+  'type',
+  'name',
+  'title',
+  'description',
+  'options',
+  'fieldsets'
+]
 
 const FILE_CORE = {
   name: 'file',
@@ -57,7 +65,9 @@ export const FileType = {
           if (extensionDef.fields) {
             throw new Error('Cannot override `fields` of subtypes of "file"')
           }
-          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {type: parent})
+          const current = Object.assign({}, parent, pick(extensionDef, OVERRIDABLE_FIELDS), {
+            type: parent
+          })
           return subtype(current)
         }
       }
