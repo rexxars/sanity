@@ -39,7 +39,7 @@ export default {
       type: 'number',
       title: 'File size in bytes',
       readOnly: true,
-      fieldset: 'system',
+      fieldset: 'system'
     },
     {
       name: 'assetId',
@@ -67,7 +67,7 @@ export default {
     select: {
       title: 'originalFilename',
       path: 'path',
-      mimeType: 'mimeType',
+      mimeType: 'mimeType'
     },
     prepare(doc) {
       return {

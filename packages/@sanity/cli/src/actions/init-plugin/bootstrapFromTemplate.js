@@ -31,9 +31,7 @@ module.exports = async (context, url) => {
   }
 
   const manifest = zip.find(
-    file =>
-      path.basename(file.path) === 'package.json'
-      && !file.path.includes('node_modules')
+    file => path.basename(file.path) === 'package.json' && !file.path.includes('node_modules')
   )
 
   if (!manifest) {
@@ -51,9 +49,7 @@ module.exports = async (context, url) => {
   if (minimumBaseVersion) {
     const installed = getSanityVersion(workDir)
     if (semver.lt(installed, minimumBaseVersion)) {
-      throw new Error(
-        `Template requires Sanity at version ${minimumBaseVersion}, installed is ${installed}`
-      )
+      throw new Error(`Template requires Sanity at version ${minimumBaseVersion}, installed is ${installed}`)
     }
   }
 

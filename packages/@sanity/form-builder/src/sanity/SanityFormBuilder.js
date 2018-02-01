@@ -52,11 +52,7 @@ export default class SanityFormBuilder extends React.Component<Props> {
   render() {
     const {value, schema, patchChannel} = this.props
     return (
-      <SanityFormBuilderContext
-        value={value}
-        schema={schema}
-        patchChannel={patchChannel}
-      >
+      <SanityFormBuilderContext value={value} schema={schema} patchChannel={patchChannel}>
         <SimpleFocusManager>{this.renderInput}</SimpleFocusManager>
       </SanityFormBuilderContext>
     )

@@ -152,23 +152,18 @@ export default class ArrayOfPrimitivesInput extends React.PureComponent<Props> {
   renderList(value) {
     const {type} = this.props
     const isSortable = get(type, 'options.sortable') !== false
-    return isSortable
-      ? (
-        <SortableList
-          className={styles.list}
-          onSortEnd={this.handleSortEnd}
-          movingItemClass={styles.movingItem}
-          useDragHandle
-        >
-          {value.map(this.renderItem)}
-        </SortableList>
-      )
-      : (
-        <DefaultList decoration="divider">
-          {value.map(this.renderItem)}
-        </DefaultList>
-      )
-
+    return isSortable ? (
+      <SortableList
+        className={styles.list}
+        onSortEnd={this.handleSortEnd}
+        movingItemClass={styles.movingItem}
+        useDragHandle
+      >
+        {value.map(this.renderItem)}
+      </SortableList>
+    ) : (
+      <DefaultList decoration="divider">{value.map(this.renderItem)}</DefaultList>
+    )
   }
 
   setElement = (el: ?Fieldset) => {
@@ -208,15 +203,15 @@ export default class ArrayOfPrimitivesInput extends React.PureComponent<Props> {
         ref={this.setElement}
       >
         <div className={styles.root}>
-          <div className={styles.list}>
-            {value && value.length > 0 && this.renderList(value)}
-          </div>
+          <div className={styles.list}>{value && value.length > 0 && this.renderList(value)}</div>
           <div className={styles.functions}>
             {type.of.length === 1 ? (
               <Button onClick={this.handleAddBtnClick} className={styles.addButton}>
                 Add
               </Button>
-            ) : this.renderSelectType()}
+            ) : (
+              this.renderSelectType()
+            )}
           </div>
         </div>
       </Fieldset>

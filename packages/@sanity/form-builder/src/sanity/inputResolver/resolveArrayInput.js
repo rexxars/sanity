@@ -10,9 +10,7 @@ export function isArrayOfPrimitives(type) {
 }
 
 function isTagsArray(type) {
-  return get(type.options, 'layout') === 'tags'
-    && type.of.length === 1
-    && is.type('string', type.of[0])
+  return get(type.options, 'layout') === 'tags' && type.of.length === 1 && is.type('string', type.of[0])
 }
 
 function hasBlocks(type) {

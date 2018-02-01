@@ -11,11 +11,7 @@ import PatchEvent, {set, unset} from 'part:@sanity/form-builder/patch-event'
 
 const getLocale = context => {
   const intl = context.intl || {}
-  return (
-    intl.locale
-    || (typeof window !== 'undefined' && window.navigator.language)
-    || 'en'
-  )
+  return intl.locale || (typeof window !== 'undefined' && window.navigator.language) || 'en'
 }
 
 class GeopointInput extends React.Component {
@@ -27,15 +23,15 @@ class GeopointInput extends React.Component {
     }),
     type: PropTypes.shape({
       title: PropTypes.string.isRequired,
-      description: PropTypes.string,
+      description: PropTypes.string
     })
-  };
+  }
 
   static contextTypes = {
     intl: PropTypes.shape({
       locale: PropTypes.string
     })
-  };
+  }
 
   constructor() {
     super()
@@ -54,11 +50,15 @@ class GeopointInput extends React.Component {
 
   handleChange = latLng => {
     const {type, onChange} = this.props
-    onChange(PatchEvent.from(set({
-      _type: type.name,
-      lat: latLng.lat(),
-      lng: latLng.lng()
-    })))
+    onChange(
+      PatchEvent.from(
+        set({
+          _type: type.name,
+          lat: latLng.lat(),
+          lng: latLng.lng()
+        })
+      )
+    )
   }
 
   handleClear = () => {
@@ -95,7 +95,8 @@ class GeopointInput extends React.Component {
       return (
         <div>
           <p>
-            The <a href="https://sanity.io/docs/schema-types/geopoint-type">Geopoint type</a> needs a Google Maps API key with access to:
+            The <a href="https://sanity.io/docs/schema-types/geopoint-type">Geopoint type</a> needs a Google
+            Maps API key with access to:
           </p>
           <ul>
             <li>Google Maps JavaScript API</li>
@@ -104,7 +105,9 @@ class GeopointInput extends React.Component {
           </ul>
           <p>
             Please enter the API key with access to these services in
-            <code style={{whitespace: 'nowrap'}}>`&lt;project-root&gt;/config/@sanity/google-maps-input.json`</code>
+            <code style={{whitespace: 'nowrap'}}>
+              `&lt;project-root&gt;/config/@sanity/google-maps-input.json`
+            </code>
           </p>
         </div>
       )
@@ -112,14 +115,14 @@ class GeopointInput extends React.Component {
 
     return (
       <Fieldset legend={type.title} description={type.description} className={styles.root}>
-        {value && <div>
-          <img className={styles.previewImage} src={this.getStaticImageUrl(value)} />
-        </div>}
+        {value && (
+          <div>
+            <img className={styles.previewImage} src={this.getStaticImageUrl(value)} />
+          </div>
+        )}
 
         <div className={styles.functions}>
-          <Button onClick={this.handleToggleModal}>
-            {value ? 'Edit' : 'Set location'}
-          </Button>
+          <Button onClick={this.handleToggleModal}>{value ? 'Edit' : 'Set location'}</Button>
 
           {value && (
             <Button type="button" onClick={this.handleClear}>

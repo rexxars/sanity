@@ -6,7 +6,7 @@ import {Document, Mutation} from '../../src/document'
 import {extract} from '../../src/jsonpath'
 
 export default class DocumentTester {
-  doc : Document
+  doc: Document
   constructor(tap, attrs) {
     this.doc = new Document(attrs)
     this.onRebaseCalled = false
@@ -117,7 +117,10 @@ export default class DocumentTester {
     return this
   }
   noUnresolvedLocalMutations() {
-    this.tap.notOk(this.doc.anyUnresolvedMutations(), `should be no unresolved local mutations ${this.context}`)
+    this.tap.notOk(
+      this.doc.anyUnresolvedMutations(),
+      `should be no unresolved local mutations ${this.context}`
+    )
     return this
   }
   end() {

@@ -30,7 +30,6 @@ function buildConstraintFromType(type, terms) {
 }
 
 export function search(textTerm, referenceType) {
-
   const terms = textTerm.split(/\s+/)
   const typeConstraints = referenceType.to.map(type => buildConstraintFromType(type, terms))
 

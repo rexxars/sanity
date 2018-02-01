@@ -6,20 +6,13 @@ import {
   BLOCK_STYLES,
   DEFAULT_BLOCK_STYLES,
   DEFAULT_LINK_ANNOTATION,
-  DEFAULT_LIST_TYPES, DEFAULT_MARKS_FIELD,
+  DEFAULT_LIST_TYPES,
+  DEFAULT_MARKS_FIELD,
   DEFAULT_TEXT_FIELD,
   DEFAULT_DECORATORS
 } from './defaults'
 
-const INHERITED_FIELDS = [
-  'type',
-  'name',
-  'title',
-  'jsonType',
-  'description',
-  'options',
-  'fieldsets'
-]
+const INHERITED_FIELDS = ['type', 'name', 'title', 'jsonType', 'description', 'options', 'fieldsets']
 
 const BLOCK_CORE = {
   name: 'block',
@@ -42,11 +35,7 @@ export const BlockType = {
     const stylesField = createStylesField(styles)
     const listsField = createListsField(lists)
 
-    const fields = [
-      spansField,
-      stylesField,
-      listsField
-    ].concat(subTypeDef.fields || [])
+    const fields = [spansField, stylesField, listsField].concat(subTypeDef.fields || [])
 
     const parsed = Object.assign(pick(BLOCK_CORE, INHERITED_FIELDS), rest, {
       type: BLOCK_CORE,
@@ -85,9 +74,7 @@ export const BlockType = {
 }
 
 function ensureNormalStyle(styles) {
-  return styles.some(style => style.value === 'normal')
-    ? styles
-    : [BLOCK_STYLES.normal, ...styles]
+  return styles.some(style => style.value === 'normal') ? styles : [BLOCK_STYLES.normal, ...styles]
 }
 
 function createStylesField(styles) {
@@ -125,9 +112,7 @@ function createListsField(lists) {
   }
 }
 
-const DEFAULT_ANNOTATIONS = [
-  DEFAULT_LINK_ANNOTATION
-]
+const DEFAULT_ANNOTATIONS = [DEFAULT_LINK_ANNOTATION]
 
 function createSpansField(marks) {
   return {

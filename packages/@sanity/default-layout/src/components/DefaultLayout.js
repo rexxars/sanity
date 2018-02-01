@@ -52,11 +52,7 @@ export default withRouterHOC(
 
     componentWillUnmount() {
       if (this._loadingScreenElement) {
-        this._loadingScreenElement.removeEventListener(
-          'animationend',
-          this.handleAnimationEnd,
-          false
-        )
+        this._loadingScreenElement.removeEventListener('animationend', this.handleAnimationEnd, false)
       }
     }
 
@@ -120,14 +116,13 @@ export default withRouterHOC(
         }
       })
 
-
       return (
-        <div
-          className={`${styles.defaultLayout} ${mobileMenuIsOpen ? styles.mobileMenuIsOpen : ''}`}>
+        <div className={`${styles.defaultLayout} ${mobileMenuIsOpen ? styles.mobileMenuIsOpen : ''}`}>
           {this.state.showLoadingScreen && (
             <div
               className={this.state.loaded ? styles.loadingScreenLoaded : styles.loadingScreen}
-              ref={this.setLoadingScreenElement}>
+              ref={this.setLoadingScreenElement}
+            >
               <AppLoadingScreen text="Restoring Sanity" />
             </div>
           )}
@@ -148,12 +143,7 @@ export default withRouterHOC(
               <Ink duration={200} opacity={0.1} radius={200} />
             </a>
             <div className={styles.mobileMenuButton}>
-              <Button
-                kind="simple"
-                onClick={this.handleMobileMenuToggle}
-                title="Menu"
-                icon={HamburgerIcon}
-              />
+              <Button kind="simple" onClick={this.handleMobileMenuToggle} title="Menu" icon={HamburgerIcon} />
             </div>
             <ToolSwitcher
               tools={this.props.tools}
@@ -173,9 +163,7 @@ export default withRouterHOC(
             </div>
           </div>
 
-          {createMenuIsOpen && (
-            <ActionModal onClose={this.handleActionModalClose} actions={modalActions} />
-          )}
+          {createMenuIsOpen && <ActionModal onClose={this.handleActionModalClose} actions={modalActions} />}
 
           <UpdateNotifier />
 

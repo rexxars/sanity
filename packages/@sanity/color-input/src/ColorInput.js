@@ -7,15 +7,16 @@ import ColorPicker from './ColorPicker'
 const {set} = patches
 
 export default class ColorInput extends PureComponent {
-
   static propTypes = {
     type: PropTypes.shape({
       name: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
-      fields: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired
-      }))
+      fields: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired
+        })
+      )
     }).isRequired,
     onChange: PropTypes.func,
     value: PropTypes.shape({
@@ -49,9 +50,7 @@ export default class ColorInput extends PureComponent {
 
     const value = Object.assign({_type: type.name, alpha: color.rgb.a}, color)
 
-    onChange(PatchEvent.from(
-      Object.keys(value).map(key => set(value[key], [key]))
-    ))
+    onChange(PatchEvent.from(Object.keys(value).map(key => set(value[key], [key]))))
   }
 
   render() {

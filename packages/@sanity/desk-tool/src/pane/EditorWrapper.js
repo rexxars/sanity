@@ -39,13 +39,15 @@ function documentEventToState(event) {
     case 'mutation': {
       return {
         deletedSnapshot: event.deletedSnapshot,
-        snapshot: event.document ? {
-          ...event.document,
-          // todo: The following line is a temporary workaround for a problem with the mutator not
-          // setting updatedAt on patches applied optimistic when they are received from server
-          // can be removed when this is fixed
-          _updatedAt: new Date().toISOString()
-        } : event.document
+        snapshot: event.document
+          ? {
+              ...event.document,
+              // todo: The following line is a temporary workaround for a problem with the mutator not
+              // setting updatedAt on patches applied optimistic when they are received from server
+              // can be removed when this is fixed
+              _updatedAt: new Date().toISOString()
+            }
+          : event.document
       }
     }
     default: {
@@ -78,13 +80,9 @@ export default class EditorPane extends React.Component {
     this.published = checkout(getPublishedId(documentId))
     this.draft = checkout(getDraftId(documentId))
 
-    this.subscription = this.published
-      .events.map(event => ({...event, version: 'published'}))
-      .merge(
-        this.draft.events
-          .do(this.receiveDraftEvent)
-          .map(event => ({...event, version: 'draft'}))
-      )
+    this.subscription = this.published.events
+      .map(event => ({...event, version: 'published'}))
+      .merge(this.draft.events.do(this.receiveDraftEvent).map(event => ({...event, version: 'draft'})))
       .subscribe(event => {
         this.setState(prevState => {
           const version = event.version // either 'draft' or 'published'
@@ -152,7 +150,8 @@ export default class EditorPane extends React.Component {
 
   handleDelete = () => {
     const {documentId} = this.props
-    const tx = client.observable.transaction()
+    const tx = client.observable
+      .transaction()
       .delete(getPublishedId(documentId))
       .delete(getDraftId(documentId))
 
@@ -161,13 +160,15 @@ export default class EditorPane extends React.Component {
         type: 'success',
         result: result
       }))
-      .catch(error => Observable.of({
-        type: 'error',
-        message: `An error occurred while attempting to delete document.
+      .catch(error =>
+        Observable.of({
+          type: 'error',
+          message: `An error occurred while attempting to delete document.
         This usually means that you attempted to delete a document that other documents
         refers to.`,
-        error
-      }))
+          error
+        })
+      )
       .subscribe(result => {
         this.setState({transactionResult: result})
       })
@@ -181,9 +182,7 @@ export default class EditorPane extends React.Component {
     const {documentId} = this.props
     const {published} = this.state
 
-    let tx = client.observable
-      .transaction()
-      .delete(getPublishedId(documentId))
+    let tx = client.observable.transaction().delete(getPublishedId(documentId))
 
     if (published.snapshot) {
       tx = tx.createIfNotExists({
@@ -197,13 +196,15 @@ export default class EditorPane extends React.Component {
         type: 'success',
         result: result
       }))
-      .catch(error => Observable.of({
-        type: 'error',
-        message: `An error occurred while attempting to unpublish document.
+      .catch(error =>
+        Observable.of({
+          type: 'error',
+          message: `An error occurred while attempting to unpublish document.
         This usually means that you attempted to unpublish a document that other documents
         refers to.`,
-        error
-      }))
+          error
+        })
+      )
       .subscribe(result => {
         this.setState({transactionResult: result})
       })
@@ -227,11 +228,13 @@ export default class EditorPane extends React.Component {
         type: 'success',
         result: result
       }))
-      .catch(error => Observable.of({
-        type: 'error',
-        message: 'An error occurred while attempting to publishing document',
-        error
-      }))
+      .catch(error =>
+        Observable.of({
+          type: 'error',
+          message: 'An error occurred while attempting to publishing document',
+          error
+        })
+      )
       .subscribe({
         next: result => {
           this.setState({
@@ -260,20 +263,24 @@ export default class EditorPane extends React.Component {
     this.commit()
   }
 
-  commit = throttle(() => {
-    this.setState({isSaving: true})
-    this.draft.commit().subscribe({
-      next: () => {
-        // todo
-      },
-      error: error => {
-        // todo
-      },
-      complete: () => {
-        this.setState({isSaving: false})
-      }
-    })
-  }, 1000, {leading: true, trailing: true})
+  commit = throttle(
+    () => {
+      this.setState({isSaving: true})
+      this.draft.commit().subscribe({
+        next: () => {
+          // todo
+        },
+        error: error => {
+          // todo
+        },
+        complete: () => {
+          this.setState({isSaving: false})
+        }
+      })
+    },
+    1000,
+    {leading: true, trailing: true}
+  )
 
   handleRestoreDeleted = () => {
     const {draft, published} = this.state
@@ -307,7 +314,15 @@ export default class EditorPane extends React.Component {
 
   render() {
     const {typeName} = this.props
-    const {draft, published, isCreatingDraft, isUnpublishing, transactionResult, isPublishing, isSaving} = this.state
+    const {
+      draft,
+      published,
+      isCreatingDraft,
+      isUnpublishing,
+      transactionResult,
+      isPublishing,
+      isSaving
+    } = this.state
 
     if (isRecoverable(draft, published)) {
       return this.renderDeleted()

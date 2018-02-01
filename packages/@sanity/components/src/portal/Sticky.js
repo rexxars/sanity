@@ -17,7 +17,6 @@ const PADDING = 50
 const PADDING_DUMMY_TRANSITION = 'height 0.2s linear'
 
 export default class Sticky extends React.PureComponent {
-
   static propTypes = {
     children: PropTypes.node.isRequired,
     isOpen: PropTypes.bool,
@@ -39,7 +38,7 @@ export default class Sticky extends React.PureComponent {
     useOverlay: true,
     scrollIntoView: true,
     addPadding: true,
-    onResize: () => {},
+    onResize: () => {}
   }
 
   static contextTypes = {
@@ -50,7 +49,7 @@ export default class Sticky extends React.PureComponent {
     portalIsOpen: false,
     availableSpaceTop: 0,
     contentTop: 0,
-    contentLeft: 0,
+    contentLeft: 0
   }
 
   _elementResizeDetector = elementResizeDetectorMaker({strategy: 'scroll'})
@@ -67,9 +66,9 @@ export default class Sticky extends React.PureComponent {
   _scrollContainerWidth = 0
 
   componentDidMount() {
-
     const {getScrollContainer} = this.context
-    const scrollContainer = (typeof getScrollContainer === 'function' && getScrollContainer()) || document.body
+    const scrollContainer =
+      (typeof getScrollContainer === 'function' && getScrollContainer()) || document.body
     this.setScrollContainerElement(scrollContainer)
 
     if (window) {
@@ -98,9 +97,13 @@ export default class Sticky extends React.PureComponent {
     }
 
     if (this._paddingDummy) {
-      this._paddingDummy.removeEventListener('transitionend', () => {
-        this._paddingDummy.remove()
-      }, false)
+      this._paddingDummy.removeEventListener(
+        'transitionend',
+        () => {
+          this._paddingDummy.remove()
+        },
+        false
+      )
     }
   }
 
@@ -160,11 +163,8 @@ export default class Sticky extends React.PureComponent {
 
     const scrollContainerHeight = this._scrollContainerElement.offsetHeight
 
-    if ((this._rootTop + neededHeight) > scrollContainerHeight) {
-      this._extraScrollTop
-      = -window.innerHeight
-      + neededHeight
-      + this._rootTop
+    if (this._rootTop + neededHeight > scrollContainerHeight) {
+      this._extraScrollTop = -window.innerHeight + neededHeight + this._rootTop
 
       this._initialScrollTop = scrollTop
       this._isScrolling = true
@@ -181,10 +181,7 @@ export default class Sticky extends React.PureComponent {
 
   addMovingListeners = () => {
     if (this._elementResizeDetector && this._contentElement && this._contentElement.firstChild) {
-      this._elementResizeDetector.listenTo(
-        this._contentElement.firstChild,
-        this.handleElementResize
-      )
+      this._elementResizeDetector.listenTo(this._contentElement.firstChild, this.handleElementResize)
     }
   }
 
@@ -303,11 +300,7 @@ export default class Sticky extends React.PureComponent {
   }
 
   render() {
-    const {
-      useOverlay,
-      children,
-      isOpen
-    } = this.props
+    const {useOverlay, children, isOpen} = this.props
 
     const {
       availableSpaceTop,
@@ -327,9 +320,7 @@ export default class Sticky extends React.PureComponent {
           className={styles.portal}
         >
           <div className={styles.portalInner}>
-            {
-              useOverlay && <div className={styles.overlay} />
-            }
+            {useOverlay && <div className={styles.overlay} />}
             <div
               className={styles.availableSpace}
               ref={this.setAvailableSpaceElement}

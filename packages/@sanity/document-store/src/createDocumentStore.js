@@ -6,7 +6,6 @@ import {BufferedDocument, Mutation} from '@sanity/mutator'
 const NOOP = () => {}
 
 function createBufferedDocument(documentId, server) {
-
   const serverEvents$ = Observable.from(server.byId(documentId)).share()
   const saves = pubsub()
 
@@ -23,14 +22,13 @@ function createBufferedDocument(documentId, server) {
         // right now the BufferedDocument just commits fire-and-forget-ish
         // We should be able to handle failures and retry here
 
-        server.mutate(omit(payload, 'resultRev'))
-          .subscribe({
-            next: res => {
-              opts.success(res)
-              saves.publish()
-            },
-            error: opts.failure
-          })
+        server.mutate(omit(payload, 'resultRev')).subscribe({
+          next: res => {
+            opts.success(res)
+            saves.publish()
+          },
+          error: opts.failure
+        })
       }
 
       const rebase$ = new Observable(rebaseObserver => {
@@ -68,9 +66,7 @@ function createBufferedDocument(documentId, server) {
       return {
         events: new Observable(observer => {
           observer.next({type: 'snapshot', document: bufferedDocument.LOCAL})
-          return mutation$
-            .merge(rebase$)
-            .subscribe(observer)
+          return mutation$.merge(rebase$).subscribe(observer)
         }),
         patch(patches) {
           const mutations = patches
@@ -114,9 +110,10 @@ function createBufferedDocument(documentId, server) {
       observer.next(currentBuffered)
       observer.complete()
     }
-    return bufferedDocs$.do(doc => {
-      currentBuffered = doc
-    })
+    return bufferedDocs$
+      .do(doc => {
+        currentBuffered = doc
+      })
       .subscribe(observer)
   })
 
@@ -144,7 +141,6 @@ function createBufferedDocument(documentId, server) {
 }
 
 module.exports = function createDocumentStore({serverConnection}) {
-
   return {
     byId,
     byIds,
@@ -154,7 +150,7 @@ module.exports = function createDocumentStore({serverConnection}) {
     patch: patchDoc,
     delete: deleteDoc,
     createOrReplace: createOrReplace,
-    createIfNotExists: createIfNotExists,
+    createIfNotExists: createIfNotExists
   }
 
   function patchDoc(documentId, patches) {
@@ -179,8 +175,7 @@ module.exports = function createDocumentStore({serverConnection}) {
 
   function byIds(documentIds) {
     return new Observable(observer => {
-      const documentSubscriptions = documentIds
-        .map(id => byId(id).subscribe(observer))
+      const documentSubscriptions = documentIds.map(id => byId(id).subscribe(observer))
 
       return () => {
         documentSubscriptions.map(subscription => subscription.unsubscribe())

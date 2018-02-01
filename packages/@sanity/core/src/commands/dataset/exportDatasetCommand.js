@@ -26,9 +26,7 @@ export default {
     // Verify existence of dataset before trying to export from it
     const datasets = await client.datasets.list()
     if (!datasets.find(set => set.name === dataset)) {
-      throw new Error(
-        `Dataset with name "${dataset}" not found`
-      )
+      throw new Error(`Dataset with name "${dataset}" not found`)
     }
 
     let destinationPath = targetDestination
@@ -70,9 +68,7 @@ async function getOutputPath(destination, dataset) {
     return null
   }
 
-  const dstPath = path.isAbsolute(destination)
-    ? destination
-    : path.resolve(process.cwd(), destination)
+  const dstPath = path.isAbsolute(destination) ? destination : path.resolve(process.cwd(), destination)
 
   let dstStats = null
   try {
@@ -81,19 +77,13 @@ async function getOutputPath(destination, dataset) {
     // Do nothing
   }
 
-  const looksLikeFile = dstStats
-    ? dstStats.isFile()
-    : path.basename(dstPath).indexOf('.') !== -1
+  const looksLikeFile = dstStats ? dstStats.isFile() : path.basename(dstPath).indexOf('.') !== -1
 
   if (!dstStats) {
-    const createPath = looksLikeFile
-      ? path.dirname(dstPath)
-      : dstPath
+    const createPath = looksLikeFile ? path.dirname(dstPath) : dstPath
 
     await fse.mkdirs(createPath)
   }
 
-  return looksLikeFile
-    ? dstPath
-    : path.join(dstPath, `${dataset}.ndjson`)
+  return looksLikeFile ? dstPath : path.join(dstPath, `${dataset}.ndjson`)
 }

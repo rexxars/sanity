@@ -19,9 +19,7 @@ export default {
       // Noop.
     }
 
-    const url = projectId
-      ? `https://manage.sanity.io/projects/${projectId}`
-      : 'https://manage.sanity.io/'
+    const url = projectId ? `https://manage.sanity.io/projects/${projectId}` : 'https://manage.sanity.io/'
 
     print(`Opening ${url}`)
     open(url, {wait: false})

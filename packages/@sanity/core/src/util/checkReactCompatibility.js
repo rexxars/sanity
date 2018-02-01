@@ -17,9 +17,7 @@ module.exports = workDir => {
     }
 
     const manifestPath = resolveFrom.silent(workDir, path.join(pkg, 'package.json'))
-    const installed = manifestPath
-      ? require(manifestPath).version
-      : dependencies[pkg].replace(/[\D.]/g, '')
+    const installed = manifestPath ? require(manifestPath).version : dependencies[pkg].replace(/[\D.]/g, '')
 
     if (!semver.satisfies(installed, supported[pkg])) {
       throw new Error(

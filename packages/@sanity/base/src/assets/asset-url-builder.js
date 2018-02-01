@@ -14,12 +14,9 @@ export default function assetUrlBuilder(url, options) {
   }
 
   const defaultFit = width === height ? 'crop' : 'clip'
-  const params = [
-    width && `w=${width}`,
-    height && `h=${height}`,
-    `fit=${fit ? fit : defaultFit}`,
-    'q=85',
-  ].filter(Boolean).join('&')
+  const params = [width && `w=${width}`, height && `h=${height}`, `fit=${fit ? fit : defaultFit}`, 'q=85']
+    .filter(Boolean)
+    .join('&')
 
   return `${url}?${params}`
 }

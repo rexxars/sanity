@@ -8,15 +8,7 @@ export const ASSET_FIELD = {
   to: {type: 'sanity.fileAsset'}
 }
 
-const OVERRIDABLE_FIELDS = [
-  'jsonType',
-  'type',
-  'name',
-  'title',
-  'description',
-  'options',
-  'fieldsets'
-]
+const OVERRIDABLE_FIELDS = ['jsonType', 'type', 'name', 'title', 'description', 'options', 'fieldsets']
 
 const FILE_CORE = {
   name: 'file',
@@ -25,7 +17,7 @@ const FILE_CORE = {
 }
 
 const DEFAULT_OPTIONS = {
-  accept: '',
+  accept: ''
 }
 
 export const FileType = {
@@ -35,10 +27,7 @@ export const FileType = {
   extend(subTypeDef, extendMember) {
     const options = {...(subTypeDef.options || DEFAULT_OPTIONS)}
 
-    const fields = (subTypeDef.fields || []).concat([
-      ASSET_FIELD
-    ])
-      .filter(Boolean)
+    const fields = (subTypeDef.fields || []).concat([ASSET_FIELD]).filter(Boolean)
 
     const parsed = Object.assign(pick(FILE_CORE, OVERRIDABLE_FIELDS), subTypeDef, {
       type: FILE_CORE,

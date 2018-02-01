@@ -4,9 +4,10 @@ const encodeQueryString = require('./encodeQueryString')
 const pick = require('../util/pick')
 const defaults = require('../util/defaults')
 
-const EventSource = typeof window !== 'undefined' && window.EventSource
-  ? window.EventSource // Native browser EventSource
-  : require('@sanity/eventsource') // Node.js, IE etc
+const EventSource =
+  typeof window !== 'undefined' && window.EventSource
+    ? window.EventSource // Native browser EventSource
+    : require('@sanity/eventsource') // Node.js, IE etc
 
 const possibleOptions = ['includePreviousRevision', 'includeResult']
 const defaultOptions = {
@@ -56,9 +57,7 @@ module.exports = function listen(query, params, opts = {}) {
 
     function onMessage(evt) {
       const event = parseEvent(evt)
-      return event instanceof Error
-        ? observer.error(event)
-        : observer.next(event)
+      return event instanceof Error ? observer.error(event) : observer.next(event)
     }
 
     function onDisconnect(evt) {
@@ -111,7 +110,5 @@ function extractErrorMessage(err) {
     return err.error.description
   }
 
-  return typeof err.error === 'string'
-    ? err.error
-    : JSON.stringify(err.error, null, 2)
+  return typeof err.error === 'string' ? err.error : JSON.stringify(err.error, null, 2)
 }

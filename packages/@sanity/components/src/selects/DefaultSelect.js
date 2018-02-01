@@ -14,9 +14,9 @@ export default class DefaultSelect extends React.Component {
     disabled: PropTypes.bool,
     items: PropTypes.arrayOf(
       PropTypes.shape({
-        title: PropTypes.string,
+        title: PropTypes.string
       })
-    ),
+    )
   }
 
   static defaultProps = {
@@ -57,13 +57,15 @@ export default class DefaultSelect extends React.Component {
           ref={this.setInput}
         >
           {!value && <option />}
-          {
-            items && items.length > 0 && items.map((item, i) => {
+          {items &&
+            items.length > 0 &&
+            items.map((item, i) => {
               return (
-                <option key={i} value={i}>{item.title}</option>
+                <option key={i} value={i}>
+                  {item.title}
+                </option>
               )
-            })
-          }
+            })}
         </select>
         <div className={styles.functions}>
           <span className={styles.arrow}>

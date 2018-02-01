@@ -58,18 +58,12 @@ class SanityPanel extends React.PureComponent {
       return null
     }
 
-    return (
-      <div>
-        {propTables}
-      </div>
-    )
+    return <div>{propTables}</div>
   }
 
   normalizePath(path) {
     const basePath = this.state.info.basePath
-    const normalized = path.indexOf(basePath) === 0
-      ? path.slice(basePath.length)
-      : path
+    const normalized = path.indexOf(basePath) === 0 ? path.slice(basePath.length) : path
 
     return normalized.replace(/(^\/|\/$)/g, '')
   }
@@ -93,7 +87,9 @@ class SanityPanel extends React.PureComponent {
             <dd>{def.description || '<no description provided>'}</dd>
 
             <dt className={styles.title}>Defined by</dt>
-            <dd>{def.plugin} <span className={styles.light}>({this.normalizePath(def.path)})</span></dd>
+            <dd>
+              {def.plugin} <span className={styles.light}>({this.normalizePath(def.path)})</span>
+            </dd>
 
             <dt className={styles.title}>Implemented by</dt>
             <dd>
@@ -107,9 +103,7 @@ class SanityPanel extends React.PureComponent {
             </dd>
           </dl>
         </section>
-        <section className={styles.section}>
-          {this.renderPropTables()}
-        </section>
+        <section className={styles.section}>{this.renderPropTables()}</section>
       </div>
     )
   }

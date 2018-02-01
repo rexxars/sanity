@@ -9,7 +9,7 @@ export default class Checkbox extends React.Component {
     disabled: PropTypes.bool,
     children: PropTypes.any,
     onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
+    onBlur: PropTypes.func
   }
 
   state = {
@@ -64,9 +64,7 @@ export default class Checkbox extends React.Component {
           ref={this.setInput}
           onFocus={this.handleFocus}
         />
-        <div className={styles.label}>
-          {children || label}
-        </div>
+        <div className={styles.label}>{children || label}</div>
 
         <div className={styles.focusHelper} />
         <div className={styles.boxOutline}>

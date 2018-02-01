@@ -38,10 +38,9 @@ export default function createPathMaterializer(observeWithPaths) {
 
       if (isReference(value) || isDocument(value)) {
         const id = isReference(value) ? value._ref : value._id
-        return observeWithPaths(id, nextHeads)
-          .switchMap(snapshot => {
-            return materializePaths({...createEmpty(nextHeads), ...value, ...snapshot}, paths)
-          })
+        return observeWithPaths(id, nextHeads).switchMap(snapshot => {
+          return materializePaths({...createEmpty(nextHeads), ...value, ...snapshot}, paths)
+        })
       }
     }
 
@@ -54,15 +53,18 @@ export default function createPathMaterializer(observeWithPaths) {
       leads[head].push(tail)
     })
 
-    const next = Object.keys(leads).reduce((res, head) => {
-      const tails = leads[head]
-      if (tails.every(tail => tail.length === 0)) {
-        res[head] = value[head]
-      } else {
-        res[head] = materializePaths(value[head], tails)
-      }
-      return res
-    }, {...value})
+    const next = Object.keys(leads).reduce(
+      (res, head) => {
+        const tails = leads[head]
+        if (tails.every(tail => tail.length === 0)) {
+          res[head] = value[head]
+        } else {
+          res[head] = materializePaths(value[head], tails)
+        }
+        return res
+      },
+      {...value}
+    )
 
     return props(Observable.of(next), {wait: true})
   }

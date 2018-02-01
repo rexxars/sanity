@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 
-export default function createImageLoadProxy(Component, {error: ErrorComponent, loader: LoaderComponent} = {}) {
+export default function createImageLoadProxy(
+  Component,
+  {error: ErrorComponent, loader: LoaderComponent} = {}
+) {
   return class ImageLoadProxy extends React.Component {
     static displayName = `${Component.displayName || Component.name || '<Anonymous>'}$ImageLoadProxy`
     static propTypes = {
@@ -47,7 +50,8 @@ export default function createImageLoadProxy(Component, {error: ErrorComponent, 
     render() {
       const {error, image} = this.state
 
-      if (!error && !image) { // loading
+      if (!error && !image) {
+        // loading
         return LoaderComponent ? <LoaderComponent {...this.props} /> : null
       }
       if (error) {

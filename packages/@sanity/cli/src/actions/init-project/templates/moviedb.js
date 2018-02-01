@@ -2,7 +2,7 @@ export const importPrompt = 'Import a sampling of sci-fi movies to go with your 
 export const datasetUrl = 'https://public.sanity.io/moviesdb.ndjson'
 
 export const dependencies = {
-  '@sanity/google-maps-input': '^0.99.0',
+  '@sanity/google-maps-input': '^0.99.0'
 }
 
 export const generateSanityManifest = base => ({

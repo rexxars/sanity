@@ -16,7 +16,7 @@ export default {
       options: {
         source: document => document.title,
         maxLength: 96,
-        auto: true,
+        auto: true
       }
     }
   ]

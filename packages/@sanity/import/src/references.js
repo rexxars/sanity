@@ -78,9 +78,7 @@ function unsetWeakBatch(client, progress, batch) {
 }
 
 function reducePatch(trx, task) {
-  return trx.patch(task.documentId, patch =>
-    patch.unset(task.references.map(path => `${path}._weak`))
-  )
+  return trx.patch(task.documentId, patch => patch.unset(task.references.map(path => `${path}._weak`)))
 }
 
 exports.getStrongRefs = getStrongRefs

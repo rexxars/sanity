@@ -66,27 +66,21 @@ export default class ConfirmButton extends React.Component {
           ref={this.setButton}
         />
         <div className={styles.popoverAnchor}>
-          {
-            showConfirmDialog && (
-              <PopOver
-                color="danger"
-                useOverlay={false}
-                onClose={this.handleConfirmPopoverClose}
-              >
-                <div className={styles.wrapper}>
-                  <Button
-                    color="white"
-                    inverted
-                    onClick={onConfirm}
-                    icon={TrashIcon}
-                    ref={this.setConfirmButton}
-                  >
-                    Confirm remove
-                  </Button>
-                </div>
-              </PopOver>
-            )
-          }
+          {showConfirmDialog && (
+            <PopOver color="danger" useOverlay={false} onClose={this.handleConfirmPopoverClose}>
+              <div className={styles.wrapper}>
+                <Button
+                  color="white"
+                  inverted
+                  onClick={onConfirm}
+                  icon={TrashIcon}
+                  ref={this.setConfirmButton}
+                >
+                  Confirm remove
+                </Button>
+              </div>
+            </PopOver>
+          )}
         </div>
       </div>
     )

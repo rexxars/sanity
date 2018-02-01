@@ -8,11 +8,8 @@ import createHistory from 'history/createBrowserHistory'
 import NotFound from './components/NotFound'
 import type {Router} from '../src/types'
 
-const router : Router = route('/omg/lol', [
-  route.scope('product', '/products/:id', [
-    route('/:detailView'),
-    route('/user/:userId')
-  ]),
+const router: Router = route('/omg/lol', [
+  route.scope('product', '/products/:id', [route('/:detailView'), route('/user/:userId')]),
   route('/users/:userId', params => {
     if (params.userId === 'me') {
       return route('/:profileSection')
@@ -32,7 +29,7 @@ function handleNavigate(nextUrl, {replace} = {}) {
 }
 
 function render(state, pathname) {
-  ReactDOM.render((
+  ReactDOM.render(
     <div>
       <RouterProvider router={router} onNavigate={handleNavigate} state={state}>
         {router.isNotFound(pathname) ? <NotFound pathname={pathname} /> : <Main />}
@@ -41,8 +38,9 @@ function render(state, pathname) {
         <h2>Components outside provider context</h2>
         <Main />
       </div>
-    </div>
-  ), document.getElementById('main'))
+    </div>,
+    document.getElementById('main')
+  )
 }
 
 if (router.isRoot(location.pathname)) {

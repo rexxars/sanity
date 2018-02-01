@@ -9,9 +9,7 @@ import type {Type} from '../typedefs'
 const EMPTY_ITEM = {title: '', value: undefined}
 
 function toSelectItems(list) {
-  return (typeof list[0] === 'string')
-    ? list.map(item => ({title: item, value: item}))
-    : list
+  return typeof list[0] === 'string' ? list.map(item => ({title: item, value: item})) : list
 }
 
 type Props = {
@@ -52,14 +50,10 @@ export default class StringSelect extends React.Component<Props> {
 
     const isRadio = type.options && type.options.layout === 'radio'
     return (
-      <FormField
-        level={level}
-        label={type.title}
-        description={type.description}
-      >
-        {isRadio
+      <FormField level={level} label={type.title} description={type.description}>
+        {isRadio ? (
           // todo: make separate inputs
-          ? <RadioSelect
+          <RadioSelect
             {...rest}
             name={type.name}
             legend={type.title}
@@ -69,7 +63,8 @@ export default class StringSelect extends React.Component<Props> {
             direction={type.options.direction || 'vertical'}
             ref={this.setInput}
           />
-          : <Select
+        ) : (
+          <Select
             {...rest}
             label={type.title}
             value={currentItem}
@@ -78,7 +73,7 @@ export default class StringSelect extends React.Component<Props> {
             items={[EMPTY_ITEM].concat(items)}
             ref={this.setInput}
           />
-        }
+        )}
       </FormField>
     )
   }

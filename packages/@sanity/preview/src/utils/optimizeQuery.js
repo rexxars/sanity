@@ -7,7 +7,7 @@ type Selection = [string[], Path[]]
 type CombinedSelection = {
   ids: string[],
   paths: string[],
-  map: number[],
+  map: number[]
 }
 type Doc = {
   _id: string
@@ -16,16 +16,18 @@ type Doc = {
 type Result = Doc[]
 
 export function combineSelections(selections: Array<Selection>): number {
-  return values(selections.reduce((output, [id, paths], index) => {
-    const key = sortBy(paths.join(','), identity)
-    if (!output[key]) {
-      output[key] = {paths, ids: [], map: []}
-    }
-    const idx = output[key].ids.length
-    output[key].ids[idx] = id
-    output[key].map[idx] = index
-    return output
-  }, {}))
+  return values(
+    selections.reduce((output, [id, paths], index) => {
+      const key = sortBy(paths.join(','), identity)
+      if (!output[key]) {
+        output[key] = {paths, ids: [], map: []}
+      }
+      const idx = output[key].ids.length
+      output[key].ids[idx] = id
+      output[key].map[idx] = index
+      return output
+    }, {})
+  )
 }
 
 function stringifyId(id: string) {

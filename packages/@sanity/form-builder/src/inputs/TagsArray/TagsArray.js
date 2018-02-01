@@ -9,7 +9,7 @@ type Props = {
   type: Type,
   value: Array<string>,
   level: number,
-  onChange: (PatchEvent) => void
+  onChange: PatchEvent => void
 }
 
 export default class TagsArrayInput extends React.PureComponent<Props> {
@@ -37,17 +37,8 @@ export default class TagsArrayInput extends React.PureComponent<Props> {
   render() {
     const {type, value, level, ...rest} = this.props
     return (
-      <FormField
-        level={level}
-        label={type.title}
-        description={type.description}
-      >
-        <TagInput
-          {...rest}
-          value={value}
-          onChange={this.handleChange}
-          ref={this.setInput}
-        />
+      <FormField level={level} label={type.title} description={type.description}>
+        <TagInput {...rest} value={value} onChange={this.handleChange} ref={this.setInput} />
       </FormField>
     )
   }

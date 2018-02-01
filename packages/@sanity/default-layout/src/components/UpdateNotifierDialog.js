@@ -89,17 +89,14 @@ class UpdateNotifierDialog extends Component {
   render() {
     const {severity, onClose} = this.props
     return (
-      <Dialog
-        isOpen
-        onClose={onClose}
-      >
+      <Dialog isOpen onClose={onClose}>
         <div className={styles.content}>
           <div>
-            <h2>
-              {severity === 'low' ? 'New versions available' : 'Studio is outdated'}
-            </h2>
+            <h2>{severity === 'low' ? 'New versions available' : 'Studio is outdated'}</h2>
             {__DEV__ ? this.renderInfo() : this.renderContactDeveloper()}
-            <Button color="primary" onClick={onClose}>Close</Button>
+            <Button color="primary" onClick={onClose}>
+              Close
+            </Button>
           </div>
         </div>
       </Dialog>

@@ -11,10 +11,6 @@ export default class DefaultLabel extends React.PureComponent {
   render() {
     const {className, level} = this.props
     const levelClass = `level_${level}`
-    return (
-      <div className={`${styles.root} ${className} ${styles[levelClass]}`}>
-        {this.props.children}
-      </div>
-    )
+    return <div className={`${styles.root} ${className} ${styles[levelClass]}`}>{this.props.children}</div>
   }
 }

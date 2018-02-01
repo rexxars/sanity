@@ -24,7 +24,11 @@ import type {Type} from '../../typedefs'
 import * as PathUtils from '../../utils/pathUtils'
 import DragBarsIcon from 'part:@sanity/base/bars-icon'
 
-const DragHandle = createDragHandle(() => <span className={styles.dragHandle}><DragBarsIcon /></span>)
+const DragHandle = createDragHandle(() => (
+  <span className={styles.dragHandle}>
+    <DragBarsIcon />
+  </span>
+))
 
 const DIALOG_ACTIONS = [
   {
@@ -47,9 +51,9 @@ type Props = {
   value: ItemValue,
   level: number,
   layout?: 'media' | 'default',
-  onRemove: (ItemValue) => void,
+  onRemove: ItemValue => void,
   onChange: (PatchEvent, ItemValue) => void,
-  onFocus: (Path) => void,
+  onFocus: Path => void,
   onBlur: void => void,
   focusPath: Path
 }
@@ -63,7 +67,6 @@ function hasFocusInPath(path, value) {
 }
 
 export default class RenderItemValue extends React.Component<Props> {
-
   _focusArea: ?FocusArea
 
   static defaultProps = {
@@ -141,7 +144,8 @@ export default class RenderItemValue extends React.Component<Props> {
     }
     if (action.name === 'delete') {
       // Needs a proper confirm dialog later
-      if (window.confirm('Do you really want to delete?')) { // eslint-disable-line no-alert
+      if (window.confirm('Do you really want to delete?')) {
+        // eslint-disable-line no-alert
         this.handleRemove()
       }
     }
@@ -208,9 +212,7 @@ export default class RenderItemValue extends React.Component<Props> {
           showCloseButton={false}
           actions={DIALOG_ACTIONS}
         >
-          <div className={styles.defaultDialogContent}>
-            {content}
-          </div>
+          <div className={styles.defaultDialogContent}>{content}</div>
         </DefaultDialog>
       </div>
     )
@@ -238,32 +240,17 @@ export default class RenderItemValue extends React.Component<Props> {
             className={styles.previewWrapperHelper}
             onFocus={this.handleFocus}
           >
-            <Preview
-              layout={previewLayout}
-              value={value}
-              type={this.getMemberType()}
-            />
+            <Preview layout={previewLayout} value={value} type={this.getMemberType()} />
           </div>
         </div>
 
         <div className={styles.functions}>
-          {
-            value._ref && (
-              <IntentLink
-                className={styles.linkToReference}
-                intent="edit"
-                params={{id: value._ref}}
-              >
-                <LinkIcon />
-              </IntentLink>
-            )
-          }
-          {!type.readOnly && (
-            <ConfirmButton
-              title="Remove this item"
-              onConfirm={this.handleRemove}
-            />
+          {value._ref && (
+            <IntentLink className={styles.linkToReference} intent="edit" params={{id: value._ref}}>
+              <LinkIcon />
+            </IntentLink>
           )}
+          {!type.readOnly && <ConfirmButton title="Remove this item" onConfirm={this.handleRemove} />}
         </div>
       </div>
     )
@@ -277,14 +264,9 @@ export default class RenderItemValue extends React.Component<Props> {
     const isExpanded = PathUtils.isExpanded(value, focusPath)
 
     return (
-      <div
-        className={isGrid ? styles.gridItem : styles.listItem}
-        ref={this.setElement}
-      >
+      <div className={isGrid ? styles.gridItem : styles.listItem} ref={this.setElement}>
         {this.renderItem()}
-        <div
-          className={options.editModal === 'fold' ? styles.editRootFold : styles.editRoot}
-        >
+        <div className={options.editModal === 'fold' ? styles.editRootFold : styles.editRoot}>
           {isExpanded && this.renderEditItemForm(value)}
         </div>
       </div>

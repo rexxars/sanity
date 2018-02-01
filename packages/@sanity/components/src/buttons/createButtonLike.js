@@ -7,7 +7,8 @@ import cx from 'classnames'
 
 export default function createButtonLike(Component, {displayName, defaultProps = {}}) {
   return class ButtonLike extends React.Component {
-    static displayName = displayName || `ButtonLike(${typeof Component === 'string' ? Component : (Component.displayName || Component.name)})`
+    static displayName = displayName ||
+      `ButtonLike(${typeof Component === 'string' ? Component : Component.displayName || Component.name})`
 
     static propTypes = {
       kind: PropTypes.oneOf(['default', 'simple']),
@@ -20,7 +21,7 @@ export default function createButtonLike(Component, {displayName, defaultProps =
       ripple: PropTypes.bool,
       className: PropTypes.string,
       disabled: PropTypes.bool,
-      tabIndex: PropTypes.number,
+      tabIndex: PropTypes.number
     }
 
     static defaultProps = {
@@ -63,7 +64,6 @@ export default function createButtonLike(Component, {displayName, defaultProps =
     }
 
     render() {
-
       const {kind, ripple, inverted, color, icon: Icon, loading, className, children, ...rest} = this.props
 
       // Should not be part of the destructing, cause it should be passed to component through rest
@@ -88,14 +88,17 @@ export default function createButtonLike(Component, {displayName, defaultProps =
           onClick={this.handleClick}
           ref={this.setRootElement}
           tabIndex={0}
-
         >
           <span className={styles.inner} tabIndex={-1}>
             <span className={styles.content}>
-              {loading && <span className={styles.spinner}><Spinner inline /></span>}
+              {loading && (
+                <span className={styles.spinner}>
+                  <Spinner inline />
+                </span>
+              )}
               {Icon && <Icon className={styles.icon} />}
               {children && <span className={styles.content}>{children}</span>}
-              {ripple && !disabled && <Ink duration={1000} opacity={0.10} radius={200} />}
+              {ripple && !disabled && <Ink duration={1000} opacity={0.1} radius={200} />}
             </span>
           </span>
         </Component>

@@ -2,7 +2,7 @@ const PALETTE_FIELDS = [
   {name: 'background', type: 'string', title: 'Background', readOnly: true},
   {name: 'foreground', type: 'string', title: 'Foreground', readOnly: true},
   {name: 'population', type: 'number', title: 'Population', readOnly: true},
-  {name: 'title', type: 'string', title: 'String', readOnly: true},
+  {name: 'title', type: 'string', title: 'String', readOnly: true}
 ]
 
 export default {
@@ -46,7 +46,7 @@ export default {
       type: 'number',
       title: 'File size in bytes',
       readOnly: true,
-      fieldset: 'system',
+      fieldset: 'system'
     },
     {
       name: 'assetId',
@@ -121,7 +121,7 @@ export default {
       title: 'originalFilename',
       imageUrl: 'url',
       path: 'path',
-      mimeType: 'mimeType',
+      mimeType: 'mimeType'
     },
     prepare(doc) {
       return {

@@ -64,9 +64,7 @@ export default {
 
     const documentCount = isUrl ? 0 : await linecount(sourceFile)
     debug(
-      documentCount
-        ? 'Could not count documents in source'
-        : `Found ${documentCount} lines in source file`
+      documentCount ? 'Could not count documents in source' : `Found ${documentCount} lines in source file`
     )
 
     const importClient = client.clone().config({dataset: targetDataset})

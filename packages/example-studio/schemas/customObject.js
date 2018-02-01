@@ -14,10 +14,7 @@ export default {
       name: 'metadata',
       type: 'object',
       title: 'Some metadata',
-      fields: [
-        {name: 'name', type: 'string'},
-        {name: 'title', type: 'string'}
-      ]
+      fields: [{name: 'name', type: 'string'}, {name: 'title', type: 'string'}]
     },
     {
       name: 'image',

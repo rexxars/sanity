@@ -27,10 +27,7 @@ function getJsonStreamer() {
 
       return doc
     } catch (err) {
-      this.emit(
-        'error',
-        new Error(`Failed to parse line #${lineNumber}: ${err.message}`)
-      )
+      this.emit('error', new Error(`Failed to parse line #${lineNumber}: ${err.message}`))
     }
 
     return undefined

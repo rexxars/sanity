@@ -5,14 +5,10 @@ import route from '../src/route'
 const router = route('/', [
   route('/animals/:animal'),
   route('/countries', [
-    route('/:country', [
-      route('/:county', [
-        route('/:municipality')
-      ])
-    ]),
+    route('/:country', [route('/:county', [route('/:municipality')])]),
     route('/:country/:county'),
     route('/:country/:county/:municipality/neighbors/:neighbor')
-  ]),
+  ])
 ])
 
 test('root', t => {

@@ -37,7 +37,7 @@ type Props = {
     title: string,
     description: string,
     options?: SchemaOptions,
-    readOnly?: boolean,
+    readOnly?: boolean
   },
   onChange: PatchEvent => void,
   level: number
@@ -47,7 +47,7 @@ function parseOptions(options: SchemaOptions = {}): ParsedOptions {
   return {
     dateFormat: options.dateFormat || DEFAULT_DATE_FORMAT,
     timeFormat: options.timeFormat || DEFAULT_TIME_FORMAT,
-    timeStep: (('timeStep' in options) && Number(options.timeStep)) || 15,
+    timeStep: ('timeStep' in options && Number(options.timeStep)) || 15,
     calendarTodayLabel: options.calendarTodayLabel || 'Today'
   }
 }
@@ -171,73 +171,70 @@ export default class DateInput extends React.Component<Props, State> {
 
     return (
       <FormField labelFor={this.inputId} label={title} level={level} description={description}>
-        {
-          readOnly && (
-            <TextInput
-              readOnly
-              value={(momentValue ? momentValue.format(getFormat(options)) : '')}
+        {readOnly && <TextInput readOnly value={momentValue ? momentValue.format(getFormat(options)) : ''} />}
+        {!readOnly && (
+          <div className={styles.inputWrapper}>
+            <DatePicker
+              {...options}
+              {...rest}
+              onKeyDown={this.handleKeyDown}
+              disabledKeyboardNavigation
+              selected={momentValue || undefined}
+              placeholderText={placeholder}
+              calendarClassName={styles.datepicker}
+              popperClassName={styles.hiddenPopper}
+              className={styles.input}
+              onChange={this.handleChange}
+              onChangeRaw={this.handleInputChange}
+              value={inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))}
+              dateFormat={options.dateFormat}
+              timeFormat={options.timeFormat}
+              timeIntervals={options.timeStep}
+              ref={this.setDatePicker}
             />
-          )
-        }
-        {
-          !readOnly && (
-            <div className={styles.inputWrapper}>
+            <Button
+              color="primary"
+              className={styles.selectButton}
+              onClick={this.handleOpen}
+              icon={CalendarIcon}
+              kind="simple"
+            >
+              Select
+            </Button>
+          </div>
+        )}
+        {isActive && (
+          <Dialog
+            isOpen={isActive}
+            onClose={this.handleClose}
+            onAction={this.handleDialogAction}
+            actions={DIALOG_ACTIONS}
+            showCloseButton={false}
+          >
+            <div className={styles.rootWithTime}>
               <DatePicker
                 {...options}
                 {...rest}
-                onKeyDown={this.handleKeyDown}
-                disabledKeyboardNavigation
+                inline
+                showMonthDropdown
+                showYearDropdown
                 selected={momentValue || undefined}
-                placeholderText={placeholder}
                 calendarClassName={styles.datepicker}
-                popperClassName={styles.hiddenPopper}
+                popperClassName={styles.popper}
                 className={styles.input}
                 onChange={this.handleChange}
                 onChangeRaw={this.handleInputChange}
-                value={inputValue ? inputValue : (momentValue && momentValue.format(getFormat(options)))}
+                value={inputValue ? inputValue : momentValue && momentValue.format(getFormat(options))}
+                showTimeSelect
                 dateFormat={options.dateFormat}
                 timeFormat={options.timeFormat}
                 timeIntervals={options.timeStep}
-                ref={this.setDatePicker}
+                ref={this.setDialogDatePicker}
+                dropdownMode="select"
               />
-              <Button color="primary" className={styles.selectButton} onClick={this.handleOpen} icon={CalendarIcon} kind="simple">Select</Button>
             </div>
-          )
-        }
-        {
-          isActive && (
-            <Dialog
-              isOpen={isActive}
-              onClose={this.handleClose}
-              onAction={this.handleDialogAction}
-              actions={DIALOG_ACTIONS}
-              showCloseButton={false}
-            >
-              <div className={styles.rootWithTime}>
-                <DatePicker
-                  {...options}
-                  {...rest}
-                  inline
-                  showMonthDropdown
-                  showYearDropdown
-                  selected={momentValue || undefined}
-                  calendarClassName={styles.datepicker}
-                  popperClassName={styles.popper}
-                  className={styles.input}
-                  onChange={this.handleChange}
-                  onChangeRaw={this.handleInputChange}
-                  value={inputValue ? inputValue : (momentValue && momentValue.format(getFormat(options)))}
-                  showTimeSelect
-                  dateFormat={options.dateFormat}
-                  timeFormat={options.timeFormat}
-                  timeIntervals={options.timeStep}
-                  ref={this.setDialogDatePicker}
-                  dropdownMode="select"
-                />
-              </div>
-            </Dialog>
-          )
-        }
+          </Dialog>
+        )}
       </FormField>
     )
   }

@@ -33,25 +33,18 @@ export default class BooleanInput extends React.Component<Props> {
     const {value, type, level, description, ...rest} = this.props
 
     const isCheckbox = type.options && type.options.layout === 'checkbox'
-    return isCheckbox
-      ? (
-        <Checkbox
-          {...rest}
-          onChange={this.handleChange}
-          checked={!!value}
-          ref={this.setInput}
-        >
-          {type.title}
-        </Checkbox>
-      )
-      : (
-        <Switch
-          {...rest}
-          onChange={this.handleChange}
-          checked={!!value}
-          label={type.title}
-          ref={this.setInput}
-        />
-      )
+    return isCheckbox ? (
+      <Checkbox {...rest} onChange={this.handleChange} checked={!!value} ref={this.setInput}>
+        {type.title}
+      </Checkbox>
+    ) : (
+      <Switch
+        {...rest}
+        onChange={this.handleChange}
+        checked={!!value}
+        label={type.title}
+        ref={this.setInput}
+      />
+    )
   }
 }

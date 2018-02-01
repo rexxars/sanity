@@ -14,7 +14,7 @@ type Hotspot = {
   x: number,
   y: number,
   height: number,
-  width: number,
+  width: number
 }
 
 type Crop = {
@@ -32,7 +32,7 @@ type Value = {
 type Props = {
   imageUrl: string,
   value?: Value,
-  onChange: (PatchEvent) => void,
+  onChange: PatchEvent => void,
   level: number
 }
 
@@ -40,12 +40,7 @@ type State = {
   value?: Value // cache value for moar fps
 }
 
-const PREVIEW_ASPECT_RATIOS = [
-  ['Landscape', 16 / 9],
-  ['Portrait', 9 / 16],
-  ['Square', 1],
-  ['Panorama', 4]
-]
+const PREVIEW_ASPECT_RATIOS = [['Landscape', 16 / 9], ['Portrait', 9 / 16], ['Square', 1], ['Panorama', 4]]
 
 export default class ImageToolInput extends React.Component<Props, State> {
   constructor(props) {
@@ -58,10 +53,7 @@ export default class ImageToolInput extends React.Component<Props, State> {
   handleChangeEnd = () => {
     const {onChange} = this.props
     const {value} = this.state
-    onChange(PatchEvent.from([
-      set(value.crop, ['crop']),
-      set(value.hotspot, ['hotspot'])
-    ]))
+    onChange(PatchEvent.from([set(value.crop, ['crop']), set(value.hotspot, ['hotspot'])]))
   }
 
   handleChange = (nextValue: Value) => {
@@ -77,10 +69,7 @@ export default class ImageToolInput extends React.Component<Props, State> {
     const {value} = this.state
 
     return (
-      <FormField
-        label="Hotspot and crop"
-        level={level}
-      >
+      <FormField label="Hotspot and crop" level={level}>
         <div className={styles.wrapper}>
           <div className={styles.imageToolContainer}>
             <ImageTool
@@ -99,17 +88,19 @@ export default class ImageToolInput extends React.Component<Props, State> {
                     <h4>{title}</h4>
                     <div className={styles.previewImage}>
                       <ImageLoader src={imageUrl}>
-                        {({image, error}) => (
-                          error
-                            ? <span>Unable to load image: {error.message}</span>
-                            : <HotspotImage
+                        {({image, error}) =>
+                          error ? (
+                            <span>Unable to load image: {error.message}</span>
+                          ) : (
+                            <HotspotImage
                               aspectRatio={ratio}
                               src={image.src}
                               srcAspectRatio={image.width / image.height}
                               hotspot={value.hotspot || DEFAULT_HOTSPOT}
                               crop={value.crop || DEFAULT_CROP}
                             />
-                        )}
+                          )
+                        }
                       </ImageLoader>
                     </div>
                   </div>

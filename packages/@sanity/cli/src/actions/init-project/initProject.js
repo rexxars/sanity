@@ -102,20 +102,22 @@ export default async function initSanity(args, context) {
 
   // Prompt for template to use
   const defaultTemplate = unattended ? flags.template || 'clean' : null
-  const templateName = defaultTemplate || (await prompt.single({
-    message: 'Select project template',
-    type: 'list',
-    choices: [
-      {
-        value: 'moviedb',
-        name: 'Movie database (schema + sample data)'
-      },
-      {
-        value: 'blog',
-        name: 'Blog (schema)'
-      }
-    ]
-  }))
+  const templateName =
+    defaultTemplate ||
+    (await prompt.single({
+      message: 'Select project template',
+      type: 'list',
+      choices: [
+        {
+          value: 'moviedb',
+          name: 'Movie database (schema + sample data)'
+        },
+        {
+          value: 'blog',
+          name: 'Blog (schema)'
+        }
+      ]
+    }))
 
   // Build a full set of resolved options
   const initOptions = {
@@ -134,7 +136,8 @@ export default async function initSanity(args, context) {
   }
 
   // If the template has a sample dataset, prompt the user whether or not we should import it
-  const shouldImport = !unattended && template.datasetUrl && (await promptForDatasetImport(template.importPrompt))
+  const shouldImport =
+    !unattended && template.datasetUrl && (await promptForDatasetImport(template.importPrompt))
 
   // Bootstrap Sanity, creating required project files, manifests etc
   await bootstrapTemplate(initOptions, context)
@@ -172,10 +175,11 @@ export default async function initSanity(args, context) {
     )
   }
 
-
   if (shouldImport) {
     print('')
-    print(`If you want to delete the imported data, use ${chalk.cyan(`sanity dataset delete ${datasetName}`)}`)
+    print(
+      `If you want to delete the imported data, use ${chalk.cyan(`sanity dataset delete ${datasetName}`)}`
+    )
   }
 
   print(`\n${chalk.green('Success!')} Now what?\n`)
@@ -190,9 +194,7 @@ export default async function initSanity(args, context) {
   print(`▪ ${chalk.green('sanity start')} to run your studio\n`)
 
   // See if the template has a success message handler and print it
-  const successMessage = template.getSuccessMessage
-    ? template.getSuccessMessage(initOptions, context)
-    : ''
+  const successMessage = template.getSuccessMessage ? template.getSuccessMessage(initOptions, context) : ''
 
   if (successMessage) {
     print(`\n${successMessage}`)
@@ -249,11 +251,7 @@ export default async function initSanity(args, context) {
     const selected = await prompt.single({
       message: 'Select project to use',
       type: 'list',
-      choices: [
-        {value: 'new', name: 'Create new project'},
-        new prompt.Separator(),
-        ...projectChoices
-      ]
+      choices: [{value: 'new', name: 'Create new project'}, new prompt.Separator(), ...projectChoices]
     })
 
     if (selected === 'new') {
@@ -297,11 +295,7 @@ export default async function initSanity(args, context) {
     const selected = await prompt.single({
       message: 'Select dataset to use',
       type: 'list',
-      choices: [
-        {value: 'new', name: 'Create new dataset'},
-        new prompt.Separator(),
-        ...datasetChoices
-      ]
+      choices: [{value: 'new', name: 'Create new dataset'}, new prompt.Separator(), ...datasetChoices]
     })
 
     if (selected === 'new') {

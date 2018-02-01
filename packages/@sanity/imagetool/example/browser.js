@@ -42,9 +42,7 @@ class Root extends React.Component {
         <StateLink state={{demoName: 'imagetool'}}>ImageTool</StateLink>
         <StateLink state={{demoName: 'hotspotimage'}}>Hotspot Image</StateLink>
         {router.state.demoName && (
-          <RouteScope scope={router.state.demoName}>
-            {this.renderDemo(router.state.demoName)}
-          </RouteScope>
+          <RouteScope scope={router.state.demoName}>{this.renderDemo(router.state.demoName)}</RouteScope>
         )}
       </div>
     )
@@ -55,13 +53,13 @@ function handleNavigate(nexturl) {
   history.push(nexturl)
 }
 function render(location) {
-  ReactDOM.render((
+  ReactDOM.render(
     <RouterProvider router={routes} location={location} onNavigate={handleNavigate}>
       <Root />
-    </RouterProvider>
-  ), document.getElementById('content'))
+    </RouterProvider>,
+    document.getElementById('content')
+  )
 }
 
 history.listen(render)
 render(history.location)
-

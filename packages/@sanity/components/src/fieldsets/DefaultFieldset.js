@@ -102,9 +102,7 @@ export default class Fieldset extends React.Component {
         className={rootClassName}
       >
         <fieldset className={styles.fieldset}>
-          <div
-            className={styles.inner}
-          >
+          <div className={styles.inner}>
             <legend
               className={`${styles.legend} ${isCollapsed ? '' : styles.isOpen}`}
               onClick={isCollapsible && this.handleToggle}
@@ -122,9 +120,7 @@ export default class Fieldset extends React.Component {
               </p>
             )}
             <div className={`${styles.content} ${isCollapsed ? '' : styles.isOpen}`}>
-              <div className={styles.fieldWrapper}>
-                {!isCollapsed && children}
-              </div>
+              <div className={styles.fieldWrapper}>{!isCollapsed && children}</div>
             </div>
           </div>
         </fieldset>

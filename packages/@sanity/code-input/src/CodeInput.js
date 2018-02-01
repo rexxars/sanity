@@ -40,7 +40,6 @@ function compareNumbers(numA, numB) {
 }
 
 export default class CodeInput extends PureComponent {
-
   static propTypes = {
     level: PropTypes.number.isRequired,
     value: PropTypes.shape({
@@ -53,9 +52,11 @@ export default class CodeInput extends PureComponent {
       name: PropTypes.string,
       title: PropTypes.string,
       description: PropTypes.string,
-      fields: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired
-      }))
+      fields: PropTypes.arrayOf(
+        PropTypes.shape({
+          name: PropTypes.string.isRequired
+        })
+      )
     }).isRequired,
     onChange: PropTypes.func
   }
@@ -77,10 +78,12 @@ export default class CodeInput extends PureComponent {
     const path = ['code']
     const fixedLanguage = get(type, 'options.language')
 
-    onChange(PatchEvent.from([
-      setIfMissing({_type: type.name, language: fixedLanguage}),
-      code ? set(code, path) : unset(path)
-    ]))
+    onChange(
+      PatchEvent.from([
+        setIfMissing({_type: type.name, language: fixedLanguage}),
+        code ? set(code, path) : unset(path)
+      ])
+    )
   }
 
   handleToggleSelectLine = lineNumber => {
@@ -96,11 +99,9 @@ export default class CodeInput extends PureComponent {
       // New element, figure out where to add it so it sorts correctly
       const sorted = highlightedLines.concat(lineNumber).sort(compareNumbers)
       position = sorted.indexOf(lineNumber)
-      patches.push(insert(
-        [lineNumber],
-        'before',
-        path.concat(position === sorted.length - 1 ? -1 : position)
-      ))
+      patches.push(
+        insert([lineNumber], 'before', path.concat(position === sorted.length - 1 ? -1 : position))
+      )
     } else if (highlightedLines.length === 1) {
       // Last element removed, unset whole path
       patches.push(unset(path))
@@ -141,10 +142,7 @@ export default class CodeInput extends PureComponent {
   handleLanguageChange = item => {
     const {type, onChange} = this.props
     const path = ['language']
-    onChange(PatchEvent.from([
-      setIfMissing({_type: type.name}),
-      item ? set(item.value, path) : unset(path)
-    ]))
+    onChange(PatchEvent.from([setIfMissing({_type: type.name}), item ? set(item.value, path) : unset(path)]))
   }
 
   getLanguageAlternatives() {
@@ -153,7 +151,7 @@ export default class CodeInput extends PureComponent {
 
   getTheme() {
     const preferredTheme = get(this.props.type, 'options.theme')
-    return (preferredTheme && SUPPORTED_THEMES.find(theme => theme === preferredTheme))
+    return preferredTheme && SUPPORTED_THEMES.find(theme => theme === preferredTheme)
       ? preferredTheme
       : DEFAULT_THEME
   }
@@ -190,9 +188,10 @@ export default class CodeInput extends PureComponent {
       )
     }
 
-    const selectedLanguage = (value && value.language)
-      ? this.getLanguageAlternatives().find(item => item.value === value.language)
-      : undefined
+    const selectedLanguage =
+      value && value.language
+        ? this.getLanguageAlternatives().find(item => item.value === value.language)
+        : undefined
 
     if (!selectedLanguage) {
       languages.unshift({title: 'Select language'})
@@ -202,11 +201,7 @@ export default class CodeInput extends PureComponent {
     return (
       <Fieldset legend={type.title} description={type.description}>
         <FormField level={level + 1} label={languageField.type.title}>
-          <DefaultSelect
-            onChange={this.handleLanguageChange}
-            value={selectedLanguage}
-            items={languages}
-          />
+          <DefaultSelect onChange={this.handleLanguageChange} value={selectedLanguage} items={languages} />
         </FormField>
         <FormField label={type.title} level={level + 1}>
           {this.renderEditor()}

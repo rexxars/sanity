@@ -17,7 +17,7 @@ export default function makeDragAware(Component) {
     static propTypes = {
       onDragStart: PropTypes.func,
       onDrag: PropTypes.func,
-      onDragEnd: PropTypes.func,
+      onDragEnd: PropTypes.func
     }
     componentDidMount() {
       const {onDragStart, onDrag, onDragEnd} = this.props
@@ -39,11 +39,7 @@ export default function makeDragAware(Component) {
       const startListener = listen(win, EVENT_NAMES.start, handleMouseDown)
 
       this.getDisposables = () => {
-        return [
-          moveListener,
-          endListener,
-          startListener
-        ]
+        return [moveListener, endListener, startListener]
       }
 
       function handleMouseDown(event) {
@@ -96,7 +92,9 @@ export default function makeDragAware(Component) {
 
     componentWillUnmount() {
       debug('Disposing event listeners')
-      this.getDisposables().filter(Boolean).forEach(disposable => disposable.dispose())
+      this.getDisposables()
+        .filter(Boolean)
+        .forEach(disposable => disposable.dispose())
     }
 
     setDomNode = node => {

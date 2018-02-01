@@ -18,8 +18,9 @@ const NO_CONTEXT_STATE = {
   }
 }
 
-export default function withRouter<Props: {}>(Component: ComponentType<{ router: Router } & Props>): ComponentType<Props> {
-
+export default function withRouter<Props: {}>(
+  Component: ComponentType<{router: Router} & Props>
+): ComponentType<Props> {
   return class extends React.Component<*, *> {
     static displayName = `withRouter(${Component.displayName || Component.name})`
     unsubscribe: () => void
@@ -62,11 +63,13 @@ export default function withRouter<Props: {}>(Component: ComponentType<{ router:
     render() {
       const internalRouter = this.context.__internalRouter
 
-      const router: Router = internalRouter ? {
-        state: this.state.routerState,
-        navigate: internalRouter.navigate,
-        navigateIntent: internalRouter.navigateIntent
-      } : NO_CONTEXT_STATE
+      const router: Router = internalRouter
+        ? {
+            state: this.state.routerState,
+            navigate: internalRouter.navigate,
+            navigateIntent: internalRouter.navigateIntent
+          }
+        : NO_CONTEXT_STATE
 
       return <Component {...this.props} router={router} />
     }

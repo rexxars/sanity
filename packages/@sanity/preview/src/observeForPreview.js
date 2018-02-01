@@ -18,12 +18,9 @@ export default function observeForPreview(value, type, fields, viewOptions) {
     // Previewing references actually means getting the referenced value,
     // and preview using the preview config of its type
     // todo: We need a way of knowing the type of the referenced value by looking at the reference record alone
-    return resolveRefType(value, type)
-      .switchMap(refType =>
-        (refType
-          ? observeForPreview(value, refType)
-          : Observable.of({snapshot: null})
-        ))
+    return resolveRefType(value, type).switchMap(
+      refType => (refType ? observeForPreview(value, refType) : Observable.of({snapshot: null}))
+    )
   }
 
   const selection = type.preview.select
@@ -31,11 +28,10 @@ export default function observeForPreview(value, type, fields, viewOptions) {
     const configFields = Object.keys(selection)
     const targetFields = fields ? configFields.filter(fieldName => fields.includes(fieldName)) : configFields
     const paths = targetFields.map(key => selection[key].split('.'))
-    return materializePaths(value, paths)
-      .map(snapshot => ({
-        type: type,
-        snapshot: prepareForPreview(snapshot, type, viewOptions)
-      }))
+    return materializePaths(value, paths).map(snapshot => ({
+      type: type,
+      snapshot: prepareForPreview(snapshot, type, viewOptions)
+    }))
   }
   return Observable.of({
     type: type,

@@ -2,7 +2,6 @@ import React from 'react'
 import elementResizeDetectorMaker from 'element-resize-detector'
 
 export default function enhanceWithAvailHeight(Component) {
-
   return class enhancedWithAvailHeight extends React.PureComponent {
     static displayName = `enhanceWithAvailHeight(${Component.displayName || Component.name})`
     state = {}
@@ -41,7 +40,10 @@ export default function enhanceWithAvailHeight(Component) {
 
     render() {
       return (
-        <div style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, width: '100%', height: '100%'}} ref={this.setContainer}>
+        <div
+          style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, width: '100%', height: '100%'}}
+          ref={this.setContainer}
+        >
           <Component {...this.props} {...this.state} />
         </div>
       )

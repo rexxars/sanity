@@ -9,12 +9,7 @@ const ColorPicker = ({width, rgb, hex, hsv, hsl, onChange, disableAlpha, rendere
     <div style={{width}}>
       <div className={styles.saturation}>
         <div className={styles.saturationInner}>
-          <Saturation
-            is="Saturation"
-            onChange={onChange}
-            hsl={hsl}
-            hsv={hsv}
-          />
+          <Saturation is="Saturation" onChange={onChange} hsl={hsl} hsv={hsv} />
         </div>
       </div>
       <div className={styles.hue}>
@@ -24,27 +19,25 @@ const ColorPicker = ({width, rgb, hex, hsv, hsl, onChange, disableAlpha, rendere
           onChange={onChange}
           style={{
             radius: '2px',
-            shadow: 'inset 0 0 0 1px rgba(0,0,0,.15), inset 0 0 4px rgba(0,0,0,.25)',
+            shadow: 'inset 0 0 0 1px rgba(0,0,0,.15), inset 0 0 4px rgba(0,0,0,.25)'
           }}
         />
       </div>
-      {
-        !disableAlpha && (
-          <div className={styles.alpha}>
-            <Alpha
-              is="Alpha"
-              rgb={rgb}
-              hsl={hsl}
-              renderers={renderers}
-              onChange={onChange}
-              style={{
-                radius: '2px',
-                shadow: 'inset 0 0 0 1px rgba(0,0,0,.15), inset 0 0 4px rgba(0,0,0,.25)'
-              }}
-            />
-          </div>
-        )
-      }
+      {!disableAlpha && (
+        <div className={styles.alpha}>
+          <Alpha
+            is="Alpha"
+            rgb={rgb}
+            hsl={hsl}
+            renderers={renderers}
+            onChange={onChange}
+            style={{
+              radius: '2px',
+              shadow: 'inset 0 0 0 1px rgba(0,0,0,.15), inset 0 0 4px rgba(0,0,0,.25)'
+            }}
+          />
+        </div>
+      )}
       <div className={styles.controls}>
         <div className={styles.preview}>
           <div className={styles.checkboard}>
@@ -56,13 +49,7 @@ const ColorPicker = ({width, rgb, hex, hsv, hsl, onChange, disableAlpha, rendere
           />
         </div>
         <div className={styles.fields}>
-          <ColorPickerFields
-            rgb={rgb}
-            hsl={hsl}
-            hex={hex}
-            onChange={onChange}
-            disableAlpha={disableAlpha}
-          />
+          <ColorPickerFields rgb={rgb} hsl={hsl} hex={hex} onChange={onChange} disableAlpha={disableAlpha} />
         </div>
       </div>
     </div>

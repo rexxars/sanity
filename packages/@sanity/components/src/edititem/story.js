@@ -21,57 +21,48 @@ const overflowHidden = {
 
 storiesOf('Edit item')
   .addDecorator(withKnobs)
-  .add(
-    'PopOver',
-    () => {
-      return (
-        <div style={overflowHidden} id="myScrollContainerId">
+  .add('PopOver', () => {
+    return (
+      <div style={overflowHidden} id="myScrollContainerId">
         Things is in the background here.
-          <Button onClick={action('oh noes! I should not ble clickable!')}>Try click me</Button>
-          <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
-            <EditItemPopOver
-              title={text('title (prop)', 'Edit this item')}
-              onClose={action('onClose')}
-            >
-              Put your form here
-            </EditItemPopOver>
-          </Sanity>
-        </div>
-      )
+        <Button onClick={action('oh noes! I should not ble clickable!')}>Try click me</Button>
+        <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
+          <EditItemPopOver title={text('title (prop)', 'Edit this item')} onClose={action('onClose')}>
+            Put your form here
+          </EditItemPopOver>
+        </Sanity>
+      </div>
+    )
+  })
+  .add('Fold', () => {
+    const wrapperStyles = {
+      width: '50%',
+      margin: '0 auto',
+      backgroundColor: '#ccc',
+      minHeight: '50vh',
+      maxHeight: '70vh',
+      paddingTop: '5rem',
+      position: 'relative',
+      overflow: boolean('scroll', true) ? 'scroll' : 'visible'
     }
-  )
-  .add(
-    'Fold',
-    () => {
-      const wrapperStyles = {
-        width: '50%',
-        margin: '0 auto',
-        backgroundColor: '#ccc',
-        minHeight: '50vh',
-        maxHeight: '70vh',
-        paddingTop: '5rem',
-        position: 'relative',
-        overflow: boolean('scroll', true) ? 'scroll' : 'visible'
-      }
-      return (
-        <div style={wrapperStyles}>
-          <p>Over</p>
-          <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
-            <EditItemFold title="Edit this item" onClose={action('onClose')}>
-              {text('children (prop)', 'Put your content here')}
-              <div style={{height: `${number('content padding', 10)}px`}} />
-            </EditItemFold>
-          </Sanity>
-          <p>Under</p>
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-          {chance.paragraph()}
-        </div>
-      )
-    }
-  )
+    return (
+      <div style={wrapperStyles}>
+        <p>Over</p>
+        <Sanity part="part:@sanity/components/edititem/popover" propTables={[EditItemPopOver]}>
+          <EditItemFold title="Edit this item" onClose={action('onClose')}>
+            {text('children (prop)', 'Put your content here')}
+            <div style={{height: `${number('content padding', 10)}px`}} />
+          </EditItemFold>
+        </Sanity>
+        <p>Under</p>
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+        {chance.paragraph()}
+      </div>
+    )
+  })

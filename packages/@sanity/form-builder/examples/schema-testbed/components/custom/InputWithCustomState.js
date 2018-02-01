@@ -63,7 +63,7 @@ function applyPatch(currentValue: Deserialized, patch: Patch): Deserialized {
 type Props = {
   value: Serialized,
   type: any,
-  onChange: (PatchEvent) => void
+  onChange: PatchEvent => void
 }
 
 export default class InputWithCustomState extends React.Component {
@@ -77,10 +77,12 @@ export default class InputWithCustomState extends React.Component {
 
   setField(fieldName: string, inputValue: value) {
     const {onChange, type} = this.props
-    onChange(PatchEvent.from(
-      setIfMissing({_type: type.name}),
-      inputValue === '' ? unset([fieldName]) : set(inputValue, [fieldName])
-    ))
+    onChange(
+      PatchEvent.from(
+        setIfMissing({_type: type.name}),
+        inputValue === '' ? unset([fieldName]) : set(inputValue, [fieldName])
+      )
+    )
   }
 
   render() {
@@ -90,12 +92,7 @@ export default class InputWithCustomState extends React.Component {
         <h2>{type.title}</h2>
         <h3>Raw value</h3>
         <pre>{JSON.stringify(rawValue, null, 2)}</pre>
-        <ValueSync
-          value={rawValue}
-          serialize={serialize}
-          deserialize={deserialize}
-          applyPatch={applyPatch}
-        >
+        <ValueSync value={rawValue} serialize={serialize} deserialize={deserialize} applyPatch={applyPatch}>
           {({value}) => (
             <div>
               <h3>Internal value (immutable.js)</h3>

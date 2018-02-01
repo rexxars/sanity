@@ -27,11 +27,8 @@ function promptForHookName(context) {
   return prompt.single({
     type: 'input',
     message: 'Hook name:',
-    validate: name => (
-      name && name.length > 0 && name.length < 250
-        ? true
-        : 'Hook names must be between 0 and 250 characters'
-    )
+    validate: name =>
+      name && name.length > 0 && name.length < 250 ? true : 'Hook names must be between 0 and 250 characters'
   })
 }
 
@@ -40,11 +37,7 @@ function promptForHookUrl(context) {
   return prompt.single({
     type: 'input',
     message: 'Hook URL:',
-    validate: url => (
-      url && /^https?:\/\//.test(url)
-        ? true
-        : 'Hook URL must have an http/https prefix'
-    )
+    validate: url => (url && /^https?:\/\//.test(url) ? true : 'Hook URL must have an http/https prefix')
   })
 }
 

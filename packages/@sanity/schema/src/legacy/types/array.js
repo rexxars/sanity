@@ -16,7 +16,7 @@ export const ArrayType = {
   },
   extend(subTypeDef, createMemberType) {
     const parsed = Object.assign(pick(ARRAY_CORE, OVERRIDABLE_FIELDS), subTypeDef, {
-      type: ARRAY_CORE,
+      type: ARRAY_CORE
     })
     lazyGetter(parsed, 'of', () => {
       return subTypeDef.of.map(ofTypeDef => {

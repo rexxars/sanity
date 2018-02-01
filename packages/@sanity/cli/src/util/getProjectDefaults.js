@@ -25,7 +25,8 @@ export default (workDir, {isPlugin, context}) => {
 
 const getGitConfig = thenify(gitConfigLocal)
 function resolveGitRemote(cwd) {
-  return fse.stat(path.join(cwd, '.git'))
+  return fse
+    .stat(path.join(cwd, '.git'))
     .then(() => getGitConfig(cwd))
     .then(cfg => cfg.remote && cfg.remote.origin && cfg.remote.origin.url)
     .catch(() => null)
@@ -51,7 +52,8 @@ function getSanityUserInfo(context) {
     return null
   }
 
-  return client.users.getById('me')
+  return client.users
+    .getById('me')
     .then(user => `${user.name} <${user.email}>`)
     .catch(() => null)
 }

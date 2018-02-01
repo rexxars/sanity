@@ -1,4 +1,3 @@
-
 import BooleanInput from '../../inputs/Boolean'
 import EmailInput from '../../inputs/Email'
 import NumberInput from '../../inputs/Number'

@@ -3,7 +3,9 @@ import ReferenceInput from '../inputs/SanityReference'
 
 /* eslint-disable no-console */
 const warnInputTypeNotSupported = once(() => console.warn('The option "inputType" on references is removed.'))
-const warnSearchableOptionNotSupported = once(() => console.warn('The option "searchable" on references has been removed.'))
+const warnSearchableOptionNotSupported = once(() =>
+  console.warn('The option "searchable" on references has been removed.')
+)
 /* eslint-enable no-console */
 
 export default function resolveReferenceInput(type) {

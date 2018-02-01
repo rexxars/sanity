@@ -46,9 +46,5 @@ export default (args, context) => {
   }
 
   debug('Subcommand "%s" for group "%s" found, showing help', subCommandName, commandName)
-  context.output.print(generateCommandDocumentation(
-    subCommand.command,
-    commandName,
-    subCommandName
-  ))
+  context.output.print(generateCommandDocumentation(subCommand.command, commandName, subCommandName))
 }

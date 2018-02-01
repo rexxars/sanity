@@ -3,15 +3,7 @@ import {lazyGetter} from './utils'
 import {ASSET_FIELD, HOTSPOT_FIELD, CROP_FIELD} from './image/fieldDefs'
 import createPreviewGetter from '../preview/createPreviewGetter'
 
-const OVERRIDABLE_FIELDS = [
-  'jsonType',
-  'type',
-  'name',
-  'title',
-  'description',
-  'options',
-  'fieldsets'
-]
+const OVERRIDABLE_FIELDS = ['jsonType', 'type', 'name', 'title', 'description', 'options', 'fieldsets']
 
 const IMAGE_CORE = {
   name: 'image',
@@ -28,11 +20,8 @@ export const ImageType = {
   extend(subTypeDef, extendMember) {
     const options = {...(subTypeDef.options || DEFAULT_OPTIONS)}
 
-    const fields = (subTypeDef.fields || []).concat([
-      options.hotspot && HOTSPOT_FIELD,
-      options.hotspot && CROP_FIELD,
-      ASSET_FIELD
-    ])
+    const fields = (subTypeDef.fields || [])
+      .concat([options.hotspot && HOTSPOT_FIELD, options.hotspot && CROP_FIELD, ASSET_FIELD])
       .filter(Boolean)
 
     const parsed = Object.assign(pick(IMAGE_CORE, OVERRIDABLE_FIELDS), subTypeDef, {

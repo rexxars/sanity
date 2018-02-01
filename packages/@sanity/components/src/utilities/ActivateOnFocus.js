@@ -10,7 +10,7 @@ class ActivateOnFocus extends React.Component {
     isActive: PropTypes.bool,
     enableBlur: PropTypes.bool,
     onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
+    onBlur: PropTypes.func
   }
 
   static defaultProps = {
@@ -18,7 +18,7 @@ class ActivateOnFocus extends React.Component {
     message: 'Click to activate…',
     isActive: false,
     onFocus() {},
-    onBlur() {},
+    onBlur() {}
   }
 
   state = {
@@ -78,16 +78,11 @@ class ActivateOnFocus extends React.Component {
         onFocus={this.handleFocus}
         onBlur={this.handleBlur}
       >
-        <div
-          className={styles.eventHandler}
-          onClick={this.handleClick}
-        >
+        <div className={styles.eventHandler} onClick={this.handleClick}>
           <div className={styles.overlay} />
           <div className={styles.message}>{message}</div>
         </div>
-        <div className={styles.content}>
-          {children}
-        </div>
+        <div className={styles.content}>{children}</div>
       </div>
     )
   }

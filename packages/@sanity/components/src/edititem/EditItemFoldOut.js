@@ -8,16 +8,15 @@ import Escapable from '../utilities/Escapable'
 import CaptureOutsideClicks from '../utilities/CaptureOutsideClicks'
 
 export default class EditItemFoldOut extends React.PureComponent {
-
   static propTypes = {
     title: PropTypes.string,
     children: PropTypes.node.isRequired,
-    onClose: PropTypes.func,
+    onClose: PropTypes.func
   }
 
   static defaultProps = {
     title: '',
-    onClose() {}, // eslint-disable-line
+    onClose() {} // eslint-disable-line
   }
 
   componentDidMount() {
@@ -77,29 +76,23 @@ export default class EditItemFoldOut extends React.PureComponent {
                   width: `calc(${width}px + (${styles.padding} * 2))`
                 }}
               >
-                <Escapable onEscape={event => ((isActive || event.shiftKey) && onClose())} />
+                <Escapable onEscape={event => (isActive || event.shiftKey) && onClose()} />
                 <CaptureOutsideClicks onClickOutside={isActive ? onClose : null}>
-                  {
-                    title && (
-                      <div className={styles.head}>
-                        {title}
-                        <button className={styles.close} type="button" onClick={onClose}>
-                          <CloseIcon />
-                        </button>
-                      </div>
-                    )
-                  }
-
-                  {
-                    !title && (
-                      <button className={styles.closeDark} type="button" onClick={this.handleClose}>
+                  {title && (
+                    <div className={styles.head}>
+                      {title}
+                      <button className={styles.close} type="button" onClick={onClose}>
                         <CloseIcon />
                       </button>
-                    )
-                  }
-                  <div className={styles.content}>
-                    {children}
-                  </div>
+                    </div>
+                  )}
+
+                  {!title && (
+                    <button className={styles.closeDark} type="button" onClick={this.handleClose}>
+                      <CloseIcon />
+                    </button>
+                  )}
+                  <div className={styles.content}>{children}</div>
                 </CaptureOutsideClicks>
               </div>
             )}

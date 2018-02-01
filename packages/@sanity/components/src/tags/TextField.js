@@ -88,33 +88,24 @@ export default class TagsTextField extends React.Component {
 
   render() {
     const {inputValue} = this.state
-    const {
-      onChange,
-      value,
-      ...rest
-    } = this.props
+    const {onChange, value, ...rest} = this.props
 
     return (
       <div className={styles.wrapper}>
         <div className={`${styles.inner}`}>
           <div className={styles.content}>
             <ul className={styles.tags}>
-              {
-                value && value.map((tag, i) => {
+              {value &&
+                value.map((tag, i) => {
                   return (
                     <li key={i} className={styles.tag}>
                       {tag}
-                      <a
-                        onClick={this.handleRemoveTagClick}
-                        data-index={i}
-                        className={styles.clearTag}
-                      >
+                      <a onClick={this.handleRemoveTagClick} data-index={i} className={styles.clearTag}>
                         ×
                       </a>
                     </li>
                   )
-                })
-              }
+                })}
             </ul>
             <input
               {...rest}

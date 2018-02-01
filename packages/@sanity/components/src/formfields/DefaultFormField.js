@@ -21,7 +21,6 @@ export default class DefaultFormField extends React.Component {
   }
 
   render() {
-
     const {level, label, labelFor, description, children, inline, wrapped, className} = this.props
 
     const levelClass = `level_${level}`
@@ -32,27 +31,17 @@ export default class DefaultFormField extends React.Component {
           ${inline ? styles.inline : styles.block}
           ${styles[levelClass] || ''}
           ${wrapped ? styles.wrapped : ''}
-          ${className || ''}`
-        }
+          ${className || ''}`}
       >
         <label className={styles.inner} htmlFor={labelFor}>
-          {label && <DefaultLabel
-            className={styles.label}
-            level={level}
-          >
-            {label}
-          </DefaultLabel>}
+          {label && (
+            <DefaultLabel className={styles.label} level={level}>
+              {label}
+            </DefaultLabel>
+          )}
 
-          {
-            description
-            && <div className={styles.description}>
-              {description}
-            </div>
-          }
-          <div className={styles.content}>
-            {children}
-          </div>
-
+          {description && <div className={styles.description}>{description}</div>}
+          <div className={styles.content}>{children}</div>
         </label>
       </div>
     )

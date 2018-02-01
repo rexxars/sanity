@@ -125,9 +125,7 @@ function resolveRootDir(cwd) {
       }) || cwd
     )
   } catch (err) {
-    console.warn(
-      chalk.red(['Error occured trying to resolve project root:', err.message].join('\n'))
-    )
+    console.warn(chalk.red(['Error occured trying to resolve project root:', err.message].join('\n')))
     process.exit(1)
   }
 

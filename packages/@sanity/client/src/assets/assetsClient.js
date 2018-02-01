@@ -7,11 +7,11 @@ function AssetsClient(client) {
 }
 
 function toPromise(observable) {
-  return observable.filter(event => event.type === 'response')
+  return observable
+    .filter(event => event.type === 'response')
     .map(event => event.body)
     .toPromise()
 }
-
 
 function resolveWithDocument(body) {
   // todo: rewrite to just return body.document in a while
@@ -32,10 +32,13 @@ function optionsFromFile(opts, file) {
     return opts
   }
 
-  return assign({
-    filename: opts.preserveFilename === false ? undefined : file.name,
-    contentType: file.type
-  }, opts)
+  return assign(
+    {
+      filename: opts.preserveFilename === false ? undefined : file.name,
+      contentType: file.type
+    },
+    opts
+  )
 }
 
 assign(AssetsClient.prototype, {
@@ -77,9 +80,7 @@ assign(AssetsClient.prototype, {
       body
     })
 
-    return this.client.isPromiseAPI()
-      ? toPromise(observable).then(resolveWithDocument)
-      : observable
+    return this.client.isPromiseAPI() ? toPromise(observable).then(resolveWithDocument) : observable
   },
 
   delete(type, id) {
@@ -107,9 +108,7 @@ assign(AssetsClient.prototype, {
     }
 
     if (!/^image-[A-Za-z0-9_]+-\d+x\d+-[a-z]{1,5}$/.test(id)) {
-      throw new Error(
-        `Unsupported asset ID "${id}". URL generation only works for auto-generated IDs.`
-      )
+      throw new Error(`Unsupported asset ID "${id}". URL generation only works for auto-generated IDs.`)
     }
 
     const [, assetId, size, format] = id.split('-')

@@ -10,7 +10,6 @@ import Escapable from '../utilities/Escapable'
 const PADDING = 20
 
 export default class PopOver extends React.Component {
-
   static propTypes = {
     children: PropTypes.node.isRequired,
     onClose: PropTypes.func,
@@ -56,17 +55,13 @@ export default class PopOver extends React.Component {
       return
     }
 
-    const {
-      rootLeft,
-      availableHeight,
-      availableWidth
-    } = dimensions
+    const {rootLeft, availableHeight, availableWidth} = dimensions
 
     const width = this._popOverInnerElement.offsetWidth
 
-    let popoverLeft = rootLeft - (width / 2)
+    let popoverLeft = rootLeft - width / 2
 
-    if (availableWidth < (rootLeft + (width / 2))) {
+    if (availableWidth < rootLeft + width / 2) {
       popoverLeft = availableWidth - width - PADDING
     }
 
@@ -78,28 +73,13 @@ export default class PopOver extends React.Component {
   }
 
   render() {
-    const {
-      children,
-      isOpen,
-      onClose,
-      color,
-      useOverlay
-    } = this.props
+    const {children, isOpen, onClose, color, useOverlay} = this.props
 
-
-    const {
-      popoverLeft,
-      arrowLeft,
-      availableHeight,
-    } = this.state
+    const {popoverLeft, arrowLeft, availableHeight} = this.state
 
     return (
       <div style={{display: 'span'}} ref={this.setRootElement}>
-        <StickyPortal
-          isOpen={isOpen}
-          onResize={this.handlePortalResize}
-          useOverlay={useOverlay}
-        >
+        <StickyPortal isOpen={isOpen} onResize={this.handlePortalResize} useOverlay={useOverlay}>
           <Stacked>
             {isActive => (
               <div
@@ -119,7 +99,7 @@ export default class PopOver extends React.Component {
                     left: `${arrowLeft}px`
                   }}
                 />
-                <Escapable onEscape={event => ((isActive || event.shiftKey) && onClose())} />
+                <Escapable onEscape={event => (isActive || event.shiftKey) && onClose()} />
                 <CaptureOutsideClicks onClickOutside={isActive ? onClose : null}>
                   <div
                     className={styles.popover}

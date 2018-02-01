@@ -47,7 +47,11 @@ export default {
       type: 'string',
       required: true,
       options: {
-        list: [{title: 'Members', value: 'members'}, {title: 'Members and friends', value: 'friends'}, {title: 'Anyone', value: 'anyone'}],
+        list: [
+          {title: 'Members', value: 'members'},
+          {title: 'Members and friends', value: 'friends'},
+          {title: 'Anyone', value: 'anyone'}
+        ],
         layout: 'radio'
       }
     },

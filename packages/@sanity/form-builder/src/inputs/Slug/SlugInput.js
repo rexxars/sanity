@@ -58,22 +58,19 @@ export default class SlugInput extends React.Component {
     slugifyFn: PropTypes.func,
     document: PropTypes.object.isRequired,
     onChange: PropTypes.func
-  };
+  }
 
   static defaultProps = {
     value: {current: undefined, auto: true},
     onChange() {},
     slugifyFn: defaultSlugify
-  };
+  }
 
   state = vanillaState
 
   constructor(props) {
     super(props)
-    this.updateValueWithUniquenessCheck = debounce(
-      this.updateValueWithUniquenessCheck.bind(this),
-      500
-    )
+    this.updateValueWithUniquenessCheck = debounce(this.updateValueWithUniquenessCheck.bind(this), 500)
   }
 
   updateValue(value) {
@@ -84,16 +81,18 @@ export default class SlugInput extends React.Component {
   updateValueWithUniquenessCheck(value) {
     const {type, checkValidityFn, document} = this.props
     const docId = document._id
-    return makeCancelable(tryPromise(() => {
-      if (!value.current) {
-        this.updateValue(value)
-        this.setState({loading: false, validationError: null})
-        return Promise.resolve()
-      }
-      this.setState({loading: true, validationError: null})
-      return checkValidityFn(type, value.current, docId)
-    })).promise
-      .then(validationError => {
+    return makeCancelable(
+      tryPromise(() => {
+        if (!value.current) {
+          this.updateValue(value)
+          this.setState({loading: false, validationError: null})
+          return Promise.resolve()
+        }
+        this.setState({loading: true, validationError: null})
+        return checkValidityFn(type, value.current, docId)
+      })
+    )
+      .promise.then(validationError => {
         if (!validationError) {
           this.updateValue(value)
           this.setState({loading: false, validationError: null})
@@ -115,8 +114,8 @@ export default class SlugInput extends React.Component {
         console.error(err) // eslint-disable-line no-console
         this.setState({
           loading: false,
-          validationError: 'Got javascript error trying to validate the slug. '
-            + 'See javascript console for more info.'
+          validationError:
+            'Got javascript error trying to validate the slug. ' + 'See javascript console for more info.'
         })
         this.updateValue({current: value.current, auto: false})
         return Promise.resolve()
@@ -172,9 +171,8 @@ export default class SlugInput extends React.Component {
     }
     this.setState({inputText: event.target.value.toString()})
     this.finalizeSlugTimeout = setTimeout(() => {
-      const newCurrent = typeof this.state.inputText === 'undefined'
-        ? undefined
-        : this.slugify(this.state.inputText)
+      const newCurrent =
+        typeof this.state.inputText === 'undefined' ? undefined : this.slugify(this.state.inputText)
       this.setState({inputText: newCurrent})
       const newVal = {current: newCurrent, auto: value.auto}
       if (checkValidityFn) {
@@ -218,9 +216,7 @@ export default class SlugInput extends React.Component {
     const isAuto = type.options && type.options.source && value.auto
     return (
       <DefaultFormField {...formFieldProps}>
-        { validationError && (
-          <p>{validationError}</p>
-        )}
+        {validationError && <p>{validationError}</p>}
         <div className={InInputStyles.wrapper}>
           <DefaultTextInput
             id={inputId}
@@ -231,23 +227,11 @@ export default class SlugInput extends React.Component {
             value={typeof inputText === 'string' ? inputText : value.current}
           />
           <div className={InInputStyles.container}>
-            { loading && (
-              <Spinner inline message="Loading…" />
-            )}
-            {
-              hasSourceField && value.auto && (
-                <InInputButton onClick={this.handleChangeButtonClick}>
-                  Edit
-                </InInputButton>
-              )
-            }
-            {
-              hasSourceField && !value.auto && (
-                <InInputButton onClick={this.handleAutoButtonClicked}>
-                  Auto
-                </InInputButton>
-              )
-            }
+            {loading && <Spinner inline message="Loading…" />}
+            {hasSourceField &&
+              value.auto && <InInputButton onClick={this.handleChangeButtonClick}>Edit</InInputButton>}
+            {hasSourceField &&
+              !value.auto && <InInputButton onClick={this.handleAutoButtonClicked}>Auto</InInputButton>}
           </div>
         </div>
       </DefaultFormField>

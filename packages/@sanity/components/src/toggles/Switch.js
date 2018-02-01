@@ -8,7 +8,7 @@ export default class Switch extends React.Component {
     checked: PropTypes.bool,
     disabled: PropTypes.bool,
     onFocus: PropTypes.func,
-    onBlur: PropTypes.func,
+    onBlur: PropTypes.func
   }
 
   state = {
@@ -63,10 +63,7 @@ export default class Switch extends React.Component {
           ref={this.setInput}
           onFocus={this.handleFocus}
         />
-        <div className={styles.label}>
-          {label}
-        </div>
-
+        <div className={styles.label}>{label}</div>
       </label>
     )
   }

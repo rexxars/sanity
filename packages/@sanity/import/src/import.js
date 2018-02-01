@@ -9,12 +9,7 @@ const uploadAssets = require('./uploadAssets')
 const documentHasErrors = require('./documentHasErrors')
 const batchDocuments = require('./batchDocuments')
 const importBatches = require('./importBatches')
-const {
-  getStrongRefs,
-  weakenStrongRefs,
-  setTypeOnReferences,
-  strengthenReferences
-} = require('./references')
+const {getStrongRefs, weakenStrongRefs, setTypeOnReferences, strengthenReferences} = require('./references')
 
 async function importDocuments(input, opts) {
   const options = validateOptions(input, opts)

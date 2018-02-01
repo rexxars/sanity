@@ -17,7 +17,6 @@ import styles from './styles/BlockEditor.css'
 import {SLATE_SPAN_TYPE} from './constants'
 
 export default class BlockEditor extends React.Component {
-
   static propTypes = {
     type: PropTypes.any,
     level: PropTypes.number,
@@ -42,7 +41,6 @@ export default class BlockEditor extends React.Component {
   _inputId = uniqueId('SlateBlockEditor')
 
   constructor(props, context) {
-
     super(props, context)
 
     const preparation = prepareSlateForBlockEditor(this)
@@ -109,8 +107,9 @@ export default class BlockEditor extends React.Component {
   getActiveAnnotations() {
     const {value} = this.props
     const {focusBlock} = value
-    const disabled = value.inlines.some(inline => inline.type !== SLATE_SPAN_TYPE)
-      || (focusBlock ? (focusBlock.isVoid || focusBlock.text === '') : false)
+    const disabled =
+      value.inlines.some(inline => inline.type !== SLATE_SPAN_TYPE) ||
+      (focusBlock ? focusBlock.isVoid || focusBlock.text === '' : false)
     return this.annotationTypes.map(annotationType => {
       const active = this.hasAnnotationType(annotationType)
       return {
@@ -131,25 +130,21 @@ export default class BlockEditor extends React.Component {
       return <span>{props.children}</span>
     }
 
-    const items = this.textStyles
-      .map((style, index) => {
-        return {
-          key: `blockFormat-${index}`,
-          style: style,
-          preview: this.slateSchema.nodes.contentBlock({
-            children: [
-              <Preview
-                key={style.value}
-                parent={{data: Data.create({style: style.value})}}
-              >
-                {style.title}
-              </Preview>
-            ]
-          }),
-          title: ` ${style.title}`,
-          active: this.hasStyle(style.value)
-        }
-      })
+    const items = this.textStyles.map((style, index) => {
+      return {
+        key: `blockFormat-${index}`,
+        style: style,
+        preview: this.slateSchema.nodes.contentBlock({
+          children: [
+            <Preview key={style.value} parent={{data: Data.create({style: style.value})}}>
+              {style.title}
+            </Preview>
+          ]
+        }),
+        title: ` ${style.title}`,
+        active: this.hasStyle(style.value)
+      }
+    })
     let value = items.filter(item => item.active)
     if (value.length === 0) {
       value = [
@@ -195,14 +190,13 @@ export default class BlockEditor extends React.Component {
   }
 
   getListItems() {
-    return this.listItems
-      .map((item, index) => {
-        return {
-          type: item.value,
-          title: item.title,
-          active: this.hasListItem(item.value)
-        }
-      })
+    return this.listItems.map((item, index) => {
+      return {
+        type: item.value,
+        title: item.title,
+        active: this.hasListItem(item.value)
+      }
+    })
   }
 
   handleToggleFullscreen = () => {
@@ -265,7 +259,6 @@ export default class BlockEditor extends React.Component {
     // to scroll to the top/bottom of the block editor with momentum scroll or
     // a speedy mouse wheel
     // This makes the block-editor more usable when scrolling inside it.
-
     /*
     Enable this when activeOnFocus is finished
 
@@ -299,9 +292,7 @@ export default class BlockEditor extends React.Component {
     const {fullscreen, toolbarStyle} = this.state
 
     return (
-      <div
-        className={`${styles.root} ${fullscreen ? styles.fullscreen : ''}`}
-      >
+      <div className={`${styles.root} ${fullscreen ? styles.fullscreen : ''}`}>
         <Toolbar
           className={styles.toolbar}
           onInsertBlock={this.handleInsertBlock}
@@ -336,11 +327,7 @@ export default class BlockEditor extends React.Component {
               plugins={this.slatePlugins}
               schema={this.slateSchema}
             />
-            <div
-              ref={this.refBlockDragMarker}
-              style={{display: 'none'}}
-              className={styles.blockDragMarker}
-            />
+            <div ref={this.refBlockDragMarker} style={{display: 'none'}} className={styles.blockDragMarker} />
           </div>
         </div>
       </div>
@@ -373,22 +360,19 @@ export default class BlockEditor extends React.Component {
     const {fullscreen} = this.state
     const blockEditor = this.renderBlockEditor()
     return (
-      <FormField
-        label={type.title}
-        description={type.description}
-        labelFor={this._inputId}
-        level={level}
-      >
-        <button tabIndex={0} className={styles.focusSkipper} onClick={() => this.focus()}>Jump to editor</button>
-        {
-          fullscreen ? (
-            <FullscreenDialog isOpen onClose={this.handleFullScreenClose}>
-              <ScrollContainer className={styles.portal} onScroll={this.handleFullScreenScroll}>
-                {blockEditor}
-              </ScrollContainer>
-            </FullscreenDialog>
-          ) : blockEditor
-        }
+      <FormField label={type.title} description={type.description} labelFor={this._inputId} level={level}>
+        <button tabIndex={0} className={styles.focusSkipper} onClick={() => this.focus()}>
+          Jump to editor
+        </button>
+        {fullscreen ? (
+          <FullscreenDialog isOpen onClose={this.handleFullScreenClose}>
+            <ScrollContainer className={styles.portal} onScroll={this.handleFullScreenScroll}>
+              {blockEditor}
+            </ScrollContainer>
+          </FullscreenDialog>
+        ) : (
+          blockEditor
+        )}
       </FormField>
     )
   }

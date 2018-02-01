@@ -21,9 +21,7 @@ const keepActive$ = new Observable(observer => {
 })
   .concat(
     visibilityOn$.switchMap(on =>
-      Observable.of(on).concat(
-        visibilityOff$.debounceTime(DELAY_MS).map(() => false)
-      )
+      Observable.of(on).concat(visibilityOff$.debounceTime(DELAY_MS).map(() => false))
     )
   )
   .distinctUntilChanged()
@@ -69,20 +67,15 @@ export default class PreviewSubscriber extends React.PureComponent {
   subscribe(value, type, fields) {
     this.unsubscribe()
 
-    const viewOptions = this.props.ordering
-      ? {ordering: this.props.ordering}
-      : {}
+    const viewOptions = this.props.ordering ? {ordering: this.props.ordering} : {}
 
-    const inViewport$ = intersectionObservableFor(this._element)
-      .map(event => event.isIntersecting)
+    const inViewport$ = intersectionObservableFor(this._element).map(event => event.isIntersecting)
 
     this.subscription = keepActive$
       .switchMap(isVisible => (isVisible ? inViewport$ : Observable.of(false)))
       .distinctUntilChanged()
       .switchMap(isInViewport => {
-        return isInViewport
-          ? observeForPreview(value, type, fields, viewOptions)
-          : Observable.of(null)
+        return isInViewport ? observeForPreview(value, type, fields, viewOptions) : Observable.of(null)
       })
       .subscribe(result => {
         if (result) {

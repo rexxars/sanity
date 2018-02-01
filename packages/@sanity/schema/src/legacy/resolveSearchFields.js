@@ -22,10 +22,7 @@ function getCachedStringFieldPaths(type, maxDepth) {
 
 function getStringFieldPaths(type, maxDepth) {
   const reducer = (accumulator, childType, path) =>
-    (childType.jsonType === 'string'
-      ? [...accumulator, path]
-      : accumulator
-    )
+    childType.jsonType === 'string' ? [...accumulator, path] : accumulator
 
   return reduceType(type, reducer, [], [], maxDepth)
 }

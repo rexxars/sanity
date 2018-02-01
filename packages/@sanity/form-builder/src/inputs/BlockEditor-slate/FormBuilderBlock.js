@@ -28,7 +28,7 @@ const DIALOG_ACTIONS = [
     index: '1',
     name: 'close',
     title: 'Close'
-  },
+  }
   // {
   //   index: '2',
   //   name: 'delete',
@@ -88,7 +88,7 @@ export default class FormBuilderBlock extends React.Component {
     const encoded = Base64.serializeNode(this.props.node, {preserveKeys: true})
     setTransferData(event.dataTransfer, TRANSFER_TYPES.NODE, encoded)
     event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setDragImage(element, (element.clientWidth / 2), -10)
+    event.dataTransfer.setDragImage(element, element.clientWidth / 2, -10)
   }
 
   addSelectionHandler() {
@@ -111,8 +111,7 @@ export default class FormBuilderBlock extends React.Component {
 
   handleSelectionChange = event => {
     const selection = document.getSelection()
-    const isSelected = selection.containsNode
-        && selection.containsNode(this.formBuilderBlock)
+    const isSelected = selection.containsNode && selection.containsNode(this.formBuilderBlock)
     this.setState({isSelected})
   }
 
@@ -130,7 +129,6 @@ export default class FormBuilderBlock extends React.Component {
   }
 
   handleDragOverOtherNode = event => {
-
     if (!this.state.isDragging) {
       return
     }
@@ -200,7 +198,6 @@ export default class FormBuilderBlock extends React.Component {
     editor.onChange(nextChange)
 
     this.resetDropTarget()
-
   }
 
   handleCancelEvent = event => {
@@ -241,13 +238,7 @@ export default class FormBuilderBlock extends React.Component {
       )
     }
 
-    return (
-      <Preview
-        type={memberType}
-        value={this.getValue()}
-        layout="block"
-      />
-    )
+    return <Preview type={memberType} value={this.getValue()} layout="block" />
   }
 
   handleDialogAction = action => {
@@ -289,17 +280,11 @@ export default class FormBuilderBlock extends React.Component {
   renderInput() {
     const editModalLayout = get(this.props.type.options, 'editModal')
 
-    const input = (
-      <FocusManager>{this.renderFormBuilderInput}</FocusManager>
-    )
+    const input = <FocusManager>{this.renderFormBuilderInput}</FocusManager>
 
     if (editModalLayout === 'fullscreen') {
       return (
-        <FullscreenDialog
-          isOpen
-          title={this.props.node.title}
-          onClose={this.handleClose}
-        >
+        <FullscreenDialog isOpen title={this.props.node.title} onClose={this.handleClose}>
           {input}
         </FullscreenDialog>
       )
@@ -308,11 +293,7 @@ export default class FormBuilderBlock extends React.Component {
     if (editModalLayout === 'fold') {
       return (
         <div className={styles.editBlockContainerFold}>
-          <EditItemFold
-            isOpen
-            title={this.props.node.title}
-            onClose={this.handleClose}
-          >
+          <EditItemFold isOpen title={this.props.node.title} onClose={this.handleClose}>
             {input}
           </EditItemFold>
         </div>
@@ -322,11 +303,7 @@ export default class FormBuilderBlock extends React.Component {
     if (editModalLayout === 'popover') {
       return (
         <div className={styles.editBlockContainerPopOver}>
-          <EditItemPopOver
-            isOpen
-            title={this.props.node.title}
-            onClose={this.handleClose}
-          >
+          <EditItemPopOver isOpen title={this.props.node.title} onClose={this.handleClose}>
             {input}
           </EditItemPopOver>
         </div>
@@ -346,8 +323,6 @@ export default class FormBuilderBlock extends React.Component {
         {input}
       </DefaultDialog>
     )
-
-
   }
 
   showBlockDragMarker(pos, node) {
@@ -390,23 +365,12 @@ export default class FormBuilderBlock extends React.Component {
         ref={this.refFormBuilderBlock}
         className={className}
       >
-        <span
-          ref={this.refPreview}
-          className={styles.previewContainer}
-        >
-          <div className={styles.preview}>
-            {this.renderPreview()}
-          </div>
+        <span ref={this.refPreview} className={styles.previewContainer}>
+          <div className={styles.preview}>{this.renderPreview()}</div>
           <div className={styles.functions}>
-            {
-              memberType && <span className={styles.type}>{memberType.title || memberType.name}</span>
-            }
+            {memberType && <span className={styles.type}>{memberType.title || memberType.name}</span>}
             <div>
-              <Button
-                kind="simple"
-                icon={EditIcon}
-                title="Delete"
-              />
+              <Button kind="simple" icon={EditIcon} title="Delete" />
             </div>
             {/*
               Add delete button later when we have handleDelete here

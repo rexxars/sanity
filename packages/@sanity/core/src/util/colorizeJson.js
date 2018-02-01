@@ -6,7 +6,7 @@ const formatters = {
   key: 'white',
   string: 'green',
   number: 'yellow',
-  literal: 'bold',
+  literal: 'bold'
 }
 
 function colorize(input, chalk) {

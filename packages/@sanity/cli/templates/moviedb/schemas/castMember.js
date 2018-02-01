@@ -32,5 +32,4 @@ export default {
       imageUrl: 'person.image.asset.url'
     }
   }
-
 }

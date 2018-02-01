@@ -74,7 +74,7 @@ class DropDownButton extends React.PureComponent {
 
   handleResize = dimensions => {
     const buttonHeight = this._rootElement.offsetHeight
-    if (this._menuElement.offsetHeight + buttonHeight < (window.innerHeight - dimensions.rootTop)) {
+    if (this._menuElement.offsetHeight + buttonHeight < window.innerHeight - dimensions.rootTop) {
       this.setState({
         stickToBottom: true
       })
@@ -88,7 +88,6 @@ class DropDownButton extends React.PureComponent {
   render() {
     const {items, children, kind, className, origin, ...rest} = omit(this.props, 'onAction')
     const {menuOpened, width, stickToBottom} = this.state
-
 
     let menuClassName = styles.menu
 
@@ -110,15 +109,8 @@ class DropDownButton extends React.PureComponent {
 
     return (
       <div ref={this.setRootElement} className={className}>
-        <Button
-          {...rest}
-          className={`${styles.root}`}
-          onClick={this.handleOnClick}
-          kind={kind}
-        >
-          <span className={styles.title}>
-            {children}
-          </span>
+        <Button {...rest} className={`${styles.root}`} onClick={this.handleOnClick} kind={kind}>
+          <span className={styles.title}>{children}</span>
 
           <span className={styles.arrow}>
             <ArrowIcon color="inherit" />
@@ -129,36 +121,31 @@ class DropDownButton extends React.PureComponent {
               ${origin === 'left' ? styles.stickyLeft : styles.stickyRight}
             `}
           >
-            {
-              menuOpened && (
-                <Stacked>
-                  {isActive => (
-                    <StickyPortal
-                      isOpen
-                      onResize={this.handleResize}
-                      onlyBottomSpace={false}
-                      useOverlay={false}
-                      addPadding={false}
-                      scrollIntoView={false}
-                    >
-                      <div
-                        ref={this.setMenuElement}
-                        style={{minWidth: `${width}px`}}
-                      >
-                        <Escapable onEscape={event => (isActive && this.handleClose())} />
-                        <Menu
-                          items={items}
-                          isOpen
-                          className={menuClassName}
-                          onAction={this.handleAction}
-                          onClickOutside={event => (isActive && this.handleClose())}
-                        />
-                      </div>
-                    </StickyPortal>
-                  )}
-                </Stacked>
-              )
-            }
+            {menuOpened && (
+              <Stacked>
+                {isActive => (
+                  <StickyPortal
+                    isOpen
+                    onResize={this.handleResize}
+                    onlyBottomSpace={false}
+                    useOverlay={false}
+                    addPadding={false}
+                    scrollIntoView={false}
+                  >
+                    <div ref={this.setMenuElement} style={{minWidth: `${width}px`}}>
+                      <Escapable onEscape={event => isActive && this.handleClose()} />
+                      <Menu
+                        items={items}
+                        isOpen
+                        className={menuClassName}
+                        onAction={this.handleAction}
+                        onClickOutside={event => isActive && this.handleClose()}
+                      />
+                    </div>
+                  </StickyPortal>
+                )}
+              </Stacked>
+            )}
           </span>
         </Button>
       </div>

@@ -22,7 +22,7 @@ const containerStyle = {
   position: 'fixed',
   top: '50%',
   left: '50%',
-  transform: 'translateX(-50%) translateY(-50%)',
+  transform: 'translateX(-50%) translateY(-50%)'
 }
 
 const defaultItems = range(100).map((item, i) => {
@@ -31,7 +31,6 @@ const defaultItems = range(100).map((item, i) => {
     title: chance.name()
   }
 })
-
 
 class SortableTester extends React.Component {
   constructor(props, args) {
@@ -54,10 +53,7 @@ class SortableTester extends React.Component {
     const {items} = this.state
 
     return (
-      <SortableList
-        {...this.props}
-        onSort={this.handleOnSort}
-      >
+      <SortableList {...this.props} onSort={this.handleOnSort}>
         {items.map((item, index) => {
           return (
             <SortableItem index={index} key={index}>
@@ -79,11 +75,7 @@ storiesOf('List')
         <div style={containerStyle}>
           <DefaultList>
             {defaultItems.map((item, index) => {
-              return (
-                <DefaultItem key={index}>
-                  {item.title}
-                </DefaultItem>
-              )
+              return <DefaultItem key={index}>{item.title}</DefaultItem>
             })}
           </DefaultList>
         </div>

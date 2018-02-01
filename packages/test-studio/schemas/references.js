@@ -35,10 +35,10 @@ export default {
           name: 'weakAuthorRef',
           title: 'A weak author ref',
           weak: true,
-          to: {type: 'author'},
+          to: {type: 'author'}
         }
       ]
-    },
+    }
   ],
   preview: {
     fields: {

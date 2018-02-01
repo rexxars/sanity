@@ -26,9 +26,7 @@ class JsonBlock extends React.PureComponent {
       <pre className={styles.block}>
         {tokens.map((token, i) => {
           const Formatter = formatters[token.type]
-          return Formatter
-            ? <Formatter key={i} className={styles[token.type]} raw={token.raw} />
-            : token.raw
+          return Formatter ? <Formatter key={i} className={styles[token.type]} raw={token.raw} /> : token.raw
         })}
       </pre>
     )
@@ -44,11 +42,5 @@ export default function JsonDump(props) {
     return <JsonBlock data={props.data} />
   }
 
-  return (
-    <code>
-      {props.data.map((row, i) => (
-        <JsonBlock key={row._id || row.eventId || i} data={row} />
-      ))}
-    </code>
-  )
+  return <code>{props.data.map((row, i) => <JsonBlock key={row._id || row.eventId || i} data={row} />)}</code>
 }

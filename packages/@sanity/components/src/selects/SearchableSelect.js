@@ -133,7 +133,7 @@ export default class SearchableSelect extends React.Component {
 
   handleResize = dimensions => {
     const width = this._rootElement.clientWidth
-    if ((window.innerHeight - dimensions.rootTop) < window.innerHeight / 3) {
+    if (window.innerHeight - dimensions.rootTop < window.innerHeight / 3) {
       this.setState({
         dropdownPosition: 'top',
         width: width
@@ -147,7 +147,15 @@ export default class SearchableSelect extends React.Component {
   }
 
   render() {
-    const {isOpen, highlightIndex, isInputSelected, inputValue, width, hasFocus, dropdownPosition} = this.state
+    const {
+      isOpen,
+      highlightIndex,
+      isInputSelected,
+      inputValue,
+      width,
+      hasFocus,
+      dropdownPosition
+    } = this.state
     const {onSearch, ...rest} = this.props
     return (
       <div ref={this.setRootElement}>

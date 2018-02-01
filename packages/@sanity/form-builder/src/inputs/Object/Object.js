@@ -34,7 +34,6 @@ function getCollapsedWithDefaults(options = {}, level) {
 }
 
 export default class ObjectInput extends React.PureComponent {
-
   static propTypes = {
     type: FormBuilderPropTypes.type,
     value: PropTypes.object,
@@ -71,7 +70,8 @@ export default class ObjectInput extends React.PureComponent {
         const valueTypeName = value && value._type
         const schemaTypeName = type.name
 
-        if (valueTypeName && schemaTypeName === 'object') { // eslint-disable-line max-depth
+        if (valueTypeName && schemaTypeName === 'object') {
+          // eslint-disable-line max-depth
           // The value has a _type key, but the type name from schema is 'object',
           // but _type: 'object' is implicit so we should fix it by removing it
           event = event.prepend(unset(['_type']))
@@ -80,7 +80,6 @@ export default class ObjectInput extends React.PureComponent {
           // fix it by setting _type to type name defined in schema
           event = event.prepend(set(schemaTypeName, ['_type']))
         }
-
       }
     }
     onChange(event)
@@ -114,9 +113,7 @@ export default class ObjectInput extends React.PureComponent {
 
     const collapsibleOpts = getCollapsedWithDefaults(fieldset.options)
 
-    const isExpanded = focusPath.length > 0 && fieldset.fields.some(field => (
-      focusPath[0] === field.name
-    ))
+    const isExpanded = focusPath.length > 0 && fieldset.fields.some(field => focusPath[0] === field.name)
 
     return (
       <div key={fieldset.name} className={fieldStyles.root}>
@@ -133,7 +130,6 @@ export default class ObjectInput extends React.PureComponent {
           })}
         </Fieldset>
       </div>
-
     )
   }
 
@@ -159,20 +155,15 @@ export default class ObjectInput extends React.PureComponent {
     }
 
     const knownFieldNames = type.fields.map(field => field.name)
-    const unknownFields = Object.keys(value || {})
-      .filter(key => !key.startsWith('_') && !knownFieldNames.includes(key))
+    const unknownFields = Object.keys(value || {}).filter(
+      key => !key.startsWith('_') && !knownFieldNames.includes(key)
+    )
 
     if (unknownFields.length === 0) {
       return null
     }
 
-    return (
-      <UnknownFields
-        fieldNames={unknownFields}
-        value={value}
-        onChange={onChange}
-      />
-    )
+    return <UnknownFields fieldNames={unknownFields} value={value} onChange={onChange} />
   }
 
   setFirstField = el => {
@@ -203,12 +194,7 @@ export default class ObjectInput extends React.PureComponent {
     const columns = type.options && type.options.columns
 
     return (
-      <Fieldset
-        level={level}
-        legend={type.title}
-        description={type.description}
-        columns={columns}
-      >
+      <Fieldset level={level} legend={type.title} description={type.description} columns={columns}>
         {renderedFields}
         {renderedUnknownFields}
       </Fieldset>

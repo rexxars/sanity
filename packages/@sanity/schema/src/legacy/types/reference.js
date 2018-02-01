@@ -27,7 +27,10 @@ function buildTitle(type) {
   if (!type.to || type.to.length === 0) {
     return 'Reference'
   }
-  return `Reference to ${humanize(arrify(type.to).map(toType => (toType.title || toType.name || toType.type || '').toLowerCase()), 'or')}`
+  return `Reference to ${humanize(
+    arrify(type.to).map(toType => (toType.title || toType.name || toType.type || '').toLowerCase()),
+    'or'
+  )}`
 }
 
 export const ReferenceType = {
@@ -40,7 +43,7 @@ export const ReferenceType = {
     }
     const parsed = Object.assign(pick(REFERENCE_CORE, OVERRIDABLE_FIELDS), subTypeDef, {
       type: REFERENCE_CORE,
-      title: subTypeDef.title || buildTitle(subTypeDef),
+      title: subTypeDef.title || buildTitle(subTypeDef)
     })
 
     lazyGetter(parsed, 'to', () => {

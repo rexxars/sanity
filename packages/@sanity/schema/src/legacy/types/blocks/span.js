@@ -2,15 +2,7 @@ import {pick} from 'lodash'
 import {lazyGetter} from '../utils'
 import createPreviewGetter from '../../preview/createPreviewGetter'
 
-const INHERITED_FIELDS = [
-  'type',
-  'name',
-  'title',
-  'jsonType',
-  'description',
-  'options',
-  'fieldsets'
-]
+const INHERITED_FIELDS = ['type', 'name', 'title', 'jsonType', 'description', 'options', 'fieldsets']
 
 const SPAN_CORE = {
   name: 'span',

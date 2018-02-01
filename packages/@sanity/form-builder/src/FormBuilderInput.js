@@ -91,7 +91,8 @@ export const FormBuilderInput = class FormBuilderInput extends React.PureCompone
           'Missing a required ".focus()" method on input component. Please check the implementation of %s. Read more at %s',
           displayName,
           generateHelpUrl('input-component-missing-required-method')
-        ))
+        )
+      )
       return
     }
 
@@ -110,7 +111,8 @@ export const FormBuilderInput = class FormBuilderInput extends React.PureCompone
     const {path, onFocus, focusPath} = this.props
 
     if (!onFocus) {
-      console.warn( // eslint-disable-line no-console
+      console.warn(
+        // eslint-disable-line no-console
         'FormBuilderInput was used without passing a required onFocus prop. Read more at %s.',
         generateHelpUrl('form-builder-input-missing-required-prop')
       )
@@ -130,7 +132,8 @@ export const FormBuilderInput = class FormBuilderInput extends React.PureCompone
   handleBlur = () => {
     const {onBlur} = this.props
     if (!onBlur) {
-      console.warn( // eslint-disable-line no-console
+      console.warn(
+        // eslint-disable-line no-console
         'FormBuilderInput was used without passing a required onBlur prop. Read more at %s.',
         generateHelpUrl('form-builder-input-missing-required-prop')
       )
@@ -149,18 +152,7 @@ export const FormBuilderInput = class FormBuilderInput extends React.PureCompone
   }
 
   render() {
-    const {
-      onChange,
-      onFocus,
-      onBlur,
-      path,
-      value,
-      type,
-      level,
-      focusPath,
-      isRoot,
-      ...rest
-    } = this.props
+    const {onChange, onFocus, onBlur, path, value, type, level, focusPath, isRoot, ...rest} = this.props
 
     const InputComponent = this.resolveInputComponent(type)
 

@@ -11,9 +11,9 @@ export default class RadioSelect extends React.Component {
     value: PropTypes.object,
     items: PropTypes.arrayOf(
       PropTypes.shape({
-        title: PropTypes.string,
+        title: PropTypes.string
       })
-    ),
+    )
   }
 
   static defaultProps = {
@@ -55,25 +55,23 @@ export default class RadioSelect extends React.Component {
         `}
       >
         <div className={styles.radioContainer}>
-          {
-            items.map((item, i) => {
-              return (
-                <div className={styles.item} key={i}>
-                  <RadioButton
-                    name={name}
-                    key={i}
-                    label={item.title}
-                    item={item}
-                    onChange={this.handleRadioChange}
-                    checked={value === item}
-                    onFocus={this.handleFocus}
-                    onBlur={this.handleBlur}
-                    hasFocus={focusedItem === item}
-                  />
-                </div>
-              )
-            })
-          }
+          {items.map((item, i) => {
+            return (
+              <div className={styles.item} key={i}>
+                <RadioButton
+                  name={name}
+                  key={i}
+                  label={item.title}
+                  item={item}
+                  onChange={this.handleRadioChange}
+                  checked={value === item}
+                  onFocus={this.handleFocus}
+                  onBlur={this.handleBlur}
+                  hasFocus={focusedItem === item}
+                />
+              </div>
+            )
+          })}
         </div>
       </div>
     )

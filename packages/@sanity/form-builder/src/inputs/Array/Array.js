@@ -31,13 +31,17 @@ function isEmpty(value: ?ItemValue) {
 
 function createProtoValue(type: Type): ItemValue {
   if (type.jsonType !== 'object') {
-    throw new Error(`Invalid item type: "${type.type}". Default array input can only contain objects (for now)`)
+    throw new Error(
+      `Invalid item type: "${type.type}". Default array input can only contain objects (for now)`
+    )
   }
   const key = randomKey(12)
-  return type.name === 'object' ? {_key: key} : {
-    _type: type.name,
-    _key: key
-  }
+  return type.name === 'object'
+    ? {_key: key}
+    : {
+        _type: type.name,
+        _key: key
+      }
 }
 
 type Props = {
@@ -54,7 +58,7 @@ type Props = {
 export default class ArrayInput extends React.Component<Props, State> {
   _element: ?UploadTargetFieldset
 
-  uploadSubscriptions: { [string]: Subscription }
+  uploadSubscriptions: {[string]: Subscription}
   uploadSubscriptions = {}
 
   static defaultProps = {
@@ -66,10 +70,7 @@ export default class ArrayInput extends React.Component<Props, State> {
 
   insert(itemValue: ItemValue, position: 'before' | 'after', atIndex: number) {
     const {onChange} = this.props
-    onChange(PatchEvent.from(
-      setIfMissing([]),
-      insert([itemValue], position, [atIndex])
-    ))
+    onChange(PatchEvent.from(setIfMissing([]), insert([itemValue], position, [atIndex])))
   }
 
   prepend(value: ItemValue) {
@@ -92,7 +93,7 @@ export default class ArrayInput extends React.Component<Props, State> {
     this.props.onFocus([{_key: item._key}, FOCUS_TERMINATOR])
   }
 
-  handleDropDownAction = (menuItem: { type: Type }) => {
+  handleDropDownAction = (menuItem: {type: Type}) => {
     const item = createProtoValue(menuItem.type)
     this.append(item)
     this.setItemExpanded(item)
@@ -111,11 +112,7 @@ export default class ArrayInput extends React.Component<Props, State> {
 
   removeItem(item: ItemValue) {
     const {onChange, onFocus, value} = this.props
-    onChange(
-      PatchEvent.from(
-        unset(item._key ? [{_key: item._key}] : [value.indexOf(item)])
-      )
-    )
+    onChange(PatchEvent.from(unset(item._key ? [{_key: item._key}] : [value.indexOf(item)])))
 
     if (item._key in this.uploadSubscriptions) {
       this.uploadSubscriptions[item._key].unsubscribe()
@@ -157,18 +154,14 @@ export default class ArrayInput extends React.Component<Props, State> {
     }
 
     const key = item._key || randomKey(12)
-    onChange(
-      event
-        .prefixAll({_key: key})
-        .prepend(item._key ? [] : set(key, [value.indexOf(item), '_key']))
-    )
+    onChange(event.prefixAll({_key: key}).prepend(item._key ? [] : set(key, [value.indexOf(item), '_key'])))
   }
 
   handleSortStart = () => {
     this.setState({isMoving: true})
   }
 
-  handleSortEnd = (event: { newIndex: number, oldIndex: number }) => {
+  handleSortEnd = (event: {newIndex: number, oldIndex: number}) => {
     this.setState({isMoving: false})
     const {value, onChange} = this.props
     const item = value[event.oldIndex]
@@ -177,7 +170,9 @@ export default class ArrayInput extends React.Component<Props, State> {
     // console.log('from %d => %d', event.oldIndex, event.newIndex, event)
     if (!item._key || !refItem._key) {
       // eslint-disable-next-line no-console
-      console.error('Neither the item you are moving nor the item you are moving to have a key. Cannot continue.')
+      console.error(
+        'Neither the item you are moving nor the item you are moving to have a key. Cannot continue.'
+      )
       return
     }
 
@@ -185,14 +180,12 @@ export default class ArrayInput extends React.Component<Props, State> {
       return
     }
 
-    onChange(PatchEvent.from(
-      unset([{_key: item._key}]),
-      insert(
-        [item],
-        event.oldIndex > event.newIndex ? 'before' : 'after',
-        [{_key: refItem._key}]
+    onChange(
+      PatchEvent.from(
+        unset([{_key: item._key}]),
+        insert([item], event.oldIndex > event.newIndex ? 'before' : 'after', [{_key: refItem._key}])
       )
-    ))
+    )
   }
 
   getExpandedItem(): ?ItemValue {
@@ -201,7 +194,7 @@ export default class ArrayInput extends React.Component<Props, State> {
     return head && value.find(item => item._key === head._key)
   }
 
-  getMemberTypeOfItem(item: ItemValue): ? Type {
+  getMemberTypeOfItem(item: ItemValue): ?Type {
     const {type} = this.props
     const itemTypeName = resolveTypeName(item)
     return type.of.find(memberType => memberType.name === itemTypeName)
@@ -220,30 +213,20 @@ export default class ArrayInput extends React.Component<Props, State> {
 
     const listProps = isSortable
       ? {
-        movingItemClass: styles.movingItem,
-        onSortEnd: this.handleSortEnd,
-        onSortStart: this.handleSortStart,
-        lockToContainerEdges: true,
-        useDragHandle: !isGrid
-      }
+          movingItemClass: styles.movingItem,
+          onSortEnd: this.handleSortEnd,
+          onSortStart: this.handleSortStart,
+          lockToContainerEdges: true,
+          useDragHandle: !isGrid
+        }
       : {}
     const listItemClassName = isMoving ? styles.listItemMute : styles.listItem
     return (
-      <List
-        className={styles.list}
-        {...listProps}
-      >
+      <List className={styles.list} {...listProps}>
         {value.map((item, index) => {
           const itemProps = isSortable ? {index} : {}
           return (
-            <Item
-              key={item._key}
-              className={isGrid
-                ? styles.gridItem
-                : listItemClassName
-              }
-              {...itemProps}
-            >
+            <Item key={item._key} className={isGrid ? styles.gridItem : listItemClassName} {...itemProps}>
               <RenderItemValue
                 type={type}
                 value={item}
@@ -279,10 +262,12 @@ export default class ArrayInput extends React.Component<Props, State> {
     return type.of
       .map(memberType => {
         const uploader = resolveUploader(memberType, file)
-        return uploader && {
-          type: memberType,
-          uploader
-        }
+        return (
+          uploader && {
+            type: memberType,
+            uploader
+          }
+        )
       })
       .filter(Boolean)
   }
@@ -294,7 +279,8 @@ export default class ArrayInput extends React.Component<Props, State> {
     const key = item._key
     this.append(item)
 
-    const events$ = uploader.upload(file, type)
+    const events$ = uploader
+      .upload(file, type)
       .map(uploadEvent => PatchEvent.from(uploadEvent.patches).prefixAll({_key: key}))
 
     this.uploadSubscriptions = {

@@ -11,5 +11,7 @@ export {default as ImageInput} from './inputs/Image'
 export {SlugInput}
 
 export function createFormBuilder() {
-  throw new Error('The factory function createFormBuilder(...) has been removed. Please use <FormBuilder .../> instead')
+  throw new Error(
+    'The factory function createFormBuilder(...) has been removed. Please use <FormBuilder .../> instead'
+  )
 }

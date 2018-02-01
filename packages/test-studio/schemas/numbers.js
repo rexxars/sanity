@@ -23,6 +23,6 @@ export default {
       title: 'A read only number',
       description: 'It may have a value, but it cannot be edited',
       readOnly: true
-    },
+    }
   ]
 }

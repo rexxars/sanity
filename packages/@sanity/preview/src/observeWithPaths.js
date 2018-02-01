@@ -6,9 +6,9 @@ import {combineSelections, reassemble, toGradientQuery} from './utils/optimizeQu
 let _globalListener
 const getGlobalListener = () => {
   if (!_globalListener) {
-    _globalListener = Observable
-      .from(client.listen('*[!(_id in path("_.**"))]', {}, {includeResult: false}))
-      .share()
+    _globalListener = Observable.from(
+      client.listen('*[!(_id in path("_.**"))]', {}, {includeResult: false})
+    ).share()
   }
   return _globalListener
 }
@@ -35,8 +35,9 @@ const debouncedFetchDocumentSnapshot = debounceCollect(fetchAllDocumentSnapshots
 // }
 
 export default function observeWithPaths(id, paths) {
-  return debouncedFetchDocumentSnapshot(id, paths)
-    .concat(listen(id)
+  return debouncedFetchDocumentSnapshot(id, paths).concat(
+    listen(id)
       .debounceTime(1000)
-      .switchMap(event => debouncedFetchDocumentSnapshot(id, paths)))
+      .switchMap(event => debouncedFetchDocumentSnapshot(id, paths))
+  )
 }

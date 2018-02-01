@@ -33,7 +33,8 @@ const schemaType = schema && schema.get(params.typeName)
 
 function logPatch(patch) {
   const {type, path, ...rest} = patch
-  console.log( // eslint-disable-line no-console
+  console.log(
+    // eslint-disable-line no-console
     '%c%s%c %s =>',
     'color:#2097ac',
     type,
@@ -99,7 +100,6 @@ export default class Main extends React.Component {
       value: nextValue,
       saved: false
     })
-
   }
 
   cmdSave(event) {
@@ -126,7 +126,7 @@ export default class Main extends React.Component {
   handleDispatchCommand = event => {
     const command = event.currentTarget.getAttribute('data-cmd')
     const methodName = `cmd${command}`
-    if ((typeof this[methodName]) !== 'function') {
+    if (typeof this[methodName] !== 'function') {
       throw new Error(`Invalid command: ${JSON.stringify(command)}`)
     }
     this[methodName](event)
@@ -152,11 +152,15 @@ export default class Main extends React.Component {
         <this.CommandButton command="Save">{saved ? '✓ Saved' : '  Save'}</this.CommandButton>
         <this.CommandButton command="Revert">Load saved</this.CommandButton>
         <this.CommandButton command="Clear">Clear</this.CommandButton>
-        <this.CommandButton command="Log">console.log value</this.CommandButton>
-        {' '}
+        <this.CommandButton command="Log">console.log value</this.CommandButton>{' '}
         <label>
-          <input data-cmd="InspectLive" checked={inspect} type="checkbox" onChange={this.handleDispatchCommand} />
-          {' '} Live inspection
+          <input
+            data-cmd="InspectLive"
+            checked={inspect}
+            type="checkbox"
+            onChange={this.handleDispatchCommand}
+          />{' '}
+          Live inspection
         </label>
       </div>
     )
@@ -166,14 +170,24 @@ export default class Main extends React.Component {
     const {value, inspect} = this.state
     return (
       <div className={styles[inspect === 'docked' ? 'inspectPane' : 'inspectPaneFullScreen']}>
-        <button className={styles.closeInspectPaneButton} onClick={() => this.setState({inspect: false})}>x</button>
+        <button className={styles.closeInspectPaneButton} onClick={() => this.setState({inspect: false})}>
+          x
+        </button>
         {inspect === 'docked' && (
-          <button className={styles.fullscreenInspectPaneButton} onClick={() => this.setState({inspect: 'fullscreen'})}>
-            ↑</button>
+          <button
+            className={styles.fullscreenInspectPaneButton}
+            onClick={() => this.setState({inspect: 'fullscreen'})}
+          >
+            ↑
+          </button>
         )}
         {inspect === 'fullscreen' && (
-          <button className={styles.dockedInspectPaneButton} onClick={() => this.setState({inspect: 'docked'})}>
-            ↓</button>
+          <button
+            className={styles.dockedInspectPaneButton}
+            onClick={() => this.setState({inspect: 'docked'})}
+          >
+            ↓
+          </button>
         )}
         <div className={styles[inspect === 'docked' ? 'inspectPaneInner' : 'inspectPaneInnerFullScreen']}>
           <Inspector inspect={value} />

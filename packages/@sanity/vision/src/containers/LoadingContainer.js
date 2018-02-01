@@ -19,7 +19,7 @@ class LoadingContainer extends React.PureComponent {
 
   componentDidMount() {
     const subs = this.getSubscriptions()
-    const stateKeys = this.stateKeys = Object.keys(subs)
+    const stateKeys = (this.stateKeys = Object.keys(subs))
 
     this.subscriptions = stateKeys.reduce((target, key) => {
       target.push(request(this, subs[key], key))

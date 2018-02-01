@@ -1,7 +1,7 @@
 /**
  * An example of how to sync focus path through document.location.hash
  *
-*/
+ */
 
 // @flow
 import React from 'react'

@@ -34,11 +34,7 @@ export default class TelephoneInput extends React.Component<Props> {
     const {value, type, level, ...rest} = this.props
 
     return (
-      <FormField
-        level={level}
-        label={type.title}
-        description={type.description}
-      >
+      <FormField level={level} label={type.title} description={type.description}>
         <TextInput
           {...rest}
           type="tel"

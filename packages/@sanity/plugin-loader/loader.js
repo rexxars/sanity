@@ -30,9 +30,7 @@ function registerLoader(options) {
 
   // Resolve actual parts only if basePath is set,
   // otherwise use empty defaults
-  const parts = options.basePath
-    ? resolveParts({basePath, sync: true})
-    : Object.assign({}, defaultResult)
+  const parts = options.basePath ? resolveParts({basePath, sync: true}) : Object.assign({}, defaultResult)
 
   // Configuration files are loaded with a custom prefix
   const configPath = path.join(basePath, 'config')
@@ -52,10 +50,7 @@ function registerLoader(options) {
       }
     })
 
-    parts.implementations = Object.assign(
-      parts.implementations,
-      overrides
-    )
+    parts.implementations = Object.assign(parts.implementations, overrides)
   }
 
   const realResolve = Module._resolveFilename
@@ -105,9 +100,8 @@ function registerLoader(options) {
 
       // Overrides should be plain objects, not paths to modules
       // Actual resolved parts are paths to implementations
-      const implementations = overrides && overrides[partName]
-        ? implementers
-        : implementers.map(interopRequire)
+      const implementations =
+        overrides && overrides[partName] ? implementers : implementers.map(interopRequire)
 
       require.cache[request] = getModule(request, implementations.reverse())
       return request
@@ -128,7 +122,9 @@ function registerLoader(options) {
 
       try {
         return realResolve(request, parent)
-      } catch (err) { /* intentional noop */ }
+      } catch (err) {
+        /* intentional noop */
+      }
 
       // Attempt local resolve
       try {
@@ -153,7 +149,8 @@ function registerLoader(options) {
   // Register CSS hook
   cssHook({
     generateScopedName: options.generateScopedName || '[name]__[local]___[hash:base64:5]',
-    prepend: postcss.getPostcssPlugins({basePath: basePath})
+    prepend: postcss
+      .getPostcssPlugins({basePath: basePath})
       .filter(plugin => plugin.postcssPlugin !== 'postcss-import')
   })
 }

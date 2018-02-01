@@ -169,11 +169,12 @@ class VisionGui extends React.PureComponent {
 
     this.subscribers.listen = client.listen(query, params, {}).subscribe({
       next: this.handleListenerMutation,
-      error: error => this.setState({
-        error,
-        query,
-        listenInProgress: false
-      })
+      error: error =>
+        this.setState({
+          error,
+          query,
+          listenInProgress: false
+        })
     })
   }
 
@@ -204,20 +205,22 @@ class VisionGui extends React.PureComponent {
     const queryStart = Date.now()
 
     this.subscribers.query = client.fetch(query, params, {filterResponse: false}).subscribe({
-      next: res => this.setState({
-        query,
-        url,
-        queryTime: res.ms,
-        e2eTime: Date.now() - queryStart,
-        result: res.result,
-        queryInProgress: false,
-        error: null
-      }),
-      error: error => this.setState({
-        error,
-        query,
-        queryInProgress: false
-      })
+      next: res =>
+        this.setState({
+          query,
+          url,
+          queryTime: res.ms,
+          e2eTime: Date.now() - queryStart,
+          result: res.result,
+          queryInProgress: false,
+          error: null
+        }),
+      error: error =>
+        this.setState({
+          error,
+          query,
+          queryInProgress: false
+        })
     })
   }
 
@@ -237,7 +240,17 @@ class VisionGui extends React.PureComponent {
 
   render() {
     const {client, components} = this.context
-    const {error, result, url, query, queryInProgress, listenInProgress, queryTime, e2eTime, listenMutations} = this.state
+    const {
+      error,
+      result,
+      url,
+      query,
+      queryInProgress,
+      listenInProgress,
+      queryTime,
+      e2eTime,
+      listenMutations
+    } = this.state
     const {Button, Select} = components
     const styles = this.context.styles.visionGui
     const dataset = client.config().dataset
@@ -273,24 +286,23 @@ class VisionGui extends React.PureComponent {
           </div>
           <div className={styles.queryTimingContainer}>
             {typeof queryTime === 'number' && (
-              <p className={queryTime > 0.5 ? (styles.queryTiming || 'queryTiming') : (styles.queryTimingLong || 'queryTiming')}>
+              <p
+                className={
+                  queryTime > 0.5
+                    ? styles.queryTiming || 'queryTiming'
+                    : styles.queryTimingLong || 'queryTiming'
+                }
+              >
                 Query time: {queryTime}ms (end-to-end: {e2eTime}ms)
               </p>
             )}
           </div>
           <div className={styles.headerFunctions}>
-            <Button
-              onClick={this.handleListenExecution}
-              loading={listenInProgress}
-            >
+            <Button onClick={this.handleListenExecution} loading={listenInProgress}>
               Listen
             </Button>
 
-            <Button
-              onClick={this.handleQueryExecution}
-              loading={queryInProgress}
-              color="primary"
-            >
+            <Button onClick={this.handleQueryExecution} loading={queryInProgress} color="primary">
               Run query
             </Button>
           </div>
@@ -321,7 +333,7 @@ class VisionGui extends React.PureComponent {
                     onChange={this.handleParamsChange}
                     onHeightChange={this.handleHeightChange}
                     style={{minHeight: this.state.editorHeight}}
-                   />
+                  />
                 </div>
               </SplitPane>
             </div>
@@ -331,7 +343,8 @@ class VisionGui extends React.PureComponent {
                 {queryInProgress && <DelayedSpinner />}
                 {error && <QueryErrorDialog error={error} />}
                 {hasResult && <ResultView data={result} query={query} />}
-                {Array.isArray(result) && result.length === 0 && <NoResultsDialog query={query} dataset={dataset} />}
+                {Array.isArray(result) &&
+                  result.length === 0 && <NoResultsDialog query={query} dataset={dataset} />}
                 {listenMutations && listenMutations.length > 0 && <ResultView data={listenMutations} />}
               </div>
             </div>
@@ -343,15 +356,17 @@ class VisionGui extends React.PureComponent {
 }
 
 VisionGui.propTypes = {
-  datasets: PropTypes.arrayOf(PropTypes.shape({
-    name: PropTypes.string
-  }))
+  datasets: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string
+    })
+  )
 }
 
 VisionGui.contextTypes = {
   client: PropTypes.shape({fetch: PropTypes.func}).isRequired,
   styles: PropTypes.object,
-  components: PropTypes.object,
+  components: PropTypes.object
 }
 
 export default VisionGui

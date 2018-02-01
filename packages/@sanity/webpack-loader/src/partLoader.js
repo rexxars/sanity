@@ -55,9 +55,7 @@ function sanityPartLoader(input) {
     return `module.exports = ${JSON.stringify(debug, null, 2)}\n`
   }
 
-  return loadAll
-    ? multiImplementationHandler(partName, implementations)
-    : input
+  return loadAll ? multiImplementationHandler(partName, implementations) : input
 }
 
 module.exports = sanityPartLoader

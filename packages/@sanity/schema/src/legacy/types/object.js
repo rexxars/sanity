@@ -27,7 +27,6 @@ export const ObjectType = {
     }
   },
   extend(rawSubTypeDef, createMemberType) {
-
     const subTypeDef = {fields: [], ...rawSubTypeDef}
 
     const options = {...(subTypeDef.options || {})}
@@ -41,7 +40,7 @@ export const ObjectType = {
 
         const compiledField = {
           name,
-          fieldset,
+          fieldset
         }
 
         return lazyGetter(compiledField, 'type', () => {
@@ -84,9 +83,8 @@ export const ObjectType = {
   }
 }
 
-
 function createFieldsets(typeDef, fields) {
-  const fieldsetsDef = (typeDef.fieldsets || [])
+  const fieldsetsDef = typeDef.fieldsets || []
   const fieldsets = fieldsetsDef.map(fieldset => {
     const {name, title, description, options} = fieldset
     return {

@@ -43,7 +43,7 @@ function select(event) {
 }
 
 function maybeSelectAll(event) {
-  const selectAll = (event.keyCode === 65 && (event.metaKey || event.ctrlKey))
+  const selectAll = event.keyCode === 65 && (event.metaKey || event.ctrlKey)
   if (!selectAll) {
     return
   }
@@ -86,18 +86,10 @@ export default class InspectView extends React.PureComponent {
       >
         <div className={styles.content}>
           <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-            <ToggleButtons
-              value={viewMode}
-              items={VIEW_MODES}
-              onChange={this.handleChangeViewMode}
-            />
+            <ToggleButtons value={viewMode} items={VIEW_MODES} onChange={this.handleChangeViewMode} />
           </div>
           {viewMode === VIEW_MODE_PARSED && (
-            <JSONInspector
-              isExpanded={isExpanded}
-              onClick={toggleExpanded}
-              data={value}
-            />
+            <JSONInspector isExpanded={isExpanded} onClick={toggleExpanded} data={value} />
           )}
           {viewMode === VIEW_MODE_RAW && (
             <pre

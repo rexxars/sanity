@@ -20,9 +20,7 @@ if (fakeOutdatedModule) {
 }
 
 const onIdle =
-  typeof window.requestIdleCallback === 'function'
-    ? window.requestIdleCallback
-    : cb => setTimeout(cb, 0)
+  typeof window.requestIdleCallback === 'function' ? window.requestIdleCallback : cb => setTimeout(cb, 0)
 
 // eslint-disable-next-line id-length
 const buildQueryString = () => ({m: Object.keys(versions).map(pkg => `${pkg}@${versions[pkg]}`)})

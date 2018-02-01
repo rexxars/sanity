@@ -20,14 +20,12 @@ export default class Item extends React.PureComponent<Props> {
   render() {
     const {value, checked, type} = this.props
     return (
-      <Checkbox
-        onChange={this.handleChange}
-        checked={checked}
-      >
-        {isLegacyOptionsItem(value)
-          ? value.title
-          : <Preview layout="inline" type={type} value={resolveValueWithLegacyOptionsSupport(value)} />
-        }
+      <Checkbox onChange={this.handleChange} checked={checked}>
+        {isLegacyOptionsItem(value) ? (
+          value.title
+        ) : (
+          <Preview layout="inline" type={type} value={resolveValueWithLegacyOptionsSupport(value)} />
+        )}
       </Checkbox>
     )
   }

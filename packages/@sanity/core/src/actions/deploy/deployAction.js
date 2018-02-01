@@ -7,10 +7,7 @@ import lazyRequire from '@sanity/util/lib/lazyRequire'
 export default async (args, context) => {
   const {apiClient, workDir, chalk, output, prompt} = context
   const flags = Object.assign({build: true}, args.extOptions)
-  const sourceDir = path.resolve(
-    process.cwd(),
-    args.argsWithoutOptions[0] || path.join(workDir, 'dist')
-  )
+  const sourceDir = path.resolve(process.cwd(), args.argsWithoutOptions[0] || path.join(workDir, 'dist'))
 
   const client = apiClient({
     requireUser: true,
@@ -27,7 +24,6 @@ export default async (args, context) => {
     output.print('Your project has not been assigned a studio hostname.')
     output.print('To deploy your Sanity Studio to our hosted Sanity.Studio service,')
     output.print('you will need one. Please enter the part you want to use.')
-
 
     studioHostname = await prompt.single({
       type: 'input',
@@ -85,9 +81,7 @@ async function checkDir(sourceDir) {
       throw new Error(`Directory ${sourceDir} is not a directory`)
     }
   } catch (err) {
-    const error = err.code === 'ENOENT'
-      ? new Error(`Directory "${sourceDir}" does not exist`)
-      : err
+    const error = err.code === 'ENOENT' ? new Error(`Directory "${sourceDir}" does not exist`) : err
 
     throw error
   }
@@ -95,11 +89,16 @@ async function checkDir(sourceDir) {
   try {
     await fse.stat(path.join(sourceDir, 'index.html'))
   } catch (err) {
-    const error = err.code === 'ENOENT' ? new Error([
-      `"${sourceDir}/index.html" does not exist -`,
-      '[SOURCE_DIR] must be a directory containing',
-      'a Sanity studio built using "sanity build"'
-    ].join(' ')) : err
+    const error =
+      err.code === 'ENOENT'
+        ? new Error(
+            [
+              `"${sourceDir}/index.html" does not exist -`,
+              '[SOURCE_DIR] must be a directory containing',
+              'a Sanity studio built using "sanity build"'
+            ].join(' ')
+          )
+        : err
 
     throw error
   }
@@ -116,7 +115,8 @@ function validateHostname(value, client) {
   }
 
   // Check that the hostname is not already taken
-  return client.request({uri, method: 'PATCH', body: {studioHost}})
+  return client
+    .request({uri, method: 'PATCH', body: {studioHost}})
     .then(() => true)
     .catch(() => 'Hostname already taken')
 }

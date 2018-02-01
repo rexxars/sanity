@@ -17,7 +17,7 @@ function remove<T>(array: Array<T>, item: T): Array<T> {
   return array
 }
 
-export function withMaxConcurrency(func: (any) => ObservableI<*>, concurrency: number = DEFAULT_CONCURRENCY) {
+export function withMaxConcurrency(func: any => ObservableI<*>, concurrency: number = DEFAULT_CONCURRENCY) {
   const throttler = createThrottler(concurrency)
   return (...args: Array<any>) => Observable.from(throttler(func(...args)))
 }
@@ -49,8 +49,7 @@ export function createThrottler(concurrency: number = DEFAULT_CONCURRENCY) {
 
   function scheduleAndWait(observable) {
     pendingObservables.push(observable)
-    return ready$.asObservable()
-      .first(obs => obs === observable)
+    return ready$.asObservable().first(obs => obs === observable)
   }
 
   function check() {

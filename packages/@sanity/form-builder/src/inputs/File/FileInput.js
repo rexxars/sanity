@@ -38,9 +38,9 @@ type Props = {
   value?: Value,
   type: Type,
   level: number,
-  onChange: (PatchEvent) => void,
+  onChange: PatchEvent => void,
   resolveUploader: UploaderResolver,
-  materialize: (string) => ObservableI<Object>,
+  materialize: string => ObservableI<Object>,
   onBlur: () => void,
   onFocus: () => void,
   focusPath: Array<*>
@@ -62,9 +62,7 @@ export default class FileInput extends React.PureComponent<Props, State> {
   }
 
   handleRemoveButtonClick = (event: SyntheticEvent<*>) => {
-    this.props.onChange(
-      PatchEvent.from(unset(['asset']))
-    )
+    this.props.onChange(PatchEvent.from(unset(['asset'])))
   }
 
   clearUploadStatus() {
@@ -89,7 +87,7 @@ export default class FileInput extends React.PureComponent<Props, State> {
   uploadFirstAccepted(fileList: FileList) {
     const {resolveUploader, type} = this.props
 
-    let match: ?{ uploader: Uploader, file: File }
+    let match: ?{uploader: Uploader, file: File}
 
     Array.from(fileList).some(file => {
       const uploader = resolveUploader(type, file)
@@ -111,27 +109,21 @@ export default class FileInput extends React.PureComponent<Props, State> {
     this.setState({isUploading: true})
     onChange(PatchEvent.from([setIfMissing({_type: type.name})]))
 
-    this.uploadSubscription = uploader.upload(file, type)
-      .subscribe({
-        next: uploadEvent => {
-          if (uploadEvent.patches) {
-            onChange(PatchEvent.from(uploadEvent.patches))
-          }
-        },
-        error: err => {
-          this.setState({uploadError: err})
-          this.clearUploadStatus()
-        },
-        complete: () => {
-          onChange(
-            PatchEvent.from([
-              unset(['hotspot']),
-              unset(['crop'])
-            ])
-          )
-          this.setState({isUploading: false})
+    this.uploadSubscription = uploader.upload(file, type).subscribe({
+      next: uploadEvent => {
+        if (uploadEvent.patches) {
+          onChange(PatchEvent.from(uploadEvent.patches))
         }
-      })
+      },
+      error: err => {
+        this.setState({uploadError: err})
+        this.clearUploadStatus()
+      },
+      complete: () => {
+        onChange(PatchEvent.from([unset(['hotspot']), unset(['crop'])]))
+        this.setState({isUploading: false})
+      }
+    })
   }
 
   renderMaterializedAsset = (assetDocument: Object): Node => {
@@ -141,7 +133,7 @@ export default class FileInput extends React.PureComponent<Props, State> {
           <FileIcon />
         </div>
         <div>
-          {assetDocument.originalFilename} {' '}
+          {assetDocument.originalFilename}{' '}
           <a href={assetDocument.url} download>
             Download
           </a>
@@ -168,11 +160,7 @@ export default class FileInput extends React.PureComponent<Props, State> {
           </div>
           <div className={styles.cancelButton}>
             {isUploading && (
-              <Button
-                kind="simple"
-                color="danger"
-                onClick={this.handleCancelUpload}
-              >
+              <Button kind="simple" color="danger" onClick={this.handleCancelUpload}>
                 Cancel
               </Button>
             )}
@@ -185,11 +173,13 @@ export default class FileInput extends React.PureComponent<Props, State> {
   handleFieldChange = (event: PatchEvent, field: FieldT) => {
     const {onChange, type} = this.props
 
-    onChange(event
-      .prefixAll(field.name)
-      .prepend(setIfMissing({
-        _type: type.name
-      })))
+    onChange(
+      event.prefixAll(field.name).prepend(
+        setIfMissing({
+          _type: type.name
+        })
+      )
+    )
   }
 
   handleStartAdvancedEdit = () => {
@@ -203,9 +193,7 @@ export default class FileInput extends React.PureComponent<Props, State> {
   renderAdvancedEdit(fields: Array<FieldT>) {
     return (
       <Dialog title="Edit details" onClose={this.handleStopAdvancedEdit} isOpen>
-        <div>
-          {this.renderFields(fields)}
-        </div>
+        <div>{this.renderFields(fields)}</div>
         <Button onClick={this.handleStopAdvancedEdit}>Close</Button>
       </Dialog>
     )
@@ -251,7 +239,6 @@ export default class FileInput extends React.PureComponent<Props, State> {
   }
 
   handleUpload = ({file, uploader}) => {
-
     this.uploadWith(uploader, file)
   }
 
@@ -278,53 +265,51 @@ export default class FileInput extends React.PureComponent<Props, State> {
         ref={this.setFocusArea}
       >
         {uploadError && (
-          <Snackbar
-            kind="error"
-            action={{title: 'OK'}}
-            onAction={() => this.setState({uploadError: null})}
-          >
+          <Snackbar kind="error" action={{title: 'OK'}} onAction={() => this.setState({uploadError: null})}>
             {"We're"} really sorry, but the upload could not be completed.
           </Snackbar>
         )}
         <div className={styles.content}>
           <div className={styles.assetWrapper}>
-            {value && value._upload && (
-              <div className={styles.uploadState}>
-                {this.renderUploadState(value._upload)}
-              </div>
-            )}
+            {value &&
+              value._upload && (
+                <div className={styles.uploadState}>{this.renderUploadState(value._upload)}</div>
+              )}
             {hasAsset ? (
               <WithMaterializedReference reference={value.asset} materialize={materialize}>
                 {this.renderMaterializedAsset}
               </WithMaterializedReference>
-            ) : <UploadPlaceholder />}
+            ) : (
+              <UploadPlaceholder />
+            )}
           </div>
           {highlightedFields.length > 0 && (
-            <div className={styles.fieldsWrapper}>
-              {this.renderFields(highlightedFields)}
-            </div>
+            <div className={styles.fieldsWrapper}>{this.renderFields(highlightedFields)}</div>
           )}
         </div>
         <div className={styles.functions}>
           <FileInputButton
             icon={UploadIcon}
             onSelect={this.handleSelectFile}
-            accept={''/* todo build from this.props.resolveUploaders */}
+            accept={'' /* todo build from this.props.resolveUploaders */}
           >
             Upload
           </FileInputButton>
-          {value && otherFields.length > 0 && (
-            <Button
-              icon={EditIcon}
-              kind="simple"
-              title="Edit details"
-              onClick={this.handleStartAdvancedEdit}
-            >
-              Edit
-            </Button>
-          )}
+          {value &&
+            otherFields.length > 0 && (
+              <Button
+                icon={EditIcon}
+                kind="simple"
+                title="Edit details"
+                onClick={this.handleStartAdvancedEdit}
+              >
+                Edit
+              </Button>
+            )}
           {hasAsset && (
-            <Button color="danger" kind="simple" onClick={this.handleRemoveButtonClick}>Remove</Button>
+            <Button color="danger" kind="simple" onClick={this.handleRemoveButtonClick}>
+              Remove
+            </Button>
           )}
         </div>
         {isAdvancedEditOpen && this.renderAdvancedEdit(otherFields)}

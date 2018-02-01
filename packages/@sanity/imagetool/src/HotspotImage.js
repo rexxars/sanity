@@ -8,10 +8,10 @@ import {debounce} from 'lodash'
 const debug = Debug('sanity-imagetool')
 
 function getCropAspect(crop, srcAspect) {
-  const origHeight = (1 / srcAspect)
+  const origHeight = 1 / srcAspect
   const origWidth = srcAspect * origHeight
-  const cropWidth = origWidth - ((crop.left + crop.right) * origWidth)
-  const cropHeight = origHeight - ((crop.top + crop.bottom) * origHeight)
+  const cropWidth = origWidth - (crop.left + crop.right) * origWidth
+  const cropHeight = origHeight - (crop.top + crop.bottom) * origHeight
   return cropWidth / cropHeight
 }
 
@@ -23,10 +23,7 @@ export default class HotspotImage extends React.PureComponent {
     hotspot: PropTypes.object.isRequired,
     crop: PropTypes.object.isRequired,
     width: PropTypes.number,
-    aspectRatio: PropTypes.oneOfType([
-      PropTypes.number,
-      PropTypes.oneOf(['auto', 'none']),
-    ]),
+    aspectRatio: PropTypes.oneOfType([PropTypes.number, PropTypes.oneOf(['auto', 'none'])]),
     alignX: PropTypes.oneOf(['center', 'left', 'right']),
     alignY: PropTypes.oneOf(['center', 'top', 'bottom']),
     className: PropTypes.string,
@@ -53,7 +50,7 @@ export default class HotspotImage extends React.PureComponent {
     // Fixes issues that may happen if the component is rendered on server and mounted after the image has finished loading
     // In these situations, neither the onLoad or the onError events will be called.
     // Derived from http://imagesloaded.desandro.com/
-    const alreadyLoaded = (imageElement.src && imageElement.complete && imageElement.naturalWidth !== undefined)
+    const alreadyLoaded = imageElement.src && imageElement.complete && imageElement.naturalWidth !== undefined
     if (alreadyLoaded) {
       debug("Image '%s' already loaded, refreshing (from cache) to trigger onLoad / onError", this.props.src)
       imageElement.src = imageElement.src

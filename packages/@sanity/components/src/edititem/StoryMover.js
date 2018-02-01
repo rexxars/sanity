@@ -3,7 +3,6 @@ import React from 'react'
 import Draggable from 'react-draggable'
 
 export default class Mover extends React.Component {
-
   static propTypes = {
     children: PropTypes.node
   }

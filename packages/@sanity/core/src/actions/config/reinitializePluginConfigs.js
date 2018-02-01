@@ -17,13 +17,12 @@ async function reinitializePluginConfigs(options, flags = {}) {
   const missingConfigs = await Promise.all(withLocalConfigs.map(createMissingConfig))
   const configPlugins = missingConfigs.map(warnOnDifferingChecksum)
 
-  return missingConfigs.length > 0
-    ? saveNewChecksums(configPlugins)
-    : Promise.resolve()
+  return missingConfigs.length > 0 ? saveNewChecksums(configPlugins) : Promise.resolve()
 
   function hasLocalConfig(plugin) {
-    return localConfigExists(workDir, plugin.name)
-      .then(configDeployed => Object.assign({}, plugin, {configDeployed}))
+    return localConfigExists(workDir, plugin.name).then(configDeployed =>
+      Object.assign({}, plugin, {configDeployed})
+    )
   }
 
   function createMissingConfig(plugin) {
@@ -50,7 +49,9 @@ async function reinitializePluginConfigs(options, flags = {}) {
     const local = localChecksums[plugin.name]
     if (typeof local !== 'undefined' && local !== plugin.configChecksum) {
       const name = normalizePluginName(plugin.name)
-      output.print(`[WARN] Default configuration file for plugin "${name}" has changed since local copy was created`)
+      output.print(
+        `[WARN] Default configuration file for plugin "${name}" has changed since local copy was created`
+      )
     }
 
     return plugin
@@ -76,13 +77,9 @@ export async function tryInitializePluginConfigs(options, flags = {}) {
       throw err
     }
 
-    const manifest = await fse
-      .readJson(path.join(options.workDir, 'package.json'))
-      .catch(() => ({}))
+    const manifest = await fse.readJson(path.join(options.workDir, 'package.json')).catch(() => ({}))
 
-    const dependencies = Object.keys(
-      Object.assign({}, manifest.dependencies, manifest.devDependencies)
-    )
+    const dependencies = Object.keys(Object.assign({}, manifest.dependencies, manifest.devDependencies))
     const depName = err.plugin[0] === '@' ? err.plugin : `sanity-plugin-${err.plugin}`
     if (dependencies.includes(depName)) {
       err.message = `${err.message}\n\nTry running "sanity install"?`
@@ -106,6 +103,7 @@ function pluginHasDistConfig(plugin) {
 }
 
 function getPluginConfigChecksum(plugin) {
-  return generateConfigChecksum(getPluginConfigPath(plugin))
-    .then(configChecksum => Object.assign({}, plugin, {configChecksum}))
+  return generateConfigChecksum(getPluginConfigPath(plugin)).then(configChecksum =>
+    Object.assign({}, plugin, {configChecksum})
+  )
 }

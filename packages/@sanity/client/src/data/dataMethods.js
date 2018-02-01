@@ -38,14 +38,10 @@ module.exports = {
   },
 
   fetch(query, params, options = {}) {
-    const mapResponse = options.filterResponse === false
-      ? res => res
-      : res => res.result
+    const mapResponse = options.filterResponse === false ? res => res : res => res.result
 
     const observable = this._dataRequest('query', {query, params}).map(mapResponse)
-    return this.isPromiseAPI()
-      ? toPromise(observable)
-      : observable
+    return this.isPromiseAPI() ? toPromise(observable) : observable
   },
 
   getDocument(id) {
@@ -54,9 +50,7 @@ module.exports = {
       .filter(isResponse)
       .map(event => event.body.documents && event.body.documents[0])
 
-    return this.isPromiseAPI()
-      ? toPromise(observable)
-      : observable
+    return this.isPromiseAPI() ? toPromise(observable) : observable
   },
 
   create(doc, options) {
@@ -78,17 +72,11 @@ module.exports = {
   },
 
   delete(selection, options) {
-    return this.dataRequest(
-      'mutate',
-      {mutations: [{delete: getSelection(selection)}]},
-      options
-    )
+    return this.dataRequest('mutate', {mutations: [{delete: getSelection(selection)}]}, options)
   },
 
   mutate(mutations, options) {
-    const mut = mutations instanceof Patch
-      ? mutations.serialize()
-      : mutations
+    const mut = mutations instanceof Patch ? mutations.serialize() : mutations
     const muts = Array.isArray(mut) ? mut : [mut]
 
     return this.dataRequest('mutate', {mutations: muts}, options)
@@ -101,9 +89,7 @@ module.exports = {
   dataRequest(endpoint, body, options = {}) {
     const request = this._dataRequest(endpoint, body, options)
 
-    return this.isPromiseAPI()
-      ? toPromise(request)
-      : request
+    return this.isPromiseAPI() ? toPromise(request) : request
   },
 
   _dataRequest(endpoint, body, options = {}) {
@@ -137,9 +123,7 @@ module.exports = {
         // Should we return documents?
         const results = res.results || []
         if (options.returnDocuments) {
-          return returnFirst
-            ? results[0] && results[0].document
-            : results.map(mut => mut.document)
+          return returnFirst ? results[0] && results[0].document : results.map(mut => mut.document)
         }
 
         // Return a reduced subset

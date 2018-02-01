@@ -8,6 +8,10 @@ export default createImageLoadProxy(ImageTool, {
     return <div>Loading...</div>
   },
   error(props) {
-    return <div>Could not load image "{props.src}" {props.error.message}</div>
+    return (
+      <div>
+        Could not load image "{props.src}" {props.error.message}
+      </div>
+    )
   }
 })

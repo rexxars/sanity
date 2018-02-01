@@ -20,7 +20,6 @@ const adapter: Adapter = {
 
 export default adapter
 
-
 /**
  *
  * *** WARNING ***
@@ -30,47 +29,51 @@ export default adapter
  */
 
 function toFormBuilder(origin, patches: Array<GradientPatch>): Array<Patch> {
-  return flatten(patches.map(patch => {
-    return flatten(Object.keys(patch)
-      .filter(key => key !== 'id')
-      .map((type): Array<Patch> => {
-        if (type === 'unset') {
-          return patch.unset.map(path => {
-            return {
-              type: 'unset',
-              path: path.split('.'),
-              origin
+  return flatten(
+    patches.map(patch => {
+      return flatten(
+        Object.keys(patch)
+          .filter(key => key !== 'id')
+          .map((type): Array<Patch> => {
+            if (type === 'unset') {
+              return patch.unset.map(path => {
+                return {
+                  type: 'unset',
+                  path: path.split('.'),
+                  origin
+                }
+              })
             }
+            return Object.keys(patch[type]).map(path => {
+              if (type === 'insert') {
+                const position = 'before' in patch.insert ? 'before' : 'after'
+                return {
+                  type: 'insert',
+                  position: position,
+                  path: path.split('.'),
+                  items: patch[type][path],
+                  origin
+                }
+              }
+              if (type === 'set') {
+                return {
+                  type: 'set',
+                  path: path.split('.'),
+                  value: patch[type][path],
+                  origin
+                }
+              }
+              return {
+                type,
+                path: path.split('.'),
+                value: patch[type][path],
+                origin
+              }
+            })
           })
-        }
-        return Object.keys(patch[type]).map(path => {
-          if (type === 'insert') {
-            const position = 'before' in patch.insert ? 'before' : 'after'
-            return {
-              type: 'insert',
-              position: position,
-              path: path.split('.'),
-              items: patch[type][path],
-              origin
-            }
-          }
-          if (type === 'set') {
-            return {
-              type: 'set',
-              path: path.split('.'),
-              value: patch[type][path],
-              origin
-            }
-          }
-          return {
-            type,
-            path: path.split('.'),
-            value: patch[type][path],
-            origin
-          }
-        })
-      }))
-  }))
+      )
+    })
+  )
 }
 
 function fromFormBuilder(patch: Patch): GradientPatch {

@@ -69,11 +69,10 @@ export default class OptionsArrayInput extends React.PureComponent {
     }
 
     const nextValue = list
-      .filter(item => (
-        isEqual(optionValue, item)
-          ? isChecked
-          : inArray(value, resolveValueWithLegacyOptionsSupport(item))
-      ))
+      .filter(
+        item =>
+          isEqual(optionValue, item) ? isChecked : inArray(value, resolveValueWithLegacyOptionsSupport(item))
+      )
       .map(resolveValueWithLegacyOptionsSupport)
 
     this.props.onChange(PatchEvent.from(nextValue.length > 0 ? set(nextValue) : unset()))
@@ -81,7 +80,9 @@ export default class OptionsArrayInput extends React.PureComponent {
 
   getMemberTypeOfItem(option) {
     const {type} = this.props
-    return type.of.find(memberType => memberType.name === resolveTypeName(resolveValueWithLegacyOptionsSupport(option)))
+    return type.of.find(
+      memberType => memberType.name === resolveTypeName(resolveValueWithLegacyOptionsSupport(option))
+    )
   }
 
   render() {
@@ -99,9 +100,9 @@ export default class OptionsArrayInput extends React.PureComponent {
             const validTypes = type.of.map(ofType => ofType.name)
             return (
               <div key={option._key || index} className={styles.error}>
-                Invalid option type: Type <code>{actualType}</code> not valid for array
-                of [{validTypes.join(', ')}]. Check
-                the list options of this field
+                Invalid option type: Type <code>{actualType}</code> not valid for array of [{validTypes.join(
+                  ', '
+                )}]. Check the list options of this field
               </div>
             )
           }
