@@ -33,6 +33,7 @@ const compareModified = async (stream, sourceFile, targetPath) => {
 
 const tsPaths = globby.sync(['./packages/@sanity/*/tsconfig.json'])
 const tsProjects = tsPaths.map(conf => ts.createProject(conf))
+
 const scripts = [
   './packages/@sanity/*/src/**/*.js',
   './packages/sanity-plugin-*/src/**/*.js',
@@ -84,6 +85,31 @@ const mapToDest = orgPath => {
 const packagesPath = 'packages'
 const pkgPath = (cwd, sourcePath) => path.relative(path.join(cwd, 'packages'), sourcePath)
 const getLogErrorHandler = () => plumber({errorHandler: err => gutil.log(err.stack)})
+
+const tsTasks = tsProjects.map(project => {
+  const name = `ts-${path.basename(project.projectDirectory)}`
+  exports[name] = () => {
+    const compilation = project
+      .src()
+      .pipe(through.obj(logCompile('TS')))
+      .pipe(project())
+
+    return mergeStream(
+      compilation.dts
+        .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
+        .pipe(dest(project.options.outDir)),
+
+      compilation.js
+        .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
+        .pipe(dest(project.options.outDir))
+    )
+  }
+
+  return exports[name]
+})
+
+const buildTypeScript = series(...tsTasks)
+
 const watchJavaScript = series(buildJavaScript, function watchJS() {
   watch(scripts, watchJavaScriptRebuild)
 })
@@ -106,6 +132,7 @@ const watchTypeScript = series(buildTypeScript, function watchTS() {
   })
 })
 
+exports.buildTypeScript = buildTypeScript
 exports.default = parallel(buildJavaScript, buildTypeScript)
 exports.build = parallel(buildJavaScript, buildTypeScript)
 exports.watchTypeScript = watchTypeScript
@@ -161,7 +188,9 @@ function rebuildTypeScriptProject(project) {
     .pipe(dest(project.options.outDir))
 }
 
-function buildTypeScript() {
+/*function buildTypeScript() {
+  //return series(...tsTasks)
+
   return mergeStream(
     ...tsProjects.map(project => {
       const compilation = project
@@ -181,6 +210,7 @@ function buildTypeScript() {
     })
   )
 }
+*/
 
 function buildAssets() {
   return src(assets, srcOpts)
