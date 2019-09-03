@@ -188,30 +188,6 @@ function rebuildTypeScriptProject(project) {
     .pipe(dest(project.options.outDir))
 }
 
-/*function buildTypeScript() {
-  //return series(...tsTasks)
-
-  return mergeStream(
-    ...tsProjects.map(project => {
-      const compilation = project
-        .src()
-        .pipe(through.obj(logCompile('TS')))
-        .pipe(project())
-
-      return mergeStream(
-        compilation.dts
-          .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
-          .pipe(dest(project.options.outDir)),
-
-        compilation.js
-          .pipe(sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
-          .pipe(dest(project.options.outDir))
-      )
-    })
-  )
-}
-*/
-
 function buildAssets() {
   return src(assets, srcOpts)
     .pipe(filter(['**/*.*', '!**/*.js', '!**/*.ts']))
