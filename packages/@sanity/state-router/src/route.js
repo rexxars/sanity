@@ -5,6 +5,7 @@ import parseRoute from './parseRoute'
 import resolveStateFromPath from './resolveStateFromPath'
 import resolvePathFromState from './resolvePathFromState'
 import {decodeParams, encodeParams} from './utils/paramsEncoding'
+import {decodeJsonParams, encodeJsonParams} from './utils/jsonParamsEncoding'
 
 type NodeOptions = {
   path?: string,
@@ -69,14 +70,27 @@ function normalize(...paths) {
 route.intents = function intents(base) {
   const basePath = normalize(base).join('/')
   return route(`${basePath}/:intent`, [
-    route(':params', {
-      transform: {
-        params: {
-          toState: decodeParams,
-          toPath: encodeParams
+    route(
+      ':params',
+      {
+        transform: {
+          params: {
+            toState: decodeParams,
+            toPath: encodeParams
+          }
         }
-      }
-    })
+      },
+      [
+        route(':jsonParams', {
+          transform: {
+            jsonParams: {
+              toState: decodeJsonParams,
+              toPath: encodeJsonParams
+            }
+          }
+        })
+      ]
+    )
   ])
 }
 
